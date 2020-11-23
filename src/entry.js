@@ -2,7 +2,7 @@ import { Loading, Notification, Message } from 'element-ui';
 
 import MisPage from './components/container/page';
 import MisSetting from './components/setting/index';
-import UmisConfig from './utils/config';
+import { overwrite } from './utils/config';
 import api from './utils/api';
 import {
   getRenderedTpl,
@@ -35,7 +35,7 @@ export default {
       );
     });
     Vue.use(Loading);
-    Vue.prototype.$umisConfig = UmisConfig.create(options);
+    Vue.prototype.$umisConfig = overwrite(options);
     Vue.prototype.$eventHub = new Vue();
     Vue.prototype.$misComponents = misComponents;
     Vue.prototype.$onExpressionEval = onExpressionEval;

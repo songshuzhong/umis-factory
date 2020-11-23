@@ -94,7 +94,7 @@ export default {
       this.getPageSchema();
     }
     if (this.initApi) {
-      this.fetchInitApi();
+      this.handleFetchApi();
 
       if (this.interval) {
         this.handleIntervalFetch();
@@ -133,7 +133,7 @@ export default {
     },
     handleIntervalFetch() {
       this.intervalFetcher = setInterval(() => {
-        this.fetchInitApi();
+        this.handleFetchApi();
         if (this.stopAutoRefreshWhen) {
           this.iStopAutoRefresh = this.$onExpressionEval(
             this.stopAutoRefreshWhen,
@@ -142,8 +142,8 @@ export default {
         }
       }, this.interval);
     },
-    fetchInitApi() {
-      const { method, url, params } = this.initApi;
+    handleFetchApi(apiData) {
+      const { method, url, params } = apiData || this.initApi;
       const compiledUrl = this.$getCompiledUrl(url, this.data);
       const compiledParams = this.$getCompiledParams(params, this.data);
       let fetchBody;
@@ -166,6 +166,9 @@ export default {
 
       this.compiledCacheUrl = compiledUrl;
       this.compiledCacheParams = compiledParams;
+
+      fetchBody = this.$json2FormData(this.$umisConfig.isFormData, fetchBody);
+
       this.$api
         .slientApi()
         [method](compiledUrl, fetchBody)
@@ -192,7 +195,7 @@ export default {
     },
     handlePageChanged(pageIndex) {
       this.iPageIndex = pageIndex;
-      this.fetchInitApi();
+      this.handleFetchApi();
     },
     shouldUpdateInitApi() {
       const { url, params } = this.initApi;
@@ -203,7 +206,7 @@ export default {
         compiledUrl !== this.compiledCacheUrl ||
         !deepEqual(compiledParams, this.compiledCacheParams)
       ) {
-        this.fetchInitApi();
+        this.handleFetchApi();
       }
     },
   },

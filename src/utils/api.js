@@ -1,9 +1,9 @@
 import qs from 'qs';
 import axios from 'axios';
+import { config } from './config';
 const notification = () => {};
 const isCancel = axios.isCancel;
 const cancelToken = axios.CancelToken;
-let umisConfig = null;
 let apiFailSilent = false;
 let apiMessageDuration = 5000;
 let apiMessageOffset = 0;
@@ -138,19 +138,17 @@ function factory(baseUrl, configs, silent, noInterceptor) {
 
 let umisApi = null;
 
-function apiFactory(config) {
-  umisConfig = config;
-  Object.assign(umisConfig.domains, {
-    VUE_APP_API_BASE: process.env.VUE_APP_API_BASE,
-  });
+function apiFactory() {
+  config.domains['VUE_APP_API_BASE'] = process.env.VUE_APP_API_BASE;
   return {
     isCancel,
     cancelToken,
     factory: factory,
     slientApi() {
-      if (umisConfig.isApiChanged || !umisApi) {
+      if (config.isApiChanged || !umisApi) {
+        config.isApiChanged = false;
         umisApi = factory(
-          umisConfig.VUE_APP_API_ACTIVE,
+          config.VUE_APP_API_ACTIVE,
           {
             withCredentials: true,
           },

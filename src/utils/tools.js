@@ -34,19 +34,17 @@ const onExpressionEval = (expression, data) => {
   }
 };
 
-const json2FormData = (isFormData, data, invisibleField = [], target) => {
+const json2FormData = (isFormData, data) => {
   let formData;
-  if (isFormData && !target) {
+  if (isFormData) {
     formData = new FormData();
     for (let name in data) {
-      if (data.hasOwnProperty(name) && !invisibleField.includes(name))
-        formData.append(name, data[name]);
+      if (data.hasOwnProperty(name)) formData.append(name, data[name]);
     }
   } else {
     formData = {};
     for (let name in data) {
-      if (data.hasOwnProperty(name) && !invisibleField.includes(name))
-        formData[name] = data[name];
+      if (data.hasOwnProperty(name)) formData[name] = data[name];
     }
   }
   return formData;

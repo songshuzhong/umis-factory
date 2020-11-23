@@ -135,37 +135,23 @@ export default {
       });
     },
     sendFormData() {
-      const formData = this.$json2FormData(
-        this.$umisConfig.isFormData,
-        this.data,
-        this.invisibleField,
-        this.target
-      );
+      const formData = {};
+      for (let name in this.data) {
+        if (
+          this.data.hasOwnProperty(name) &&
+          !this.invisibleField.includes(name)
+        )
+          formData[name] = this.data[name];
+      }
       if (this.target) {
         return this.linkageTrigger(this.target, formData);
       }
       if (this.api) {
-        this.iApiLoading = true;
-        this.$api
-          .slientApi()
-          .post(this.api, formData)
-          .then(res => {
-            this.$notice({
-              type: 'success',
-              title: '通知',
-              message: res.msg,
-            });
-          })
-          .catch(e => {
-            this.$notice({
-              type: 'error',
-              title: '警告',
-              message: e.toString(),
-            });
-          })
-          .finally(() => {
-            this.iApiLoading = false;
-          });
+        this.handleFetchApi({
+          url: this.api,
+          method: 'post',
+          params: formData,
+        });
       }
     },
   },
