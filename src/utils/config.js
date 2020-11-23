@@ -1,35 +1,18 @@
-let instance = null;
-let isFormData = false;
-let isApiChanged = false;
-let domains = [];
-let style = '';
-let script = '';
-
+const config = {
+  isFormData: false,
+  isApiChanged: false,
+  domains: [],
+  style: '',
+  script: '',
+};
 export default {
   create(options) {
-    instance = null;
-    isFormData = options.isFormData || false;
-    isApiChanged = options.isApiChanged || false;
-    domains = options.domains || [];
-    style = options.style || '';
-    script = options.script || '';
-  },
-  getFormDataType() {
-    return isFormData;
-  },
-  setFormDataType(val) {
-    isFormData = val;
-  },
-  getStyle() {
-    return style;
-  },
-  setStyle(val) {
-    style = val;
-  },
-  getScript() {
-    return script;
-  },
-  setScript(val) {
-    script = val;
+    config.isFormData = options.isFormData || false;
+    config.isApiChanged = options.isApiChanged || false;
+    config.domains = options.domains || [];
+    config.style = options.style || '';
+    config.script = options.script || '';
+
+    return config;
   },
 };

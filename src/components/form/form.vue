@@ -33,7 +33,7 @@
   </el-form>
 </template>
 <script>
-import {Form as ElForm} from 'element-ui';
+import { Form as ElForm } from 'element-ui';
 
 import derivedProp from '../mixin/derivedProp';
 import linkage from '../mixin/linkage';

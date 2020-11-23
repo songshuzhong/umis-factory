@@ -46,13 +46,13 @@
 </template>
 <script>
 import clonedeep from 'lodash.clonedeep';
-import {Card as ElCard} from 'element-ui';
-import {RadioGroup as ElRadioGroup} from 'element-ui';
-import {Radio as ElRadio} from 'element-ui';
-import {ButtonGroup as ElButtonGroup} from 'element-ui';
-import {Button as ElButton} from 'element-ui';
-import {Link as ElLink} from 'element-ui';
-import {Input as ElInput} from 'element-ui';
+import { Card as ElCard } from 'element-ui';
+import { RadioGroup as ElRadioGroup } from 'element-ui';
+import { Radio as ElRadio } from 'element-ui';
+import { ButtonGroup as ElButtonGroup } from 'element-ui';
+import { Button as ElButton } from 'element-ui';
+import { Link as ElLink } from 'element-ui';
+import { Input as ElInput } from 'element-ui';
 
 export default {
   name: 'SettingDomain',
@@ -65,11 +65,40 @@ export default {
     ElLink,
     ElInput,
   },
+  props: {
+    value: {
+      type: Array,
+      required: false,
+    },
+    onApiChanged: {
+      type: Function,
+      required: true,
+    },
+  },
   data() {
     return {
       domains: this.$umisConfig.domains,
       checked: 'VUE_APP_API_ACTIVE',
     };
+  },
+  watch: {
+    value: {
+      handler(val) {
+        this.domains = val;
+      },
+      immediate: true,
+      deep: true,
+    },
+    domains: {
+      handler(val) {
+        this.$emit('input', val);
+      },
+    },
+    checked: {
+      handler() {
+        this.onApiChanged();
+      },
+    },
   },
   methods: {
     onAdd() {

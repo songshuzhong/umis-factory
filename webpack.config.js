@@ -3,6 +3,8 @@ const webpack = require('webpack');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = {
@@ -15,16 +17,13 @@ module.exports = {
     library: 'UmisFactory',
   },
   externals: {
+    qs: 'qs',
     axios: 'axios',
     'element-ui': 'element-ui',
     'deep-equal': 'deep-equal',
     'copy-to-clipboard': 'copy-to-clipboard',
     'lodash.clonedeep': 'lodash.clonedeep',
-    lodash: {
-      commonjs: 'lodash',
-      amd: 'lodash',
-      root: '_',
-    },
+    'lodash.template': 'lodash.template',
     vue: {
       root: 'Vue',
       commonjs: 'vue',
@@ -110,6 +109,7 @@ module.exports = {
     alias: {
       '@utils': path.join(__dirname, 'src/utils'),
       '@assets': path.join(__dirname, 'src/assets'),
+      '@components': path.join(__dirname, 'src/components'),
     },
   },
   plugins: [
@@ -126,8 +126,41 @@ module.exports = {
       analyzerMode: 'static',
       reportFilename: 'app.report.html',
       defaultSizes: 'parsed',
-      openAnalyzer: false,
+      openAnalyzer: true,
       logLevel: 'info',
     }),
   ],
+  optimization: {
+    nodeEnv: false, //prevent webpack from injecting process var
+    splitChunks: false,
+    namedModules: false,
+    namedChunks: false,
+    flagIncludedChunks: true,
+    occurrenceOrder: true,
+    sideEffects: true,
+    usedExports: true,
+    concatenateModules: true,
+    splitChunks: {
+      hidePathInfo: true,
+      minSize: 30000,
+      maxAsyncRequests: 5,
+      maxInitialRequests: 3,
+    },
+    noEmitOnErrors: true,
+    checkWasmTypes: true,
+    minimizer: [
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
+        sourceMap: true // set to true if you want JS source maps
+      }),
+      new OptimizeCSSAssetsPlugin({
+        cssProcessor: require('cssnano'),
+        cssProcessorPluginOptions: {
+          preset: ['default', { discardComments: { removeAll: true } }],
+        },
+        canPrint: true
+      })
+    ]
+  }
 };

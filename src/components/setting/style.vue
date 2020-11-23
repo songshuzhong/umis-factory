@@ -10,8 +10,8 @@
   </el-card>
 </template>
 <script>
-import {Card as ElCard} from 'element-ui';
-import {Button as ElButton} from 'element-ui';
+import { Card as ElCard } from 'element-ui';
+import { Button as ElButton } from 'element-ui';
 
 export default {
   name: 'SettingStyle',
@@ -19,10 +19,28 @@ export default {
     ElCard,
     ElButton,
   },
+  props: {
+    value: {
+      type: String,
+      required: false,
+    },
+  },
+  watch: {
+    value: {
+      handler(val) {
+        this.schema = val;
+      },
+      immediate: true,
+    },
+    schema: {
+      handler(val) {
+        this.$emit('input', val);
+      },
+    },
+  },
   data() {
-    const initStyle = this.$umisConfig.style;
     return {
-      schema: initStyle,
+      schema: '',
     };
   },
   mounted() {
@@ -50,15 +68,16 @@ export default {
       this.onFormatSchema();
     },
     onFormatSchema() {
-      const self = this;
       const timer = setTimeout(() => {
-        self.editor.getAction(['editor.action.formatDocument']).run();
+        this.editor.getAction(['editor.action.formatDocument']).run();
         clearTimeout(timer);
       }, 100);
     },
     onSave() {
       const json = this.editor.getValue();
-      this.$saveInitStyle(this, json);
+      this.$saveInitStyle(this, json).then(() => {
+        this.schema = json;
+      });
     },
   },
 };

@@ -11,14 +11,14 @@
         @change="handleFormTypeChange"
       />
     </el-card>
-    <setting-api />
+    <setting-api v-model="domains" :on-api-changed="handleApiChanged" />
     <setting-interceptor />
-    <setting-style />
+    <setting-style v-model="style" />
   </div>
 </template>
 <script>
-import {Card as ElCard} from 'element-ui';
-import {Switch as ElSwitch} from 'element-ui';
+import { Card as ElCard } from 'element-ui';
+import { Switch as ElSwitch } from 'element-ui';
 
 import SettingApi from './api';
 import SettingStyle from './style';
@@ -34,14 +34,33 @@ export default {
     SettingInterceptor,
   },
   data() {
-    console.log(this.$misConfig.getStyle());
+    const {
+      isApiChanged,
+      isFormData,
+      style,
+      script,
+      domains,
+    } = this.$umisConfig;
+
     return {
-      isFormData: this.$misConfig.isFormData,
+      isApiChanged,
+      isFormData,
+      style,
+      script,
+      domains,
     };
+  },
+  watch: {
+    domains: {
+      handler(val) {},
+    },
   },
   methods: {
     handleFormTypeChange(val) {
       this.$saveInitFormType(this, val);
+    },
+    handleApiChanged() {
+      this.isApiChanged = true;
     },
   },
 };

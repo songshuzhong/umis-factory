@@ -11,9 +11,7 @@
       <span v-if="field.label" slot="label" class="umis-form-field">
         <span class="umis-form-field__label">{{ field.label }}</span>
         <el-tooltip v-if="field.tip">
-          <el-button>
-            <i class="el-icon-info" />
-          </el-button>
+          <i class="el-icon-info" />
           <div slot="content" v-html="field.tip" />
         </el-tooltip>
       </span>

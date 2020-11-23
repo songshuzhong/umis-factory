@@ -57,27 +57,31 @@ const saveInitFormType = (ctx, isFormData) => {
 };
 
 const saveInitStyle = (ctx, style) => {
-  try {
-    let ele = document.getElementById('umis-setting-style');
+  return new Promise((resolve, reject) => {
+    try {
+      let ele = document.getElementById('umis-setting-style');
 
-    if (!ele) {
-      ele = document.createElement('style');
-      ele.id = 'umis-setting-style';
-      document.head.appendChild(ele);
+      if (!ele) {
+        ele = document.createElement('style');
+        ele.id = 'umis-setting-style';
+        document.head.appendChild(ele);
+      }
+      ele.innerHTML = style;
+      ctx.$notice({
+        type: 'success',
+        title: '通知',
+        message: '保存成功！',
+      });
+      resolve();
+    } catch (e) {
+      ctx.$notice({
+        type: 'error',
+        title: '警告',
+        message: e.toString(),
+      });
+      reject();
     }
-    ele.innerHTML = style;
-    ctx.$notice({
-      type: 'success',
-      title: '通知',
-      message: '保存成功！',
-    });
-  } catch (e) {
-    ctx.$notice({
-      type: 'error',
-      title: '警告',
-      message: e.toString(),
-    });
-  }
+  });
 };
 
 export {

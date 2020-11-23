@@ -1,7 +1,7 @@
-import {Loading as ElLoading} from 'element-ui';
-import {Notification} from 'element-ui';
-import message from 'element-ui';
+import { Loading, Notification, Message } from 'element-ui';
 
+import MisPage from './components/container/page';
+import MisSetting from './components/setting/index';
 import UmisConfig from './utils/config';
 import api from './utils/api';
 import {
@@ -34,8 +34,8 @@ export default {
         componentConfig.default || componentConfig
       );
     });
-    Vue.use(ElLoading);
-    Vue.prototype.$misConfig = UmisConfig.create(options);
+    Vue.use(Loading);
+    Vue.prototype.$umisConfig = UmisConfig.create(options);
     Vue.prototype.$eventHub = new Vue();
     Vue.prototype.$misComponents = misComponents;
     Vue.prototype.$onExpressionEval = onExpressionEval;
@@ -46,7 +46,9 @@ export default {
     Vue.prototype.$saveInitStyle = saveInitStyle;
     Vue.prototype.$saveInitFormType = saveInitFormType;
     Vue.prototype.$notice = Notification;
-    Vue.prototype.$message = message;
+    Vue.prototype.$message = Message;
     Vue.prototype.$api = api(options);
   },
 };
+
+export { MisPage, MisSetting };
