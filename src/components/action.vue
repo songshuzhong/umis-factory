@@ -18,7 +18,7 @@
       :icon-color="confirmIconColor"
       :hide-icon="confirmHideIcon"
       :title="confirmTitle"
-      @onConfirm="onClick"
+      @confirm="onClick"
     >
       <el-button
         v-loading="iApiLoading"
@@ -58,10 +58,10 @@
   </fragment>
 </template>
 <script>
-import {Popconfirm as ElPopconfirm} from 'element-ui';
-import { Tooltip as ElTooltip} from 'element-ui';
-import {Badge as ElBadge} from 'element-ui';
-import {Button as ElButton} from 'element-ui';
+import { Popconfirm as ElPopconfirm } from 'element-ui';
+import { Tooltip as ElTooltip } from 'element-ui';
+import { Badge as ElBadge } from 'element-ui';
+import { Button as ElButton } from 'element-ui';
 
 import derivedProp from './mixin/derivedProp';
 import initData from './mixin/initData';

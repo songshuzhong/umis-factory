@@ -29,11 +29,12 @@
 
 <script>
 import copy from 'copy-to-clipboard';
-import {Alert as ElAlert }from 'element-ui';
+import { Alert as ElAlert } from 'element-ui';
 import derivedProp from '../mixin/derivedProp';
 import linkage from '../mixin/linkage';
 import visible from '../mixin/visible';
 import initData from '../mixin/initData';
+import initApi from '@components/mixin/initApi';
 
 export default {
   name: 'mis-Component',
@@ -70,7 +71,7 @@ export default {
       required: false,
     },
   },
-  mixins: [visible, initData, linkage, derivedProp],
+  mixins: [visible, initApi, initData, linkage, derivedProp],
   data() {
     return {
       error: '',
@@ -128,33 +129,17 @@ export default {
     },
     handleAjaxAction(feedback) {
       const { method, url, data = {} } = this.props.actionApi;
-      const compiledUrl = this.$getCompiledUrl(url, this.props.data);
       const params = this.$getCompiledUrl(
         JSON.stringify(data),
         this.props.data
       );
-      const formData = this.$json2FormData(
-        this.$umisConfig.isFormData,
-        JSON.parse(params)
-      );
-
-      this.$api
-        .slientApi()
-        [method](compiledUrl, formData)
-        .then(res => {
+      this.handleFetchApi({
+        url,
+        method,
+        params,
+      })
+        .then(() => {
           this.afterAction();
-          this.$notice({
-            type: 'success',
-            title: '通知',
-            message: res.msg,
-          });
-        })
-        .catch(e => {
-          this.$notice({
-            type: 'error',
-            title: '警告',
-            message: e.toString(),
-          });
         })
         .finally(() => {
           feedback();

@@ -73,7 +73,14 @@ export default {
     },
     data: {
       handler(val, old) {
-        if (this.isMounted && val !== old && this.initApi) {
+        if (
+          this.isMounted &&
+          val !== old &&
+          this.initApi &&
+          !['mis-component', 'mis-service'].includes(
+            this.$options['_componentTag']
+          )
+        ) {
           this.shouldUpdateInitApi();
         }
       },
@@ -93,7 +100,7 @@ export default {
     if (this.initSchema) {
       this.getPageSchema();
     }
-    if (this.initApi) {
+    if (this.initApi && this.$options['_componentTag'] !== 'mis-component') {
       this.handleFetchApi();
 
       if (this.interval) {
@@ -147,6 +154,7 @@ export default {
       const compiledUrl = this.$getCompiledUrl(url, this.data);
       const compiledParams = this.$getCompiledParams(params, this.data);
       let fetchBody;
+
       if (method === 'get') {
         fetchBody = {
           params: {
@@ -162,19 +170,19 @@ export default {
           ...compiledParams,
         };
       }
-      this.iLoading = true;
 
+      this.iLoading = true;
       this.compiledCacheUrl = compiledUrl;
       this.compiledCacheParams = compiledParams;
 
       fetchBody = this.$json2FormData(this.$umisConfig.isFormData, fetchBody);
 
-      this.$api
+      return this.$api
         .slientApi()
         [method](compiledUrl, fetchBody)
         .then(res => {
           const data = res.data;
-          if (data.hasOwnProperty('rows')) {
+          if (data && data.hasOwnProperty('rows')) {
             const { total, rows, hasMore } = data;
             this.iTotal = total;
             this.iHasMore = hasMore;
