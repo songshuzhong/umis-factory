@@ -132,11 +132,7 @@ module.exports = {
   ],
   optimization: {
     nodeEnv: false, //prevent webpack from injecting process var
-    splitChunks: false,
-    namedModules: false,
-    namedChunks: false,
     flagIncludedChunks: true,
-    occurrenceOrder: true,
     sideEffects: true,
     usedExports: true,
     concatenateModules: true,
@@ -152,15 +148,15 @@ module.exports = {
       new UglifyJsPlugin({
         cache: true,
         parallel: true,
-        sourceMap: true // set to true if you want JS source maps
+        sourceMap: true, // set to true if you want JS source maps
       }),
       new OptimizeCSSAssetsPlugin({
         cssProcessor: require('cssnano'),
         cssProcessorPluginOptions: {
           preset: ['default', { discardComments: { removeAll: true } }],
         },
-        canPrint: true
-      })
-    ]
-  }
+        canPrint: true,
+      }),
+    ],
+  },
 };
