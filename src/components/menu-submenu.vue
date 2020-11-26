@@ -1,6 +1,6 @@
 <template>
   <el-submenu
-    :index="index"
+    :index="path"
     :popper-class="popperClass"
     :class="classname"
     :show-timeout="showTimeout"
@@ -14,19 +14,19 @@
     </template>
     <template v-for="(item, index) in body">
       <mis-component
+        :path="`${path}/${index}/${item.renderer}`"
         :mis-name="item.renderer"
         :key="index"
-        :path="`${path}/${index}/${item.renderer}`"
-        :label="item.label"
         :name="item.name"
         :body="item.body"
+        :props="item"
       />
     </template>
   </el-submenu>
 </template>
 <script>
-import {Submenu as ElSubmenu} from 'element-ui';
-
+import { Submenu as ElSubmenu } from 'element-ui';
+import derivedProp from './mixin/derivedProp';
 export default {
   name: 'MisSubmenu',
   components: {
@@ -80,5 +80,6 @@ export default {
       required: false,
     },
   },
+  mixins: [derivedProp],
 };
 </script>

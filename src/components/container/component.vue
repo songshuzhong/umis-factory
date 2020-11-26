@@ -34,7 +34,7 @@ import derivedProp from '../mixin/derivedProp';
 import linkage from '../mixin/linkage';
 import visible from '../mixin/visible';
 import initData from '../mixin/initData';
-import initApi from '@components/mixin/initApi';
+import initApi from '../mixin/initApi';
 
 export default {
   name: 'mis-Component',

@@ -2,7 +2,7 @@ import deepEqual from 'deep-equal';
 
 export default {
   props: {
-    iSchemaUpdate: {
+    canSchemaUpdate: {
       type: Boolean,
       required: false,
       default: true,
@@ -196,7 +196,7 @@ export default {
         });
     },
     updatePageSchema(data) {
-      if (this.iSchemaUpdate) {
+      if (this.canSchemaUpdate) {
         this.iSchema = data;
         window.UMIS = { schema: data };
       }

@@ -10,6 +10,8 @@
     :minlength="minlength"
     :maxlength="maxlength"
     :clearable="clearable"
+    :prefix-icon="prefixIcon"
+    :suffix-icon="suffixIcon"
     :placeholder="placeholder"
     :show-password="showPassword"
     :show-word-limit="showWordLimit"
@@ -18,7 +20,7 @@
 </template>
 
 <script>
-import {Input as ElInput} from 'element-ui';
+import { Input as ElInput } from 'element-ui';
 
 export default {
   name: 'MisInput',

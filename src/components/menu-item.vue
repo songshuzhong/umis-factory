@@ -1,11 +1,17 @@
 <template>
   <el-menu-item :name="name" :index="name">
-    {{ label }}
+    <template v-if="icon">
+      <i :class="icon" />
+      <span slot="title">{{ title }}</span>
+    </template>
+    <template v-else>
+      {{ label }}
+    </template>
   </el-menu-item>
 </template>
 
 <script>
-import {MenuItem as ElMenuItem} from 'element-ui';
+import { MenuItem as ElMenuItem } from 'element-ui';
 
 export default {
   name: 'MisMenuItem',
@@ -14,6 +20,14 @@ export default {
   },
   props: {
     label: {
+      type: String,
+      required: false,
+    },
+    title: {
+      type: String,
+      required: false,
+    },
+    icon: {
       type: String,
       required: false,
     },

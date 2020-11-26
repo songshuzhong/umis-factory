@@ -8,9 +8,10 @@
       >
         <mis-field
           v-for="(value, name, key) in item"
+          v-model="iValue[index][name]"
           :key="`${path}/${index}/${name}`"
           :name="name"
-          v-model="iValue[index][name]"
+          :data="iValue"
           :field="getFieldByKey(key, index)"
           :path="`${path}/${index}/${name}`"
         />
@@ -31,9 +32,10 @@
         class="umis-form-combo__item"
       >
         <mis-field
-          :underline="false"
           v-model="iValue[item.name]"
+          :underline="false"
           :name="item.name"
+          :data="iValue"
           :field="getField(item)"
           :path="`${path}/${index}/${item.renderer}`"
         />
@@ -43,9 +45,9 @@
 </template>
 <script>
 import clonedeep from 'lodash.clonedeep';
-import {Button as ElButton} from 'element-ui';
-import {Link as ElLink} from 'element-ui';
-import {FormItem as ElFormItem} from 'element-ui';
+import { Button as ElButton } from 'element-ui';
+import { Link as ElLink } from 'element-ui';
+import { FormItem as ElFormItem } from 'element-ui';
 
 export default {
   name: 'MisCombo',

@@ -21,19 +21,20 @@
         :path="`${path}/${field.renderer}`"
         :name="field.name"
         :data="data"
+        :init-data="data"
         :value="iValue"
         :disabled="iDisabled"
         :action="action"
-        @input="onInput($event)"
         :linkage-trigger="linkageTrigger"
+        @input="onInput($event)"
       />
     </el-form-item>
   </transition>
 </template>
 
 <script>
-import {Tooltip as ElTooltip} from 'element-ui';
-import {FormItem as ElFormItem} from 'element-ui';
+import { Tooltip as ElTooltip } from 'element-ui';
+import { FormItem as ElFormItem } from 'element-ui';
 import visible from '../mixin/visible';
 
 export default {

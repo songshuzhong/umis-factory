@@ -2,12 +2,13 @@
   <el-menu
     :mode="mode"
     :default-active="defaultActive"
-    :collapse="collapse"
+    :collapse="data.collapse"
     :class="classname"
     :router="router"
     :background-color="backgroundColor"
     :text-color="textColor"
     :active-text-color="activeTextColor"
+    :collapse-transition="true"
   >
     <template v-if="title">
       <mis-component
@@ -18,11 +19,9 @@
     </template>
     <template v-for="(item, index) in body">
       <mis-component
+        :path="`${path}/${index}/${item.renderer}`"
         :mis-name="item.renderer"
         :key="index"
-        :index="index.toString()"
-        :path="`${path}/${index}/${item.renderer}`"
-        :label="item.label"
         :name="item.name"
         :body="item.body"
         :props="item"
@@ -32,7 +31,8 @@
 </template>
 
 <script>
-import {Menu as ElMenu} from 'element-ui';
+import { Menu as ElMenu } from 'element-ui';
+import initData from './mixin/initData';
 
 export default {
   name: 'MisMenu',
@@ -96,5 +96,14 @@ export default {
       required: false,
     },
   },
+  watch: {
+    collapse: {
+      handler(val) {
+        this.data.collapse = val;
+      },
+      immediate: true,
+    },
+  },
+  mixins: [initData],
 };
 </script>

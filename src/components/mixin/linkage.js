@@ -11,10 +11,33 @@ export default {
         this.$eventHub.$emit('mis-component:linkage', target, trigerData);
       }
     },
-    handleLinkage(target, data) {
-      if (this.name && target === this.name) {
-        const newData = Object.assign({}, this.data, data);
-        this.data = clonedeep(newData);
+    getURLParameters(url) {
+      return url.match(/([^?=&]+)(=([^&]*))/g).reduce((total, item) => {
+        const [key, value] = item.split('=');
+        total[key] = value.replace('${', '').replace('}', '');
+        return total;
+      }, {});
+    },
+    handleLinkage(linkage, data) {
+      if (linkage) {
+        const [target, url] = linkage.split('?');
+        let newData = {};
+        if (this.name && target === this.name) {
+          if (url) {
+            const fields = this.getURLParameters(url);
+            for (const field in fields) {
+              if (fields[field] === '*') {
+                newData[field] = data;
+              } else if (fields.hasOwnProperty(field)) {
+                newData[field] = data[fields[field]];
+              }
+            }
+            newData = Object.assign({}, this.data, newData);
+          } else {
+            newData = Object.assign({}, this.data, data);
+          }
+          this.data = clonedeep(newData);
+        }
       }
     },
   },
