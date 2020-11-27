@@ -32,7 +32,8 @@
 
 <script>
 import { Menu as ElMenu } from 'element-ui';
-import initData from './mixin/initData';
+import initData from '../mixin/initData';
+import linkage from '../mixin/linkage';
 
 export default {
   name: 'MisMenu',
@@ -104,6 +105,6 @@ export default {
       immediate: true,
     },
   },
-  mixins: [initData],
+  mixins: [linkage, initData],
 };
 </script>

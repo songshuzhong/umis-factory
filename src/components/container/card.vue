@@ -52,11 +52,11 @@
 </template>
 
 <script>
-import {Card as ElCard} from 'element-ui';
+import { Card as ElCard } from 'element-ui';
 
-import initApi from './mixin/initApi';
-import derivedProp from './mixin/derivedProp';
-import initData from './mixin/initData';
+import initApi from '../mixin/initApi';
+import derivedProp from '../mixin/derivedProp';
+import initData from '../mixin/initData';
 
 export default {
   name: 'MisCard',

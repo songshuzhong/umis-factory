@@ -23,6 +23,7 @@
               v-if="body"
               :mis-name="body.renderer"
               :path="`${path}/${index}/${body.renderer}`"
+              :init-data="item"
               :body="getBody(body)"
               :header="getHeader(body)"
               :footer="getFooter(body)"
@@ -35,6 +36,7 @@
                 :mis-name="foot.renderer"
                 :key="index"
                 :path="`${path}/${index}/${foot.renderer}`"
+                :init-data="item"
                 :header="getHeader(foot)"
                 :body="getBody(foot)"
                 :footer="getFooter(foot)"
@@ -58,13 +60,13 @@
   </div>
 </template>
 <script>
-import {Row as ElRow} from 'element-ui';
-import {Col as ElCol} from 'element-ui';
-import {Card as ElCard} from 'element-ui';
-import {Pagination as ElPagination} from 'element-ui';
+import { Row as ElRow } from 'element-ui';
+import { Col as ElCol } from 'element-ui';
+import { Card as ElCard } from 'element-ui';
+import { Pagination as ElPagination } from 'element-ui';
 
-import initApi from './mixin/initApi';
-import derivedProp from './mixin/derivedProp';
+import initApi from '../mixin/initApi';
+import derivedProp from '../mixin/derivedProp';
 
 export default {
   name: 'MisCards',

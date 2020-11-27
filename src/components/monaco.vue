@@ -13,13 +13,16 @@
     </transition>
     <div ref="editor" class="monaco-editor" />
     <div class="umis-editor-tools">
-      <el-button type="primary" plain @click="onSave">保存</el-button>
+      <el-button type="primary" plain @click="onSave">保存到本地</el-button>
+      <el-button type="primary" plain @click="onSaveRemote"
+        >保存到远程</el-button
+      >
     </div>
   </div>
 </template>
 <script>
-import {Button as ElButton} from 'element-ui';
-import {Alert as ElAlert} from 'element-ui';
+import { Button as ElButton } from 'element-ui';
+import { Alert as ElAlert } from 'element-ui';
 
 export default {
   name: 'MisMonaco',
@@ -32,17 +35,20 @@ export default {
       errorInfo: '',
       schema: {},
       showErrorBoundary: false,
+      pageInfo: {},
     };
   },
   created() {
     this.onFormatSchema();
   },
   mounted() {
+    const { pageSchema = {}, ...pageInfo } = window.UMIS.schema;
+    this.pageInfo = pageInfo;
     this.$eventHub.$on('mis-schema:change', this.upSchema);
     this.$eventHub.$on('mis-schema:init', this.upSchema);
     this.schema = {
       schema: 'https://github.com/songshuzhong/umis/v1/schemas/page.json',
-      ...window.UMIS.schema,
+      ...JSON.parse(pageSchema),
     };
     this.editor = window.monaco.editor.create(this.$refs.editor, {
       fontSize: '14px',
@@ -77,19 +83,39 @@ export default {
         clearTimeout(timer);
       }, 100);
     },
+    onSaveRemote() {
+      this.onSave().then(pageSchema => {
+        this.$api
+          .slientApi()
+          .put('/api/page', {
+            pageSchema: JSON.stringify(JSON.parse(pageSchema)),
+            ...this.pageInfo,
+          })
+          .then(res => {
+            console.log(res);
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      });
+    },
     onSave() {
-      try {
-        const json = this.editor.getValue();
-        this.$eventHub.$emit('mis-schema:change', JSON.parse(json));
-        this.onFormatSchema();
-      } catch (e) {
-        this.errorInfo = e;
-        this.showErrorBoundary = true;
-        this.errorInfoTimer = setTimeout(() => {
-          this.closeErrorInfo();
-          clearTimeout(this.errorInfoTimer);
-        }, 3500);
-      }
+      return new Promise((resolve, reject) => {
+        try {
+          const json = this.editor.getValue();
+          this.$eventHub.$emit('mis-schema:change', JSON.parse(json));
+          this.onFormatSchema();
+          resolve(json);
+        } catch (e) {
+          this.errorInfo = e;
+          this.showErrorBoundary = true;
+          this.errorInfoTimer = setTimeout(() => {
+            this.closeErrorInfo();
+            clearTimeout(this.errorInfoTimer);
+          }, 3500);
+          reject();
+        }
+      });
     },
     closeErrorInfo() {
       this.showErrorBoundary = false;

@@ -21,7 +21,7 @@
 <script>
 import { MenuItemGroup as ElMenuItemGroup } from 'element-ui';
 
-import derivedProp from './mixin/derivedProp';
+import derivedProp from '../mixin/derivedProp';
 
 export default {
   name: 'MisMenuItemGroup',

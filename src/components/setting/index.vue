@@ -11,6 +11,7 @@
         @change="handleFormTypeChange"
       />
     </el-card>
+    <setting-creator />
     <setting-api v-model="domains" :on-api-changed="handleApiChanged" />
     <setting-interceptor />
     <setting-style v-model="style" />
@@ -23,6 +24,7 @@ import { Switch as ElSwitch } from 'element-ui';
 import SettingApi from './api';
 import SettingStyle from './style';
 import SettingInterceptor from './interceptor';
+import SettingCreator from './creator';
 
 export default {
   name: 'UmisSettings',
@@ -32,6 +34,7 @@ export default {
     SettingApi,
     SettingStyle,
     SettingInterceptor,
+    SettingCreator,
   },
   data() {
     const {

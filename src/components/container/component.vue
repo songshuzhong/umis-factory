@@ -128,11 +128,8 @@ export default {
       }
     },
     handleAjaxAction(feedback) {
-      const { method, url, data = {} } = this.props.actionApi;
-      const params = this.$getCompiledUrl(
-        JSON.stringify(data),
-        this.props.data
-      );
+      const { method, url, params = {} } = this.props.actionApi;
+
       this.handleFetchApi({
         url,
         method,

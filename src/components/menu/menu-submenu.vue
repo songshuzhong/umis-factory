@@ -24,9 +24,11 @@
     </template>
   </el-submenu>
 </template>
+
 <script>
 import { Submenu as ElSubmenu } from 'element-ui';
-import derivedProp from './mixin/derivedProp';
+import derivedProp from '../mixin/derivedProp';
+
 export default {
   name: 'MisSubmenu',
   components: {

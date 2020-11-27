@@ -132,10 +132,11 @@ export default {
         .slientApi()
         [method](url, fetchBody)
         .then(res => {
-          this.iSchema = res.data;
+          const pageSchema = JSON.parse(res.data.pageSchema);
+          this.iSchema = pageSchema;
           this.iSchemaLoading = false;
           window.UMIS = { schema: res.data };
-          this.$eventHub.$emit('mis-schema:init', res.data);
+          this.$eventHub.$emit('mis-schema:init', pageSchema);
         });
     },
     handleIntervalFetch() {
