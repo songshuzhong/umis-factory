@@ -8,7 +8,7 @@
     :model="data"
     :inline="inline"
   >
-    <template v-for="(item, index) in controls" :key="index">
+    <template v-for="(item, index) in inactiveControls" :key="index">
       <mis-field
         v-if="formItems.includes(item.renderer)"
         v-model="data[item.name]"
@@ -21,7 +21,6 @@
         :disabled-on="item.disabledOn"
         :handle-invisible="handleInvisible"
         :linkage-trigger="onLinkageTrigger"
-        :action="onBeforeSubmit"
       />
       <mis-component
         v-else
@@ -30,6 +29,21 @@
         :path="`${path}/${index}/${item.renderer}`"
       />
     </template>
+    <el-form-item>
+      <template v-for="(item, index) in activeControls" :key="index">
+        <component
+          v-bind="item"
+          :is="item.renderer"
+          :path="`${path}/${index}/${item.renderer}`"
+          :name="item.name"
+          :init-data="data"
+          :hidden-on="item.hiddenOn"
+          :visible-on="item.visibleOn"
+          :disabled-on="item.disabledOn"
+          :action="onBeforeSubmit"
+        />
+      </template>
+    </el-form-item>
   </el-form>
 </template>
 <script>
@@ -41,13 +55,11 @@ import initApi from '../mixin/initApi';
 import initData from '../mixin/initData';
 
 const formItems = [
-  'mis-action',
   'mis-field',
   'mis-select',
   'mis-checkbox',
   'mis-radio',
   'mis-switch',
-  'mis-button',
   'mis-datepicker',
   'mis-input',
   'mis-combo',
@@ -115,6 +127,18 @@ export default {
       }, {}),
     };
   },
+  computed: {
+    activeControls() {
+      return this.controls.filter(item =>
+        ['mis-action', 'mis-button'].includes(item.renderer)
+      );
+    },
+    inactiveControls() {
+      return this.controls.filter(
+        item => !['mis-action', 'mis-button'].includes(item.renderer)
+      );
+    },
+  },
   mixins: [initApi, initData, derivedProp, linkage],
   methods: {
     handleInvisible(visible, field) {
@@ -127,12 +151,23 @@ export default {
       }
     },
     onBeforeSubmit() {
+      const attributes = event.currentTarget.attributes;
       const form = this.$refs['mis-form'];
-      form.validate(valid => {
-        if (valid) {
-          this.sendFormData();
-        }
-      });
+      if (
+        attributes.actionType &&
+        attributes.actionType.value === 'mis-reset'
+      ) {
+        form.resetFields();
+      } else if (
+        attributes.actionType &&
+        attributes.actionType.value === 'mis-submit'
+      ) {
+        form.validate(valid => {
+          if (valid) {
+            this.sendFormData();
+          }
+        });
+      }
     },
     sendFormData() {
       const formData = {};
@@ -146,7 +181,13 @@ export default {
       if (this.target) {
         return this.linkageTrigger(this.target, formData);
       }
-      if (this.api) {
+      if (this.api && this.api.method) {
+        this.handleFetchApi({
+          url: this.api.url,
+          method: this.api.method,
+          params: formData,
+        });
+      } else if (this.api) {
         this.handleFetchApi({
           url: this.api,
           method: 'post',

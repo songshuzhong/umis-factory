@@ -132,11 +132,12 @@ export default {
         .slientApi()
         [method](url, fetchBody)
         .then(res => {
-          const pageSchema = JSON.parse(res.data.pageSchema);
-          this.iSchema = pageSchema;
+          const { pageSchema, ...pageInfo } = res.data;
+          const schema = JSON.parse(pageSchema);
+          this.iSchema = schema;
+          this.iPageInfo = pageInfo;
           this.iSchemaLoading = false;
-          window.UMIS = { schema: res.data };
-          this.$eventHub.$emit('mis-schema:init', pageSchema);
+          window.UMIS = { pageInfo, pageSchema: schema };
         });
     },
     handleIntervalFetch() {
@@ -153,8 +154,12 @@ export default {
     handleFetchApi(apiData) {
       const { method, url, params } = apiData || this.initApi;
       const compiledUrl = this.$getCompiledUrl(url, this.data);
-      const compiledParams = this.$getCompiledParams(params, this.data);
+      let compiledParams = params;
       let fetchBody;
+
+      if (params) {
+        // compiledParams = this.$getCompiledParams(params, this.data);
+      }
 
       if (method === 'get') {
         fetchBody = {
@@ -184,22 +189,34 @@ export default {
         .then(res => {
           const data = res.data;
           if (data && data.hasOwnProperty('rows')) {
-            const { total, rows, hasMore } = data;
-            this.iTotal = total;
+            const { count, rows, hasMore } = data;
+            this.iTotal = count;
             this.iHasMore = hasMore;
             this.rows = rows;
           } else {
             this.data = data;
           }
+          this.$message({
+            message: res.message,
+            showClose: true,
+            type: 'success',
+          });
+        })
+        .catch(error => {
+          this.$message({
+            message: error.message,
+            showClose: true,
+            type: 'error',
+          });
         })
         .finally(() => {
           this.iLoading = false;
         });
     },
-    updatePageSchema(data) {
+    updatePageSchema(schema) {
       if (this.canSchemaUpdate) {
-        this.iSchema = data;
-        window.UMIS = { schema: data };
+        this.iSchema = schema;
+        window.UMIS.pageSchema = schema;
       }
     },
     handlePageChanged(pageIndex) {

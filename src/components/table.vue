@@ -21,16 +21,17 @@
           :width="column.width"
         >
           <template slot-scope="scope">
-            <mis-component
-              v-for="(item, jndex) in column.body"
-              :key="jndex"
-              :path="`/${path}/${index}/${item.renderer}`"
-              :mis-name="item.renderer"
-              :header="getHeader(item)"
-              :body="getBody(item)"
-              :footer="getFooter(item)"
-              :props="getFattingProps(item, scope.row)"
-            />
+            <template v-for="(item, jndex) in column.body" :key="jndex">
+              <mis-component
+                :path="`/${path}/${index}/${item.renderer}`"
+                :mis-name="item.renderer"
+                :header="getHeader(item)"
+                :body="getBody(item)"
+                :footer="getFooter(item)"
+                :init-data="scope.row"
+                :props="getFattingProps(item, scope.row)"
+              />
+            </template>
           </template>
         </el-table-column>
         <el-table-column

@@ -2,7 +2,7 @@
   <el-dialog
     v-bind="$props"
     :visible.sync="data.iVisible"
-    :title="title"
+    :title="renderTitle"
     :width="width"
     :fullscreen="fullscreen"
     :modal="modal"
@@ -69,7 +69,7 @@
   </el-dialog>
 </template>
 <script>
-import {Dialog as ElDialog} from 'element-ui';
+import { Dialog as ElDialog } from 'element-ui';
 
 import derivedProp from '../mixin/derivedProp';
 import initData from '../mixin/initData';
@@ -163,6 +163,11 @@ export default {
       },
       immediate: true,
       deep: true,
+    },
+  },
+  computed: {
+    renderTitle() {
+      return this.$getRenderedTpl(this.title, this.data);
     },
   },
   data() {

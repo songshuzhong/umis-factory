@@ -42,14 +42,8 @@ export default {
     this.onFormatSchema();
   },
   mounted() {
-    const { pageSchema = {}, ...pageInfo } = window.UMIS.schema;
+    const { pageSchema, pageInfo } = window.UMIS;
     this.pageInfo = pageInfo;
-    this.$eventHub.$on('mis-schema:change', this.upSchema);
-    this.$eventHub.$on('mis-schema:init', this.upSchema);
-    this.schema = {
-      schema: 'https://github.com/songshuzhong/umis/v1/schemas/page.json',
-      ...JSON.parse(pageSchema),
-    };
     this.editor = window.monaco.editor.create(this.$refs.editor, {
       fontSize: '14px',
       language: 'json',
@@ -65,17 +59,16 @@ export default {
         enabled: false,
       },
     });
-
-    this.editor.setValue(JSON.stringify(this.schema));
-    this.onFormatSchema();
+    this.updateSchema(pageSchema);
   },
   methods: {
-    upSchema(data) {
+    updateSchema(pageSchema) {
       this.schema = {
         schema: 'https://github.com/songshuzhong/umis/v1/schemas/page.json',
-        ...data,
+        ...pageSchema,
       };
       this.editor.setValue(JSON.stringify(this.schema));
+      this.onFormatSchema();
     },
     onFormatSchema() {
       const timer = setTimeout(() => {
@@ -88,14 +81,18 @@ export default {
         this.$api
           .slientApi()
           .put('/api/page', {
-            pageSchema: JSON.stringify(JSON.parse(pageSchema)),
+            pageSchema: JSON.stringify(pageSchema),
             ...this.pageInfo,
           })
           .then(res => {
             console.log(res);
           })
           .catch(error => {
-            console.error(error);
+            this.$message({
+              message: error.message,
+              showClose: true,
+              type: ' error',
+            });
           });
       });
     },
@@ -103,9 +100,15 @@ export default {
       return new Promise((resolve, reject) => {
         try {
           const json = this.editor.getValue();
-          this.$eventHub.$emit('mis-schema:change', JSON.parse(json));
+          const schema = JSON.parse(json);
+          this.$eventHub.$emit('mis-schema:change', schema);
           this.onFormatSchema();
-          resolve(json);
+          this.$message({
+            message: '保存成功',
+            showClose: true,
+            type: 'success',
+          });
+          resolve(schema);
         } catch (e) {
           this.errorInfo = e;
           this.showErrorBoundary = true;

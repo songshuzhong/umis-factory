@@ -6,6 +6,13 @@
         新建
       </el-button>
     </div>
+    <el-table :data="projectList">
+      <el-table-column prop="projectName" label=" 项目名" width="140">
+      </el-table-column>
+      <el-table-column prop="projectIcon" label="图标" width="120">
+      </el-table-column>
+      <el-table-column prop="address" label="地址"> </el-table-column>
+    </el-table>
     <el-dialog :visible.sync="creatorDialog">
       <el-form v-loading="apiLoading" :model="data" label-width="80px">
         <el-form-item label="英文名称">
@@ -54,6 +61,8 @@ import {
   Button as ElButton,
   Card as ElCard,
   Dialog as ElDialog,
+  Table as ElTable,
+  TableColumn as ElTableColumn,
 } from 'element-ui';
 
 export default {
@@ -69,6 +78,8 @@ export default {
     ElCard,
     ElDialog,
     ElButton,
+    ElTable,
+    ElTableColumn,
   },
   data() {
     return {

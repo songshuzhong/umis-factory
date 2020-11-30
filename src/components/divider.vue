@@ -2,13 +2,14 @@
   <el-divider :direction="direction" :content-position="contentPosition">
     <i v-if="icon" :class="icon" />
     <template v-else>
-      {{ text }}
+      {{ renderTitle }}
     </template>
   </el-divider>
 </template>
 
 <script>
 import {Divider as ElDivider} from 'element-ui';
+import initData from './mixin/initData';
 
 export default {
   name: 'MisDivider',
@@ -41,5 +42,11 @@ export default {
       required: false,
     },
   },
+  computed: {
+    renderTitle() {
+      return this.$getRenderedTpl(this.text, this.data);
+    },
+  },
+  mixins: [initData]
 };
 </script>

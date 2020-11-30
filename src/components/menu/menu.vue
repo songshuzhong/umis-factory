@@ -9,6 +9,7 @@
     :text-color="textColor"
     :active-text-color="activeTextColor"
     :collapse-transition="true"
+    :unique-opened="uniqueOpened"
   >
     <template v-if="title">
       <mis-component
@@ -95,6 +96,11 @@ export default {
     activeTextColor: {
       type: String,
       required: false,
+    },
+    uniqueOpened: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   watch: {

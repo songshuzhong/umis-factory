@@ -128,13 +128,7 @@ export default {
       }
     },
     handleAjaxAction(feedback) {
-      const { method, url, params = {} } = this.props.actionApi;
-
-      this.handleFetchApi({
-        url,
-        method,
-        params,
-      })
+      this.handleFetchApi(this.props.actionApi)
         .then(() => {
           this.afterAction();
         })
@@ -158,6 +152,7 @@ export default {
       const content = this.$getCompiledUrl(this.props.content, this.props.data);
       copy(content);
       this.$message({
+        showClose: true,
         message: '复制成功',
         type: 'success',
       });
@@ -173,6 +168,7 @@ export default {
   width: 100%;
   background-color: white;
   font-size: 14px;
+  text-align: left;
   color: #606266;
 }
 </style>

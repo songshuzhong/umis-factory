@@ -5,7 +5,7 @@
     :round="round"
     :circle="circle"
     :loading="loading"
-    :disabled="disabled"
+    :disabled="iDisabled"
     :icon="icon"
     :nativeType="nativeType"
     @click="onClick"
@@ -15,6 +15,8 @@
 </template>
 <script>
 import {Button as ElButton} from 'element-ui';
+import visible from '../mixin/visible';
+import initData from '../mixin/initData';
 
 export default {
   name: 'MisButton',
@@ -71,6 +73,7 @@ export default {
       required: false,
     },
   },
+  mixins: [initData, visible],
   methods: {
     onClick() {
       this.action();

@@ -7,7 +7,10 @@ const getRenderedTpl = (tpl, data = {}) => {
   return html;
 };
 
-const getCompiledUrl = (tpl, data = {}) => {
+const getCompiledUrl = (tpl, data) => {
+  if (data === null || typeof data === 'undefined') {
+    data = {};
+  }
   const compiled = template(tpl);
   const str = compiled(data);
 

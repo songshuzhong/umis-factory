@@ -28,6 +28,7 @@
         :plain="plain"
         :round="round"
         :circle="circle"
+        :icon="icon"
         :disabled="iApiLoading"
       >
         {{ text }}
@@ -48,6 +49,7 @@
           :plain="plain"
           :round="round"
           :circle="circle"
+          :icon="icon"
           :disabled="iApiLoading"
           @click="onClick"
         >
@@ -58,13 +60,16 @@
   </fragment>
 </template>
 <script>
-import { Popconfirm as ElPopconfirm } from 'element-ui';
-import { Tooltip as ElTooltip } from 'element-ui';
-import { Badge as ElBadge } from 'element-ui';
-import { Button as ElButton } from 'element-ui';
+import {
+  Popconfirm as ElPopconfirm,
+  Tooltip as ElTooltip,
+  Badge as ElBadge,
+  Button as ElButton,
+} from 'element-ui';
 
 import derivedProp from './mixin/derivedProp';
 import initData from './mixin/initData';
+import linkage from './mixin/linkage';
 
 export default {
   name: 'MisAction',
@@ -172,11 +177,19 @@ export default {
       type: Boolean,
       required: false,
     },
+    icon: {
+      type: String,
+      required: false,
+    },
     badgeText: {
       type: String,
       required: false,
     },
     badgeClass: {
+      type: String,
+      required: false,
+    },
+    target: {
       type: String,
       required: false,
     },
@@ -188,7 +201,7 @@ export default {
       clipboard: '',
     };
   },
-  mixins: [derivedProp, initData],
+  mixins: [derivedProp, initData, linkage],
   methods: {
     onDisVisiable() {
       this.visible = false;
@@ -204,6 +217,7 @@ export default {
     },
     handleLoading() {
       this.iApiLoading = false;
+      this.onLinkageTrigger(this.target);
     },
   },
 };

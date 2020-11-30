@@ -29,17 +29,24 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      primaryKey: ''
+    };
+  },
   watch: {
     value: {
       handler(val) {
-        this.data.value = val;
+        this.primaryKey = val;
       },
+      immediate: true
     },
   },
   mixins: [initData],
   computed: {
     getMapItem() {
-      return this.map[this.data.value];
+      const key = this.$getRenderedTpl(this.primaryKey, this.data);
+      return this.map[key];
     },
   },
 };

@@ -3,13 +3,14 @@
     v-model="iValue"
     :name="name"
     :disabled="disabled"
+    :clearable="clearable"
     :multiple="multiple"
     :filterable="filterable"
     :placeholder="placeholder"
     @change="onChange"
   >
     <el-option
-      v-for="option in options"
+      v-for="option in iOptions"
       :key="option.value"
       :label="option.text"
       :value="getJoinValue(option)"
@@ -19,8 +20,9 @@
   </el-select>
 </template>
 <script>
-import {Select as ElSelect} from 'element-ui';
-import {Option as ElOption} from 'element-ui';
+import { Select as ElSelect } from 'element-ui';
+import { Option as ElOption } from 'element-ui';
+import initApi from '../mixin/initApi';
 
 export default {
   name: 'MisSelect',
@@ -45,6 +47,10 @@ export default {
       type: Boolean,
       required: false,
     },
+    clearable: {
+      type: Boolean,
+      required: false,
+    },
     multiple: {
       type: Boolean,
       required: false,
@@ -65,6 +71,7 @@ export default {
   data() {
     return {
       iValue: [],
+      iOptions: [],
     };
   },
   watch: {
@@ -74,7 +81,26 @@ export default {
       },
       immediate: true,
     },
+    options: {
+      handler(val) {
+        if (val && val.length) {
+          this.iOptions = val;
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
+    rows: {
+      handler(val) {
+        if (val && val.length) {
+          this.iOptions = val;
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
   },
+  mixins: [initApi],
   methods: {
     onChange() {
       this.$emit('input', this.iValue);

@@ -10,41 +10,15 @@
         :md="size[2]"
         :lg="size[3]"
       >
-        <el-card
-          :shadow="shadow"
-          :body-style="{ padding: 0 }"
-          :class="classname"
-        >
-          <template slot="header">
-            <div v-html="renderHeader(item)" />
-          </template>
-          <div style="padding: 10px">
-            <mis-component
-              v-if="body"
-              :mis-name="body.renderer"
-              :path="`${path}/${index}/${body.renderer}`"
-              :init-data="item"
-              :body="getBody(body)"
-              :header="getHeader(body)"
-              :footer="getFooter(body)"
-              :props="getFattingProps(body, item)"
-            />
-          </div>
-          <div class="el-card__footer" v-if="footer">
-            <template v-for="foot in footer">
-              <mis-component
-                :mis-name="foot.renderer"
-                :key="index"
-                :path="`${path}/${index}/${foot.renderer}`"
-                :init-data="item"
-                :header="getHeader(foot)"
-                :body="getBody(foot)"
-                :footer="getFooter(foot)"
-                :props="getFattingProps(foot, item)"
-              />
-            </template>
-          </div>
-        </el-card>
+        <mis-card
+          :path="`${path}/${index}`"
+          :classname="classname"
+          :body-style="bodyStyle"
+          :header="header"
+          :body="body"
+          :footer="footer"
+          :init-data="item"
+        />
       </el-col>
     </el-row>
     <el-pagination
@@ -67,10 +41,12 @@ import { Pagination as ElPagination } from 'element-ui';
 
 import initApi from '../mixin/initApi';
 import derivedProp from '../mixin/derivedProp';
+import MisCard from './card';
 
 export default {
   name: 'MisCards',
   components: {
+    MisCard,
     ElRow,
     ElCol,
     ElCard,
