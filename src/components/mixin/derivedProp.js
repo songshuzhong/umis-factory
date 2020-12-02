@@ -5,17 +5,8 @@ export default {
       return { ...other, ...extend };
     },
     getFattingProps(props, extend = {}) {
-      const {
-        hiddenOn,
-        visibleOn,
-        transition,
-        data,
-        header,
-        body,
-        footer,
-        ...other
-      } = props;
-      return { ...other, data: { ...data, ...extend } };
+      const { data, header, body, footer, ...other } = props;
+      return { ...other };
     },
     getDataProps(props = {}, extend = {}) {
       const data = props.data || {};

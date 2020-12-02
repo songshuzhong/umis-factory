@@ -1,13 +1,14 @@
 <template>
   <el-aside :class="classname">
     <template v-if="Object.prototype.toString.call(body) === '[object Array]'">
-      <mis-component
-        v-for="(item, index) in body"
-        :mis-name="item.renderer"
-        :key="index"
-        :path="`${path}/${index}/${item.renderer}`"
-        :props="item"
-      />
+      <template v-for="(item, index) in body">
+        <mis-component
+          :mis-name="item.renderer"
+          :path="`${path}/${index}/${item.renderer}`"
+          :path="`${path}/${index}/${item.renderer}`"
+          :props="item"
+        />
+      </template>
     </template>
     <mis-component
       v-else

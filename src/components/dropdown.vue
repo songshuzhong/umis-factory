@@ -23,7 +23,8 @@
           v-if="actionItems.includes(item.actionType)"
           :path="`/${path}/${index}/${item.renderer}`"
           :mis-name="item.renderer"
-          :props="getFattingProps(item, data)"
+          :props="getFattingProps(item)"
+          :init-data="data"
         />
       </el-dropdown-item>
     </el-dropdown-menu>
@@ -31,9 +32,9 @@
 </template>
 
 <script>
-import {Dropdown as ElDropdown} from 'element-ui';
-import {DropdownMenu as ElDropdownMenu} from 'element-ui';
-import {DropdownItem as ElDropdownItem} from 'element-ui';
+import { Dropdown as ElDropdown } from 'element-ui';
+import { DropdownMenu as ElDropdownMenu } from 'element-ui';
+import { DropdownItem as ElDropdownItem } from 'element-ui';
 
 import derivedProp from './mixin/derivedProp';
 import initData from './mixin/initData';

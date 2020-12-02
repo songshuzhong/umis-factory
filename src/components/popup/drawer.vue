@@ -20,7 +20,8 @@
         :path="`${path}/${header.renderer}`"
         :action="onClose"
         :after-action="onClose"
-        :props="getFattingProps(header, data)"
+        :props="getFattingProps(header)"
+        :init-data="data"
       />
     </template>
     <template v-for="(item, index) in body">
@@ -30,7 +31,8 @@
         :path="`${path}/${index}/${item.renderer}`"
         :footer="item.footer"
         :action="onClose"
-        :props="getFattingProps(item, data)"
+        :props="getFattingProps(item)"
+        :init-data="data"
       />
     </template>
     <template v-if="footer">
@@ -41,14 +43,15 @@
           :path="`${path}/${index}/${item.renderer}`"
           :footer="item.footer"
           :action="onClose"
-          :props="getFattingProps(item, data)"
+          :props="getFattingProps(item)"
+          :init-data="data"
         />
       </template>
     </template>
   </el-drawer>
 </template>
 <script>
-import {Drawer as ElDrawer} from 'element-ui';
+import { Drawer as ElDrawer } from 'element-ui';
 import derivedProp from '../mixin/derivedProp';
 import initData from '../mixin/initData';
 

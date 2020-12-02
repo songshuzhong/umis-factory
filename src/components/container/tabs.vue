@@ -31,21 +31,21 @@
             :body="getBody(item.body)"
             :footer="getFooter(item.body)"
             v-bind="getFattingProps(item.body)"
+            :init-data="data"
           />
         </template>
         <template v-else>
-          <template
-            v-for="(child, index) in item.body"
-            :key="`${path}/${index}/${child.renderer}`"
-          >
+          <template v-for="(child, index) in item.body">
             <mis-component
               :mis-name="child.renderer"
+              :key="`${path}/${index}/${child.renderer}`"
               :path="`${path}/${index}/${child.renderer}`"
               :props="getFattingProps(child)"
               :header="getHeader(child)"
               :body="getBody(child)"
               :footer="getFooter(child)"
               v-bind="getFattingProps(child)"
+              :init-data="data"
             />
           </template>
         </template>
@@ -54,8 +54,8 @@
   </el-tabs>
 </template>
 <script>
-import {Tabs as ElTabs} from 'element-ui';
-import {TabPane as ElTabPane} from 'element-ui';
+import { Tabs as ElTabs } from 'element-ui';
+import { TabPane as ElTabPane } from 'element-ui';
 
 import derivedProp from '../mixin/derivedProp';
 import initData from '../mixin/initData';

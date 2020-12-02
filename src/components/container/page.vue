@@ -30,14 +30,14 @@ import initData from '../mixin/initData';
 export default {
   name: 'MisPage',
   props: {
-    path: {
-      type: String,
-      required: true,
-      default: 'page',
-    },
     schema: {
       type: [Array, Object],
       required: false,
+    },
+  },
+  computed: {
+    path() {
+      return this.$route.path;
     },
   },
   mixins: [initApi, initData],

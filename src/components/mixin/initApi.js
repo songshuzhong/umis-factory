@@ -32,6 +32,10 @@ export default {
       type: Boolean,
       required: false,
     },
+    silentMessage: {
+      type: Boolean,
+      required: false,
+    },
   },
   data() {
     return {
@@ -89,6 +93,12 @@ export default {
   computed: {
     iApiLoading() {
       return !this.silentLoading && this.iLoading;
+    },
+    iSendOn() {
+      if (this.sendOn) {
+        return this.$onExpressionEval(this.sendOn, this.data);
+      }
+      return true;
     },
   },
   mounted() {
@@ -152,13 +162,16 @@ export default {
       }, this.interval);
     },
     handleFetchApi(apiData) {
+      if (this.iSendOn === false) {
+        return;
+      }
       const { method, url, params } = apiData || this.initApi;
       const compiledUrl = this.$getCompiledUrl(url, this.data);
       let compiledParams = params;
       let fetchBody;
 
       if (params) {
-        // compiledParams = this.$getCompiledParams(params, this.data);
+        compiledParams = this.$getCompiledParams(params, this.data);
       }
 
       if (method === 'get') {
@@ -196,11 +209,12 @@ export default {
           } else {
             this.data = data;
           }
-          this.$message({
-            message: res.message,
-            showClose: true,
-            type: 'success',
-          });
+          !this.silentMessage &&
+            this.$message({
+              message: res.message,
+              showClose: true,
+              type: 'success',
+            });
         })
         .catch(error => {
           this.$message({

@@ -13,16 +13,17 @@
       <mis-component
         :mis-name="body.renderer"
         :path="`${path}/${index}/${body.renderer}`"
-        :body="getBody(body, item)"
-        :props="getFattingProps(body, item)"
+        :body="getBody(body)"
+        :props="getFattingProps(body)"
+        :init-data="item"
       />
     </el-timeline-item>
   </el-timeline>
 </template>
 
 <script>
-import {Timeline as ElTimeline} from 'element-ui';
-import {TimelineItem as ElTimelineItem} from 'element-ui';
+import { Timeline as ElTimeline } from 'element-ui';
+import { TimelineItem as ElTimelineItem } from 'element-ui';
 
 import initApi from './mixin/initApi';
 import derivedProp from './mixin/derivedProp';

@@ -26,10 +26,14 @@ export default {
           if (url) {
             const fields = this.getURLParameters(url);
             for (const field in fields) {
-              if (fields[field] === '*') {
-                newData[field] = data;
-              } else if (fields.hasOwnProperty(field)) {
-                newData[field] = data[fields[field]];
+              if (fields.hasOwnProperty(field)) {
+                if (field === '*') {
+                  newData = data;
+                } else if (fields[field] === '*') {
+                  newData[field] = data;
+                } else {
+                  newData[field] = data[fields[field]];
+                }
               }
             }
             newData = Object.assign({}, this.data, newData);

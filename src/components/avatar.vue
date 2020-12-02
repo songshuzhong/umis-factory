@@ -6,13 +6,13 @@
     :shape="shape"
     :size="size"
     :fit="fit"
-    :src="src"
+    :src="isComputedSrc ? computedSrc : src"
     :src-set="srcSet"
     :alt="alt"
   />
 </template>
 <script>
-import {Avatar as ElAvatar} from 'element-ui';
+import { Avatar as ElAvatar } from 'element-ui';
 import initData from './mixin/initData';
 
 export default {
@@ -63,7 +63,20 @@ export default {
       default: 'cover',
       options: ['fill', 'contain', 'cover', 'none', 'scale-down'],
     },
+    isComputedSrc: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      computedSrc: '',
+    };
   },
   mixins: [initData],
+  created() {
+    this.computedSrc = this.$getCompiledUrl(this.src, this.data);
+  },
 };
 </script>

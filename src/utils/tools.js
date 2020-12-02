@@ -11,10 +11,13 @@ const getCompiledUrl = (tpl, data) => {
   if (data === null || typeof data === 'undefined') {
     data = {};
   }
-  const compiled = template(tpl);
-  const str = compiled(data);
 
-  return str;
+  const temporaryTpl = tpl.replace(
+    /\${([^}{]+?)}/gi,
+    (escape, name) => data[name] || ''
+  );
+
+  return temporaryTpl;
 };
 
 const getCompiledParams = (params, data = {}, method) => {

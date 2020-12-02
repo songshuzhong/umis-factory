@@ -3,7 +3,7 @@
     <template v-for="(item, index) in body">
       <mis-component
         :mis-name="item.renderer"
-        :key="index"
+        :key="`${path}/${index}/${item.renderer}`"
         :path="`${path}/${index}/${item.renderer}`"
         :header="getHeader(item)"
         :body="getBody(item)"
@@ -16,11 +16,11 @@
 </template>
 
 <script>
-import {Container as ElContainer} from 'element-ui';
-import {Header as ElHeader} from 'element-ui';
-import {Aside as ElAside} from 'element-ui';
-import {Main as ElMain} from 'element-ui';
-import {Footer as ElFooter} from 'element-ui';
+import { Container as ElContainer } from 'element-ui';
+import { Header as ElHeader } from 'element-ui';
+import { Aside as ElAside } from 'element-ui';
+import { Main as ElMain } from 'element-ui';
+import { Footer as ElFooter } from 'element-ui';
 
 import derivedProp from '../mixin/derivedProp';
 

@@ -1,19 +1,28 @@
 <template>
   <el-main :class="classname">
     <template v-if="Object.prototype.toString.call(body) === '[object Array]'">
-      <mis-component
-        v-for="(item, index) in body"
-        :mis-name="item.renderer"
-        :key="index"
-        :path="`${path}/${index}/${item.renderer}`"
-        :props="item"
-      />
+      <template v-for="(item, index) in body">
+        <mis-component
+          :mis-name="item.renderer"
+          :key="`${path}/${index}/${item.renderer}`"
+          :path="`${path}/${index}/${item.renderer}`"
+          :header="getHeader(item)"
+          :body="getBody(item)"
+          :footer="getFooter(item)"
+          :props="getFattingProps(item, data)"
+          v-bind="getFattingProps(item, data)"
+        />
+      </template>
     </template>
     <mis-component
       v-else
       :mis-name="body.renderer"
       :path="`${path}${body.renderer}`"
+      :header="body.header"
+      :body="body.body"
+      :footer="body.footer"
       :props="body"
+      v-bind="getFattingProps(body)"
     />
     <template v-if="routerView">
       <router-view />
@@ -22,7 +31,7 @@
 </template>
 
 <script>
-import {Main as ElMain} from 'element-ui';
+import { Main as ElMain } from 'element-ui';
 
 import derivedProp from '../mixin/derivedProp';
 

@@ -4,20 +4,23 @@
       <el-alert
         v-if="showErrorBoundary"
         class="monaco-editor__error-info"
-        title="错误"
+        :title="errorInfo"
         type="error"
         show-icon
-        :description="errorInfo"
         @close="closeErrorInfo"
       />
     </transition>
     <div ref="editor" class="monaco-editor" />
-    <div class="umis-editor-tools">
-      <el-button type="primary" plain @click="onSave">保存到本地</el-button>
-      <el-button type="primary" plain @click="onSaveRemote"
-        >保存到远程</el-button
-      >
-    </div>
+    <transition name="el-zoom-in-bottom">
+      <div v-if="!showErrorBoundary" class="umis-editor-tools">
+        <el-button type="primary" plain @click="onSave">
+          保存到本地
+        </el-button>
+        <el-button type="primary" plain @click="onSaveRemote">
+          保存到远程
+        </el-button>
+      </div>
+    </transition>
   </div>
 </template>
 <script>

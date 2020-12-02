@@ -8,9 +8,9 @@
   >
     <el-col
       v-for="(item, index) in body"
-      :span="item.span"
-      :key="index"
+      :key="`${path}/${index}/${item.renderer}`"
       :class="classname"
+      :span="item.span"
     >
       <mis-component
         :props="item"
@@ -25,8 +25,8 @@
   </el-row>
 </template>
 <script>
-import {Row as ElRow} from 'element-ui';
-import {Col as ElCol} from 'element-ui';
+import { Row as ElRow } from 'element-ui';
+import { Col as ElCol } from 'element-ui';
 
 export default {
   name: 'MisGrid',

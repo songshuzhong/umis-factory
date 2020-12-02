@@ -4,12 +4,13 @@
       <template v-for="(item, index) in body">
         <mis-component
           :path="`${path}/${index}/${item.renderer}`"
-          :key="index"
+          :key="`${path}/${index}/${item.renderer}`"
           :mis-name="item.renderer"
           :header="getHeader(item)"
           :body="getBody(item)"
           :footer="getFooter(item)"
           :props="getFattingProps(item, data)"
+          :init-data="data"
         />
       </template>
     </template>
@@ -22,6 +23,7 @@
       :body="getBody(body)"
       :footer="getFooter(body)"
       :props="getFattingProps(body, data, { rows })"
+      :init-data="data"
     />
   </div>
 </template>

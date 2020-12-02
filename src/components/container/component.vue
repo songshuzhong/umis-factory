@@ -137,11 +137,11 @@ export default {
         });
     },
     handleUrlAction() {
-      const url = this.$getCompiledUrl(this.props.url, this.props.data);
+      const url = this.$getCompiledUrl(this.props.url, this.data);
       this.props.blank ? window.open(url) : (window.location.href = url);
     },
     handleRedirectAction() {
-      const url = this.$getCompiledUrl(this.props.url, this.props.data);
+      const url = this.$getCompiledUrl(this.props.url, this.data);
       if (/^https?:\/\//.test(url)) {
         window.location.replace(url);
       } else {
@@ -149,7 +149,7 @@ export default {
       }
     },
     handleCopyAction() {
-      const content = this.$getCompiledUrl(this.props.content, this.props.data);
+      const content = this.$getCompiledUrl(this.props.content, this.data);
       copy(content);
       this.$message({
         showClose: true,

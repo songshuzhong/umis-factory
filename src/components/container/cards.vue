@@ -4,7 +4,7 @@
       <el-col
         v-for="(item, index) in rows"
         :span="span"
-        :key="index"
+        :key="`${path}/${index}`"
         :xs="size[0]"
         :sm="size[1]"
         :md="size[2]"
@@ -28,7 +28,6 @@
       :page-size="iPageSize"
       :current-page="iPageIndex"
       :page-sizes="[10, 20, 30, 40]"
-      @size-change="handleSizeChanged"
       @current-change="handlePageChanged"
     />
   </div>
