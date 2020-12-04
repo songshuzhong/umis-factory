@@ -18,7 +18,7 @@
 <script>
 import { Header as ElHeader } from 'element-ui';
 
-import derivedProp from '../mixin/derivedProp';
+import derivedProp from '../mixin/derived-prop';
 
 export default {
   name: 'MisHeader',

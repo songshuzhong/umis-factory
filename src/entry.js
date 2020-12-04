@@ -1,6 +1,6 @@
 import { Loading, Notification, Message } from 'element-ui';
 
-import MisPage from './components/container/page';
+import MisSchema from './components/container/schema';
 import MisSetting from './components/setting/index';
 import { overwrite } from './utils/config';
 import api from './utils/api';
@@ -51,4 +51,4 @@ export default {
   },
 };
 
-export { MisPage, MisSetting };
+export { MisSchema, MisSetting };

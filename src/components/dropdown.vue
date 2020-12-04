@@ -36,8 +36,8 @@ import { Dropdown as ElDropdown } from 'element-ui';
 import { DropdownMenu as ElDropdownMenu } from 'element-ui';
 import { DropdownItem as ElDropdownItem } from 'element-ui';
 
-import derivedProp from './mixin/derivedProp';
-import initData from './mixin/initData';
+import derivedProp from './mixin/derived-prop';
+import initData from './mixin/init-data';
 
 const actionItems = ['mis-ajax', 'mis-copy', 'mis-redirect', 'mis-url'];
 

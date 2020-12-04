@@ -33,7 +33,7 @@
 
 <script>
 import { Menu as ElMenu } from 'element-ui';
-import initData from '../mixin/initData';
+import initData from '../mixin/init-data';
 import linkage from '../mixin/linkage';
 
 export default {
@@ -102,6 +102,14 @@ export default {
       required: false,
       default: false,
     },
+    target: {
+      type: String,
+      required: false,
+    },
+    linkageTrigger: {
+      type: Function,
+      required: false,
+    },
   },
   watch: {
     collapse: {
@@ -111,6 +119,6 @@ export default {
       immediate: true,
     },
   },
-  mixins: [linkage, initData],
+  mixins: [initData],
 };
 </script>

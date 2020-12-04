@@ -67,9 +67,8 @@ import {
   Button as ElButton,
 } from 'element-ui';
 
-import derivedProp from './mixin/derivedProp';
-import initData from './mixin/initData';
-import linkage from './mixin/linkage';
+import derivedProp from './mixin/derived-prop';
+import initData from './mixin/init-data';
 
 export default {
   name: 'MisAction',
@@ -88,6 +87,10 @@ export default {
       type: String,
       required: true,
     },
+    action: {
+      type: Function,
+      required: false,
+    },
     actionType: {
       type: String,
       required: true,
@@ -102,10 +105,6 @@ export default {
     },
     body: {
       type: [Array, Object],
-      required: false,
-    },
-    action: {
-      type: Function,
       required: false,
     },
     size: {
@@ -193,6 +192,10 @@ export default {
       type: String,
       required: false,
     },
+    linkageTrigger: {
+      type: Function,
+      required: false,
+    },
   },
   data() {
     return {
@@ -201,7 +204,7 @@ export default {
       clipboard: '',
     };
   },
-  mixins: [derivedProp, initData, linkage],
+  mixins: [derivedProp, initData],
   methods: {
     onDisVisiable() {
       this.visible = false;
@@ -217,7 +220,7 @@ export default {
     },
     handleLoading() {
       this.iApiLoading = false;
-      this.onLinkageTrigger(this.target);
+      this.linkageTrigger(this.target);
     },
   },
 };

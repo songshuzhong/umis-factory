@@ -22,13 +22,17 @@
   />
 </template>
 <script>
-import {DatePicker as ElDatePicker} from 'element-ui';
+import { DatePicker as ElDatePicker } from 'element-ui';
 export default {
   name: 'MisDatePicker',
   components: {
     ElDatePicker,
   },
   props: {
+    path: {
+      type: String,
+      required: true,
+    },
     name: {
       type: String,
       required: true,

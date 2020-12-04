@@ -25,9 +25,9 @@
 import { Timeline as ElTimeline } from 'element-ui';
 import { TimelineItem as ElTimelineItem } from 'element-ui';
 
-import initApi from './mixin/initApi';
-import derivedProp from './mixin/derivedProp';
-import initData from './mixin/initData';
+import initApi from './mixin/init-api';
+import derivedProp from './mixin/derived-prop';
+import initData from './mixin/init-data';
 
 export default {
   name: 'MisTimeline',

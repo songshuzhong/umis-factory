@@ -14,7 +14,7 @@
   />
 </template>
 <script>
-import {Switch as ElSwitch} from 'element-ui';
+import { Switch as ElSwitch } from 'element-ui';
 import linkage from '../mixin/linkage';
 
 export default {
@@ -91,7 +91,6 @@ export default {
       immediate: true,
     },
   },
-  mixins: [linkage],
   methods: {
     onChange(val) {
       const linkage = {};

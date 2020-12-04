@@ -22,7 +22,7 @@
 <script>
 import { Select as ElSelect } from 'element-ui';
 import { Option as ElOption } from 'element-ui';
-import initApi from '../mixin/initApi';
+import initApi from '../mixin/init-api';
 
 export default {
   name: 'MisSelect',
@@ -67,6 +67,14 @@ export default {
       type: String,
       required: true,
     },
+    target: {
+      type: String,
+      required: true,
+    },
+    linkageTrigger: {
+      type: Function,
+      required: false,
+    },
   },
   data() {
     return {
@@ -103,6 +111,11 @@ export default {
   mixins: [initApi],
   methods: {
     onChange() {
+      if (this.target) {
+        const linkage = {};
+        linkage[this.name] = this.iValue;
+        this.linkageTrigger(this.target, linkage);
+      }
       this.$emit('input', this.iValue);
     },
     getJoinValue(option) {

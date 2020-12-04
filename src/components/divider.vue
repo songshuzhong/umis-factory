@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import {Divider as ElDivider} from 'element-ui';
-import initData from './mixin/initData';
+import { Divider as ElDivider } from 'element-ui';
+import initData from './mixin/init-data';
 
 export default {
   name: 'MisDivider',
@@ -47,6 +47,6 @@ export default {
       return this.$getRenderedTpl(this.text, this.data);
     },
   },
-  mixins: [initData]
+  mixins: [initData],
 };
 </script>

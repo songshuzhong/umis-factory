@@ -10,12 +10,13 @@
     :init-data="data[value]"
     v-bind="getFattingProps(body, data)"
   />
-  <div v-else v-html="getMapItem"></div>
+  <span v-else-if="!body && inline" v-html="getMapItem" />
+  <div v-else-if="!body && !inline" v-html="getMapItem" />
 </template>
 
 <script>
-import initData from './mixin/initData';
-import derivedProp from './mixin/derivedProp';
+import initData from './mixin/init-data';
+import derivedProp from './mixin/derived-prop';
 
 export default {
   name: 'MisMapping',
@@ -43,6 +44,11 @@ export default {
     body: {
       type: Object,
       required: false,
+    },
+    inline: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   data() {

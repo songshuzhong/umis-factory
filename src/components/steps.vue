@@ -21,9 +21,8 @@
 </template>
 
 <script>
-import {Steps as ElSteps} from 'element-ui';
-import {Step as ElStep} from 'element-ui';
-import linkage from './mixin/linkage';
+import { Steps as ElSteps } from 'element-ui';
+import { Step as ElStep } from 'element-ui';
 
 export default {
   name: 'MisSteps',
@@ -68,6 +67,14 @@ export default {
       type: Array,
       required: true,
     },
+    target: {
+      type: String,
+      required: false,
+    },
+    linkageTrigger: {
+      type: Function,
+      required: true,
+    },
   },
   data() {
     return {
@@ -84,6 +91,5 @@ export default {
       immediate: true,
     },
   },
-  mixins: [linkage],
 };
 </script>

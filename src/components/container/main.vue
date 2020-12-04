@@ -33,7 +33,7 @@
 <script>
 import { Main as ElMain } from 'element-ui';
 
-import derivedProp from '../mixin/derivedProp';
+import derivedProp from '../mixin/derived-prop';
 
 export default {
   name: 'MisMain',

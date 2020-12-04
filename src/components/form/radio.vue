@@ -24,11 +24,9 @@
 </template>
 
 <script>
-import {RadioGroup as ElRadioGroup} from 'element-ui';
-import {RadioButton   as ElRadioButton} from 'element-ui';
-import {Radio as ElRadio} from 'element-ui';
-
-import linkage from '../mixin/linkage';
+import { RadioGroup as ElRadioGroup } from 'element-ui';
+import { RadioButton as ElRadioButton } from 'element-ui';
+import { Radio as ElRadio } from 'element-ui';
 
 export default {
   name: 'MisRadio',
@@ -78,7 +76,6 @@ export default {
       immediate: true,
     },
   },
-  mixins: [linkage],
   methods: {
     onChange() {
       const linkage = {};

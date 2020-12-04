@@ -75,8 +75,8 @@
 <script>
 import { Dialog as ElDialog } from 'element-ui';
 
-import derivedProp from '../mixin/derivedProp';
-import initData from '../mixin/initData';
+import derivedProp from '../mixin/derived-prop';
+import initData from '../mixin/init-data';
 
 export default {
   name: 'MisDialog',

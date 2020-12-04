@@ -1,36 +1,44 @@
 <template>
-  <div class="umis-page" v-loading="iApiLoading || iSchemaLoading">
-    <template
-      v-if="Object.prototype.toString.call(iSchema) === '[object Array]'"
-    >
-      <component
-        v-for="(item, index) in iSchema"
-        v-bind="item"
-        :key="index"
-        :is="item.renderer"
-        :path="`${path}/${index}/${item.renderer}`"
-      />
+  <div>
+    <template v-if="Object.prototype.toString.call(body) === '[object Array]'">
+      <template v-for="(child, index) in body">
+        <mis-component
+          :mis-name="child.renderer"
+          :key="`${path}/${index}/${child.renderer}`"
+          :path="`${path}/${index}/${child.renderer}`"
+          :props="getFattingProps(child)"
+          :header="getHeader(child)"
+          :body="getBody(child)"
+          :footer="getFooter(child)"
+          v-bind="getFattingProps(child)"
+          :init-data="getInitData(child)"
+          :linkage-trigger="onLinkageTrigger"
+        />
+      </template>
     </template>
-    <template
-      v-if="Object.prototype.toString.call(iSchema) === '[object Object]'"
-    >
-      <component
-        v-bind="iSchema"
-        :is="iSchema.renderer"
-        :key="iSchema.name"
-        :path="`${path}/${iSchema.renderer}`"
-      />
-    </template>
+    <mis-component
+      v-else
+      :mis-name="body.renderer"
+      :path="`${path}/${body.renderer}`"
+      :body="getBody(body)"
+      :header="getHeader(body)"
+      :footer="getFooter(body)"
+      :props="getFattingProps(body)"
+      :init-data="getInitData(body)"
+      v-bind="getFattingProps(body)"
+    />
   </div>
 </template>
 <script>
-import initApi from '../mixin/initApi';
-import initData from '../mixin/initData';
+import initApi from '../mixin/init-api';
+import initData from '../mixin/init-data';
+import derivedProp from '../mixin/derived-prop';
+import linkage from '../mixin/linkage';
 
 export default {
   name: 'MisPage',
   props: {
-    schema: {
+    body: {
       type: [Array, Object],
       required: false,
     },
@@ -40,20 +48,6 @@ export default {
       return this.$route.path;
     },
   },
-  mixins: [initApi, initData],
-  watch: {
-    schema: {
-      handler(val) {
-        this.iSchema = val;
-      },
-      immediate: true,
-    },
-  },
+  mixins: [initApi, initData, derivedProp],
 };
 </script>
-<style lang="scss">
-.umis-page {
-  width: 100%;
-  height: 100%;
-}
-</style>

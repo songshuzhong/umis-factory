@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import derivedProp from '../mixin/derivedProp';
-import initApi from '../mixin/initApi';
+import derivedProp from '../mixin/derived-prop';
+import initApi from '../mixin/init-api';
 import linkage from '../mixin/linkage';
 
 export default {
@@ -61,6 +61,6 @@ export default {
       required: false,
     },
   },
-  mixins: [linkage, initApi, derivedProp],
+  mixins: [initApi, derivedProp],
 };
 </script>

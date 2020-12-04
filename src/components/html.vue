@@ -1,9 +1,10 @@
 <template>
-  <div v-html="getHtml" />
+  <span v-if="inline" v-html="getHtml" />
+  <div v-else v-html="getHtml" />
 </template>
 <script>
-import derivedProp from './mixin/derivedProp';
-import initData from './mixin/initData';
+import derivedProp from './mixin/derived-prop';
+import initData from './mixin/init-data';
 
 export default {
   name: 'MisHtml',
@@ -15,6 +16,11 @@ export default {
     name: {
       type: String,
       required: false,
+    },
+    inline: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   computed: {

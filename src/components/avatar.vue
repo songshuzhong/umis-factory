@@ -9,11 +9,12 @@
     :src="isComputedSrc ? computedSrc : src"
     :src-set="srcSet"
     :alt="alt"
+    @click.native="onClick"
   />
 </template>
 <script>
 import { Avatar as ElAvatar } from 'element-ui';
-import initData from './mixin/initData';
+import initData from './mixin/init-data';
 
 export default {
   name: 'MisAvatar',
@@ -68,6 +69,14 @@ export default {
       required: false,
       default: false,
     },
+    action: {
+      type: Function,
+      required: false,
+    },
+    actionType: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
@@ -77,6 +86,11 @@ export default {
   mixins: [initData],
   created() {
     this.computedSrc = this.$getCompiledUrl(this.src, this.data);
+  },
+  methods: {
+    onClick() {
+      this.action && this.action();
+    },
   },
 };
 </script>

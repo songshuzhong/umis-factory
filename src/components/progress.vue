@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import {Progress as ElProgress} from 'element-ui';
-import initData from './mixin/initData';
+import { Progress as ElProgress } from 'element-ui';
+import initData from './mixin/init-data';
 import linkage from './mixin/linkage';
 
 export default {
@@ -63,6 +63,14 @@ export default {
       type: String,
       required: false,
     },
+    target: {
+      type: String,
+      required: false,
+    },
+    linkageTrigger: {
+      type: Function,
+      required: true,
+    },
   },
   watch: {
     percentage: {
@@ -72,6 +80,6 @@ export default {
       immediate: true,
     },
   },
-  mixins: [linkage, initData],
+  mixins: [initData],
 };
 </script>

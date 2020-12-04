@@ -20,9 +20,9 @@
       :header="header"
       :body="body"
       :footer="footer"
-      :action="action"
+      :action="filterAction"
       :linkage-trigger="onLinkageTrigger"
-      :init-data="getDataProps(props, data)"
+      :init-data="data"
     />
   </transition>
 </template>
@@ -30,11 +30,11 @@
 <script>
 import copy from 'copy-to-clipboard';
 import { Alert as ElAlert } from 'element-ui';
-import derivedProp from '../mixin/derivedProp';
+import derivedProp from '../mixin/derived-prop';
 import linkage from '../mixin/linkage';
 import visible from '../mixin/visible';
-import initData from '../mixin/initData';
-import initApi from '../mixin/initApi';
+import initData from '../mixin/init-data';
+import initApi from '../mixin/init-api';
 
 export default {
   name: 'mis-Component',
@@ -70,6 +70,10 @@ export default {
       type: [Array, Object],
       required: false,
     },
+    action: {
+      type: Function,
+      required: false,
+    },
   },
   mixins: [visible, initApi, initData, linkage, derivedProp],
   data() {
@@ -81,7 +85,7 @@ export default {
   },
   errorCaptured(err, vm, info) {
     this.error = `'${err.message}' is found in ${info} of component`;
-
+    console.error(err);
     return false;
   },
   computed: {
@@ -99,7 +103,13 @@ export default {
     this.$eventHub.$on('mis-component:reload', this.handleReload);
   },
   methods: {
-    action(feedback) {
+    filterAction(feedback) {
+      if (['mis-submit', 'mis-reset'].includes(this.props.actionType)) {
+        return this.action();
+      }
+      return this.dispatchAction(feedback);
+    },
+    dispatchAction(feedback) {
       switch (this.props.actionType) {
         case 'mis-ajax':
           this.handleAjaxAction(feedback);

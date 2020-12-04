@@ -13,6 +13,7 @@
         <mis-card
           :path="`${path}/${index}`"
           :classname="classname"
+          :shadow="shadow"
           :body-style="bodyStyle"
           :header="header"
           :body="body"
@@ -38,8 +39,8 @@ import { Col as ElCol } from 'element-ui';
 import { Card as ElCard } from 'element-ui';
 import { Pagination as ElPagination } from 'element-ui';
 
-import initApi from '../mixin/initApi';
-import derivedProp from '../mixin/derivedProp';
+import initApi from '../mixin/init-api';
+import derivedProp from '../mixin/derived-prop';
 import MisCard from './card';
 
 export default {

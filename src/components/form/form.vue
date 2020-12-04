@@ -8,14 +8,15 @@
     :model="data"
     :inline="inline"
   >
-    <template v-for="(item, index) in inactiveControls" :key="index">
+    <template v-for="(item, index) in inactiveControls">
       <mis-field
         v-if="formItems.includes(item.renderer)"
         v-model="data[item.name]"
+        :key="`${path}/${index}/${item.renderer}`"
         :path="`${path}/${index}/${item.renderer}`"
         :name="item.name"
         :field="item"
-        :data="data"
+        :init-data="data"
         :hidden-on="item.hiddenOn"
         :visible-on="item.visibleOn"
         :disabled-on="item.disabledOn"
@@ -24,18 +25,21 @@
       />
       <mis-component
         v-else
-        :mis-name="item.renderer"
-        :props="getFattingProps(item, data)"
+        :key="`${path}/${index}/${item.renderer}`"
         :path="`${path}/${index}/${item.renderer}`"
+        :mis-name="item.renderer"
+        :props="getFattingProps(item)"
+        :init-data="data"
       />
     </template>
     <el-form-item>
-      <template v-for="(item, index) in activeControls" :key="index">
-        <component
-          v-bind="item"
-          :is="item.renderer"
+      <template v-for="(item, index) in activeControls">
+        <mis-component
+          :key="`${path}/${index}/${item.renderer}`"
           :path="`${path}/${index}/${item.renderer}`"
+          :mis-name="item.renderer"
           :name="item.name"
+          :props="item"
           :init-data="data"
           :hidden-on="item.hiddenOn"
           :visible-on="item.visibleOn"
@@ -49,10 +53,10 @@
 <script>
 import { Form as ElForm } from 'element-ui';
 
-import derivedProp from '../mixin/derivedProp';
+import derivedProp from '../mixin/derived-prop';
 import linkage from '../mixin/linkage';
-import initApi from '../mixin/initApi';
-import initData from '../mixin/initData';
+import initApi from '../mixin/init-api';
+import initData from '../mixin/init-data';
 
 const formItems = [
   'mis-field',
@@ -139,7 +143,7 @@ export default {
       );
     },
   },
-  mixins: [initApi, initData, derivedProp, linkage],
+  mixins: [initApi, initData, derivedProp],
   methods: {
     handleInvisible(visible, field) {
       if (visible) {

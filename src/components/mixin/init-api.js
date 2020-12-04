@@ -179,6 +179,7 @@ export default {
           params: {
             pageIndex: this.iPageIndex,
             pageSize: this.iPageSize,
+            ...this.$route.query,
             ...compiledParams,
           },
         };
@@ -186,6 +187,7 @@ export default {
         fetchBody = {
           pageIndex: this.iPageIndex,
           pageSize: this.iPageSize,
+          ...this.$route.query,
           ...compiledParams,
         };
       }

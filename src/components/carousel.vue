@@ -25,12 +25,12 @@
 </template>
 
 <script>
-import {Carousel as ElCarousel} from 'element-ui';
-import {CarouselItem as ElCarouselItem} from 'element-ui';
+import { Carousel as ElCarousel } from 'element-ui';
+import { CarouselItem as ElCarouselItem } from 'element-ui';
 
-import initApi from './mixin/initApi';
-import initData from './mixin/initData';
-import derivedProp from './mixin/derivedProp';
+import initApi from './mixin/init-api';
+import initData from './mixin/init-data';
+import derivedProp from './mixin/derived-prop';
 
 export default {
   name: 'MisCarousel',

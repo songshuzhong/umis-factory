@@ -8,9 +8,8 @@ export default {
       const { data, header, body, footer, ...other } = props;
       return { ...other };
     },
-    getDataProps(props = {}, extend = {}) {
-      const data = props.data || {};
-      return Object.assign({}, data, extend);
+    getInitData(props = {}) {
+      return props.initData;
     },
     getHeader(props) {
       return props.header;

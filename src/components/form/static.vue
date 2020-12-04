@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import initData from '../mixin/initData';
+import initData from '../mixin/init-data';
 
 export default {
   name: 'MisStatic',

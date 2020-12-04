@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import initData from './mixin/initData';
-import derivedProp from './mixin/derivedProp';
+import initData from './mixin/init-data';
+import derivedProp from './mixin/derived-prop';
 
 export default {
   name: 'MisList',

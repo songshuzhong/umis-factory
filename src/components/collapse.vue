@@ -21,10 +21,10 @@
 </template>
 
 <script>
-import {Collapse as ElCollapse} from 'element-ui';
-import {CollapseItem as ElCollapseItem} from 'element-ui';
-import derivedProp from './mixin/derivedProp';
-import initData from './mixin/initData';
+import { Collapse as ElCollapse } from 'element-ui';
+import { CollapseItem as ElCollapseItem } from 'element-ui';
+import derivedProp from './mixin/derived-prop';
+import initData from './mixin/init-data';
 
 export default {
   name: 'MisCollapse',

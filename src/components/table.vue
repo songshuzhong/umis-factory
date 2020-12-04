@@ -14,8 +14,29 @@
     >
       <template v-for="(column, index) in columns" :key="index">
         <el-table-column
-          v-if="column.body"
-          :path="`/${path}/${index}/${column.name}`"
+          v-if="column.slot && column.body"
+          :path="`${path}/${index}/${column.name}`"
+          :prop="column.name || ''"
+          :label="column.label"
+          :fixed="column.fixed"
+          :width="column.width"
+          :align="column.align"
+        >
+          <template slot="header" slot-scope="scope">
+            <mis-component
+              :path="`${path}/${index}/${column.body.renderer}`"
+              :mis-name="column.body.renderer"
+              :header="getHeader(column.body)"
+              :body="getBody(column.body)"
+              :footer="getFooter(column.body)"
+              :init-data="scope.row"
+              :props="getFattingProps(column.body, scope.row)"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column
+          v-else-if="!column.slot && column.body"
+          :path="`${path}/${index}/${column.name}`"
           :prop="column.name || ''"
           :label="column.label"
           :width="column.width"
@@ -23,7 +44,7 @@
           <template slot-scope="scope">
             <template v-for="(item, jndex) in column.body" :key="jndex">
               <mis-component
-                :path="`/${path}/${index}/${item.renderer}`"
+                :path="`${path}/${index}/${item.renderer}`"
                 :mis-name="item.renderer"
                 :header="getHeader(item)"
                 :body="getBody(item)"
@@ -36,7 +57,7 @@
         </el-table-column>
         <el-table-column
           v-else
-          :path="`/${path}/${index}/${column.name}`"
+          :path="`${path}/${index}/${column.name}`"
           :prop="column.name || ''"
           :label="column.label"
           :fixed="column.fixed"
@@ -57,13 +78,13 @@
 </template>
 
 <script>
-import {Table as ElTable} from 'element-ui';
-import {TableColumn as ElTableColumn} from 'element-ui';
-import {Pagination as ElPagination} from 'element-ui';
+import { Table as ElTable } from 'element-ui';
+import { TableColumn as ElTableColumn } from 'element-ui';
+import { Pagination as ElPagination } from 'element-ui';
 
-import initApi from './mixin/initApi';
-import derivedProp from './mixin/derivedProp';
-import initData from './mixin/initData';
+import initApi from './mixin/init-api';
+import derivedProp from './mixin/derived-prop';
+import initData from './mixin/init-data';
 
 export default {
   name: 'MisTable',

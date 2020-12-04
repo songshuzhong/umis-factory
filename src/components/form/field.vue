@@ -20,7 +20,6 @@
         :is="field.renderer"
         :path="`${path}/${field.renderer}`"
         :name="field.name"
-        :data="data"
         :init-data="data"
         :value="iValue"
         :disabled="iDisabled"
@@ -36,6 +35,7 @@
 import { Tooltip as ElTooltip } from 'element-ui';
 import { FormItem as ElFormItem } from 'element-ui';
 import visible from '../mixin/visible';
+import initData from '../mixin/init-data';
 
 export default {
   name: 'MisField',
@@ -86,7 +86,7 @@ export default {
       iValue: '',
     };
   },
-  mixins: [visible],
+  mixins: [visible, initData],
   watch: {
     value: {
       handler(val) {
