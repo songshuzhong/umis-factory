@@ -7,19 +7,20 @@
     :tag="tag"
   >
     <el-col
-      v-for="(item, index) in body"
-      :key="`${path}/${index}/${item.renderer}`"
+      v-for="(child, index) in body"
+      :key="`${path}/${index}/${child.renderer}`"
       :class="classname"
-      :span="item.span"
+      :span="child.span"
     >
       <mis-component
-        :props="item"
-        :mis-name="item.renderer"
+        :mis-name="child.renderer"
         :key="index"
-        :path="`${path}/${index}/${item.renderer}`"
-        :label="item.label"
-        :name="item.name"
-        :body="item.body"
+        :path="`${path}/${index}/${child.renderer}`"
+        :label="child.label"
+        :header="getHeader(child)"
+        :body="getBody(child)"
+        :footer="getFooter(child)"
+        :props="getFattingProps(child)"
       />
     </el-col>
   </el-row>
@@ -27,6 +28,8 @@
 <script>
 import { Row as ElRow } from 'element-ui';
 import { Col as ElCol } from 'element-ui';
+
+import derivedProp from '../mixin/derived-prop';
 
 export default {
   name: 'MisGrid',
@@ -74,5 +77,6 @@ export default {
       default: 'div',
     },
   },
+  mixins: [derivedProp],
 };
 </script>

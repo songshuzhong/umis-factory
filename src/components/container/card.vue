@@ -13,8 +13,7 @@
             :header="getHeader(child)"
             :body="getBody(child)"
             :footer="getFooter(child)"
-            v-bind="getFattingProps(child)"
-            :init-data="data"
+            :init-data="getInitData(data, child)"
           />
         </template>
       </template>
@@ -26,8 +25,7 @@
         :header="getHeader(header)"
         :footer="getFooter(header)"
         :props="getFattingProps(header)"
-        v-bind="getFattingProps(header)"
-        :init-data="data"
+        :init-data="getInitData(data, header)"
       />
     </template>
     <div style="padding: 10px">
@@ -43,8 +41,7 @@
             :header="getHeader(child)"
             :body="getBody(child)"
             :footer="getFooter(child)"
-            v-bind="getFattingProps(child)"
-            :init-data="data"
+            :init-data="getInitData(data, child)"
           />
         </template>
       </template>
@@ -52,29 +49,27 @@
         v-else
         :mis-name="body.renderer"
         :path="`${path}/${body.renderer}`"
-        :body="getBody(body)"
-        :header="getHeader(body)"
-        :footer="getFooter(body)"
         :props="getFattingProps(body)"
-        :init-data="data"
-        v-bind="getFattingProps(body)"
+        :header="getHeader(body)"
+        :body="getBody(body)"
+        :footer="getFooter(body)"
+        :init-data="getInitData(data, body)"
       />
     </div>
     <div class="el-card__footer" v-if="footer">
       <template
         v-if="Object.prototype.toString.call(footer) === '[object Array]'"
       >
-        <template v-for="foot in footer">
+        <template v-for="(child, index) in footer">
           <mis-component
-            :mis-name="foot.renderer"
-            :key="`${path}/${index}/${foot.renderer}`"
-            :path="`${path}/${index}/${foot.renderer}`"
-            :header="getHeader(foot)"
-            :body="getBody(foot)"
-            :footer="getFooter(foot)"
-            :props="getFattingProps(foot)"
-            :init-data="data"
-            v-bind="getFattingProps(foot)"
+            :mis-name="child.renderer"
+            :key="`${path}/${index}/${child.renderer}`"
+            :path="`${path}/${index}/${child.renderer}`"
+            :header="getHeader(child)"
+            :body="getBody(child)"
+            :footer="getFooter(child)"
+            :props="getFattingProps(child)"
+            :init-data="(data, child)"
           />
         </template>
       </template>
@@ -86,8 +81,7 @@
         :body="getBody(footer)"
         :footer="getFooter(footer)"
         :props="getFattingProps(footer)"
-        :init-data="data"
-        v-bind="getFattingProps(footer)"
+        :init-data="getInitData(data, footer)"
       />
     </div>
   </el-card>

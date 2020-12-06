@@ -1,15 +1,13 @@
 <template>
   <transition :name="transition">
     <el-alert v-if="showErrorBoundary" title="错误: 渲染失败了" type="error">
-      <pre class="umis-component__not-find">
-          <code>
-{{`{
+      <pre class="umis-component__not-find">{{
+        `{
     "name": "${misName}"
     "path": "${path}"
     "error": "${error}"
-}`}}
-          </code>
-        </pre>
+}`
+      }}</pre>
     </el-alert>
     <component
       v-if="iVisible && forceRerender"
@@ -49,10 +47,6 @@ export default {
     misName: {
       type: String,
       required: true,
-    },
-    name: {
-      type: String,
-      required: false,
     },
     props: {
       type: Object,
@@ -163,7 +157,7 @@ export default {
       copy(content);
       this.$message({
         showClose: true,
-        message: '复制成功',
+        message: `已复制：${content}.`,
         type: 'success',
       });
     },
@@ -180,5 +174,6 @@ export default {
   font-size: 14px;
   text-align: left;
   color: #606266;
+  overflow-x: scroll;
 }
 </style>

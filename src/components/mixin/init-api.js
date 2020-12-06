@@ -2,15 +2,6 @@ import deepEqual from 'deep-equal';
 
 export default {
   props: {
-    canSchemaUpdate: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
-    initSchema: {
-      type: Object,
-      required: false,
-    },
     initApi: {
       type: Object,
       required: false,
@@ -44,9 +35,7 @@ export default {
       iPageSize: 10,
       iHasMore: true,
       iLoading: false,
-      iSchemaLoading: false,
       iStopAutoRefresh: false,
-      iSchema: {},
       data: {},
       rows: [],
     };
@@ -68,12 +57,6 @@ export default {
           this.clearAutoRefresh();
         }
       },
-    },
-    'initSchema.url': {
-      handler() {
-        this.getPageSchema();
-      },
-      deep: true,
     },
     data: {
       handler(val, old) {
@@ -106,10 +89,6 @@ export default {
     this.intervalFetcher = null;
     this.compiledCacheUrl = null;
     this.compiledCacheParams = null;
-    this.$eventHub.$on('mis-schema:change', this.updatePageSchema);
-    if (this.initSchema) {
-      this.getPageSchema();
-    }
     if (this.initApi && this.$options['_componentTag'] !== 'mis-component') {
       this.handleFetchApi();
 
@@ -126,29 +105,6 @@ export default {
       if (this.interval && this.intervalFetcher) {
         clearInterval(this.intervalFetcher);
       }
-    },
-    getPageSchema() {
-      const { method, url, params = {} } = this.initSchema;
-      let fetchBody = params;
-
-      if (method === 'get') {
-        fetchBody = {
-          params,
-        };
-      }
-
-      this.iSchemaLoading = true;
-      this.$api
-        .slientApi()
-        [method](url, fetchBody)
-        .then(res => {
-          const { pageSchema, ...pageInfo } = res.data;
-          const schema = JSON.parse(pageSchema);
-          this.iSchema = schema;
-          this.iPageInfo = pageInfo;
-          this.iSchemaLoading = false;
-          window.UMIS = { pageInfo, pageSchema: schema };
-        });
     },
     handleIntervalFetch() {
       this.intervalFetcher = setInterval(() => {
@@ -228,12 +184,6 @@ export default {
         .finally(() => {
           this.iLoading = false;
         });
-    },
-    updatePageSchema(schema) {
-      if (this.canSchemaUpdate) {
-        this.iSchema = schema;
-        window.UMIS.pageSchema = schema;
-      }
     },
     handlePageChanged(pageIndex) {
       this.iPageIndex = pageIndex;

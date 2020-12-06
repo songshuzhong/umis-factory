@@ -21,7 +21,7 @@
         :visible-on="item.visibleOn"
         :disabled-on="item.disabledOn"
         :handle-invisible="handleInvisible"
-        :linkage-trigger="onLinkageTrigger"
+        :linkage-trigger="linkageTrigger"
       />
       <mis-component
         v-else

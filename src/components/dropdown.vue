@@ -24,7 +24,7 @@
           :path="`/${path}/${index}/${item.renderer}`"
           :mis-name="item.renderer"
           :props="getFattingProps(item)"
-          :init-data="data"
+          :init-data="getInitData(data, item)"
         />
       </el-dropdown-item>
     </el-dropdown-menu>

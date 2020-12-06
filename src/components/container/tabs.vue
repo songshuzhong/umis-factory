@@ -30,8 +30,7 @@
             :header="getHeader(item.body)"
             :body="getBody(item.body)"
             :footer="getFooter(item.body)"
-            v-bind="getFattingProps(item.body)"
-            :init-data="data"
+            :init-data="getInitData(data, item)"
           />
         </template>
         <template v-else>
@@ -44,8 +43,7 @@
               :header="getHeader(child)"
               :body="getBody(child)"
               :footer="getFooter(child)"
-              v-bind="getFattingProps(child)"
-              :init-data="data"
+              :init-data="getInitData(data, child)"
             />
           </template>
         </template>

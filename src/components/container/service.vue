@@ -1,29 +1,28 @@
 <template>
   <div class="umis-service__body">
     <template v-if="Object.prototype.toString.call(body) === '[object Array]'">
-      <template v-for="(item, index) in body">
+      <template v-for="(child, index) in body">
         <mis-component
-          :path="`${path}/${index}/${item.renderer}`"
-          :key="`${path}/${index}/${item.renderer}`"
-          :mis-name="item.renderer"
-          :header="getHeader(item)"
-          :body="getBody(item)"
-          :footer="getFooter(item)"
-          :props="getFattingProps(item, data)"
-          :init-data="data"
+          :mis-name="child.renderer"
+          :path="`${path}/${index}/${child.renderer}`"
+          :key="`${path}/${index}/${child.renderer}`"
+          :header="getHeader(child)"
+          :body="getBody(child)"
+          :footer="getFooter(child)"
+          :props="getFattingProps(child)"
+          :init-data="getInitData(data, child)"
         />
       </template>
     </template>
     <mis-component
       v-else
-      v-bind="body"
       :path="`${path}/${body.renderer}`"
       :mis-name="body.renderer"
       :header="getHeader(body)"
       :body="getBody(body)"
       :footer="getFooter(body)"
       :props="getFattingProps(body, data, { rows })"
-      :init-data="data"
+      :init-data="getInitData(data, body)"
     />
   </div>
 </template>

@@ -48,6 +48,7 @@ export default {
     Vue.prototype.$notice = Notification;
     Vue.prototype.$message = Message;
     Vue.prototype.$api = api(options);
+    window.$getCompiledParams = getCompiledParams;
   },
 };
 

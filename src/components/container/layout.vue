@@ -1,17 +1,29 @@
 <template>
   <el-container :direction="direction" :class="classname">
-    <template v-for="(item, index) in body">
-      <mis-component
-        :mis-name="item.renderer"
-        :key="`${path}/${index}/${item.renderer}`"
-        :path="`${path}/${index}/${item.renderer}`"
-        :header="getHeader(item)"
-        :body="getBody(item)"
-        :footer="getFooter(item)"
-        :props="getFattingProps(item, data)"
-        v-bind="getFattingProps(item, data)"
-      />
+    <template v-if="Object.prototype.toString.call(body) === '[object Array]'">
+      <template v-for="(child, index) in body">
+        <mis-component
+          :mis-name="child.renderer"
+          :key="`${path}/${index}/${child.renderer}`"
+          :path="`${path}/${index}/${child.renderer}`"
+          :header="getHeader(child)"
+          :body="getBody(child)"
+          :footer="getFooter(child)"
+          :props="getFattingProps(child, data)"
+          :init-data="getInitData(data, child)"
+        />
+      </template>
     </template>
+    <mis-component
+      v-else
+      :mis-name="body.renderer"
+      :path="`${path}/${body.renderer}`"
+      :body="getBody(body)"
+      :header="getHeader(body)"
+      :footer="getFooter(body)"
+      :props="getFattingProps(body)"
+      :init-data="getInitData(data, body)"
+    />
   </el-container>
 </template>
 
@@ -23,6 +35,7 @@ import { Main as ElMain } from 'element-ui';
 import { Footer as ElFooter } from 'element-ui';
 
 import derivedProp from '../mixin/derived-prop';
+import initData from '../mixin/init-data';
 
 export default {
   name: 'MisLayout',
@@ -55,6 +68,6 @@ export default {
       required: false,
     },
   },
-  mixins: [derivedProp],
+  mixins: [derivedProp, initData],
 };
 </script>

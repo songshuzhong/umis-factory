@@ -13,9 +13,11 @@
       <mis-component
         :mis-name="body.renderer"
         :path="`${path}/${index}/${body.renderer}`"
+        :header="getHeader(body)"
         :body="getBody(body)"
+        :footer="getFooter(body)"
         :props="getFattingProps(body)"
-        :init-data="item"
+        :init-data="getInitData(data, body)"
       />
     </el-timeline-item>
   </el-timeline>

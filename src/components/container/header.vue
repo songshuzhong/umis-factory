@@ -1,17 +1,30 @@
 <template>
   <el-header :class="classname">
-    <template v-for="(item, index) in body">
-      <mis-component
-        :mis-name="item.renderer"
-        :key="`${path}/${index}/${item.renderer}`"
-        :path="`${path}/${index}/${item.renderer}`"
-        :title="item.title"
-        :header="getHeader(item)"
-        :body="getBody(item)"
-        :footer="getFooter(item)"
-        :props="item"
-      />
+    <template v-if="Object.prototype.toString.call(body) === '[object Array]'">
+      <template v-for="(child, index) in body">
+        <mis-component
+          :mis-name="child.renderer"
+          :key="`${path}/${index}/${child.renderer}`"
+          :path="`${path}/${index}/${child.renderer}`"
+          :header="getHeader(child)"
+          :body="getBody(child)"
+          :footer="getFooter(child)"
+          :props="getFattingProps(child)"
+          :init-data="getInitData(data, child)"
+        />
+      </template>
     </template>
+    <mis-component
+      v-else
+      :mis-name="body.renderer"
+      :key="`${path}/${body.renderer}`"
+      :path="`${path}/${body.renderer}`"
+      :header="getHeader(body)"
+      :body="getBody(body)"
+      :footer="getFooter(body)"
+      :props="getFattingProps(body)"
+      :init-data="getInitData(data, body)"
+    />
   </el-header>
 </template>
 
@@ -19,6 +32,7 @@
 import { Header as ElHeader } from 'element-ui';
 
 import derivedProp from '../mixin/derived-prop';
+import initData from '../mixin/init-data';
 
 export default {
   name: 'MisHeader',
@@ -39,6 +53,6 @@ export default {
       required: false,
     },
   },
-  mixins: [derivedProp],
+  mixins: [derivedProp, initData],
 };
 </script>

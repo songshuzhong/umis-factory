@@ -18,7 +18,6 @@
         :header="getHeader(item)"
         :footer="getFooter(item)"
         :props="getFattingProps(item)"
-        v-bind="getFattingProps(item)"
       />
     </el-carousel-item>
   </el-carousel>

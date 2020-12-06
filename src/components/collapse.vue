@@ -12,8 +12,8 @@
           :body="getBody(item)"
           :header="getHeader(item)"
           :footer="getFooter(item)"
-          :props="getFattingProps(item, data)"
-          v-bind="getFattingProps(item, data)"
+          :props="getFattingProps(item)"
+          :init-data="getInitData(data, item)"
         />
       </el-collapse-item>
     </template>

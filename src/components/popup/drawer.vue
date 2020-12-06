@@ -21,7 +21,7 @@
         :action="onClose"
         :after-action="onClose"
         :props="getFattingProps(header)"
-        :init-data="data"
+        :init-data="getInitData(data, header)"
       />
     </template>
     <template v-for="(item, index) in body">
@@ -32,7 +32,7 @@
         :footer="item.footer"
         :action="onClose"
         :props="getFattingProps(item)"
-        :init-data="data"
+        :init-data="getInitData(data, item)"
       />
     </template>
     <template v-if="footer">
@@ -44,7 +44,7 @@
           :footer="item.footer"
           :action="onClose"
           :props="getFattingProps(item)"
-          :init-data="data"
+          :init-data="getInitData(data, item)"
         />
       </template>
     </template>

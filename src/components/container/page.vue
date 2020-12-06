@@ -3,6 +3,7 @@
     <template v-if="Object.prototype.toString.call(body) === '[object Array]'">
       <template v-for="(child, index) in body">
         <mis-component
+          v-bind="getFattingProps(child)"
           :mis-name="child.renderer"
           :key="`${path}/${index}/${child.renderer}`"
           :path="`${path}/${index}/${child.renderer}`"
@@ -10,22 +11,20 @@
           :header="getHeader(child)"
           :body="getBody(child)"
           :footer="getFooter(child)"
-          v-bind="getFattingProps(child)"
-          :init-data="getInitData(child)"
-          :linkage-trigger="onLinkageTrigger"
+          :init-data="getInitData(data, child)"
         />
       </template>
     </template>
     <mis-component
       v-else
+      v-bind="getFattingProps(body)"
       :mis-name="body.renderer"
       :path="`${path}/${body.renderer}`"
-      :body="getBody(body)"
       :header="getHeader(body)"
+      :body="getBody(body)"
       :footer="getFooter(body)"
       :props="getFattingProps(body)"
-      :init-data="getInitData(body)"
-      v-bind="getFattingProps(body)"
+      :init-data="getInitData(data, body)"
     />
   </div>
 </template>
@@ -33,7 +32,6 @@
 import initApi from '../mixin/init-api';
 import initData from '../mixin/init-data';
 import derivedProp from '../mixin/derived-prop';
-import linkage from '../mixin/linkage';
 
 export default {
   name: 'MisPage',

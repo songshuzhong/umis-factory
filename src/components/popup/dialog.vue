@@ -33,8 +33,8 @@
             :header="getHeader(item)"
             :body="getBody(item)"
             :footer="getFooter(item)"
-            :props="getFattingProps(item, data)"
-            :init-data="data"
+            :props="getFattingProps(item)"
+            :init-data="getInitData(data, item)"
           />
         </template>
       </template>
@@ -51,7 +51,7 @@
               :body="getBody(item)"
               :footer="getFooter(item)"
               :props="getFattingProps(item)"
-              :init-data="data"
+              :init-data="getInitData(data, item)"
             />
           </template>
         </template>
@@ -65,7 +65,7 @@
             :body="getBody(footer)"
             :footer="getFooter(footer)"
             :props="getFattingProps(footer)"
-            :init-data="data"
+            :init-data="getInitData(data, footer)"
           />
         </template>
       </div>

@@ -10,8 +10,7 @@
   </el-card>
 </template>
 <script>
-import { Card as ElCard } from 'element-ui';
-import { Button as ElButton } from 'element-ui';
+import { Card as ElCard, Button as ElButton } from 'element-ui';
 
 export default {
   name: 'SettingStyle',

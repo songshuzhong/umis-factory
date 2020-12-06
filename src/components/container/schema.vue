@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="iApiLoading || iSchemaLoading">
+  <div v-loading="iSchemaLoading">
     <template
       v-if="Object.prototype.toString.call(iSchema) === '[object Array]'"
     >
@@ -24,9 +24,6 @@
   </div>
 </template>
 <script>
-import initApi from '../mixin/init-api';
-import initData from '../mixin/init-data';
-
 export default {
   name: 'MisSchema',
   props: {
@@ -34,19 +31,82 @@ export default {
       type: [Array, Object],
       required: false,
     },
-  },
-  computed: {
-    path() {
-      return this.$route.path;
+    canSchemaUpdate: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+    initSchema: {
+      type: Object,
+      required: false,
     },
   },
-  mixins: [initApi, initData],
+  data() {
+    return {
+      iSchemaLoading: false,
+      iStopAutoRefresh: false,
+      iSchema: {},
+    };
+  },
   watch: {
     schema: {
       handler(val) {
         this.iSchema = val;
       },
       immediate: true,
+    },
+    'initSchema.url': {
+      handler() {
+        this.getPageSchema();
+      },
+      deep: true,
+    },
+  },
+  computed: {
+    path() {
+      return this.$route.path;
+    },
+  },
+  mounted() {
+    this.isMounted = true;
+    this.$eventHub.$on('mis-schema:change', this.updatePageSchema);
+    if (this.initSchema) {
+      this.getPageSchema();
+    }
+  },
+  methods: {
+    getPageSchema() {
+      const { method, url, params = {} } = this.initSchema;
+      let fetchBody = params;
+
+      if (method === 'get') {
+        fetchBody = {
+          params,
+        };
+      }
+
+      this.iSchemaLoading = true;
+      this.$api
+        .slientApi()
+        [method](url, fetchBody)
+        .then(res => {
+          const { pageSchema, ...pageInfo } = res.data;
+          const schema = JSON.parse(pageSchema);
+          this.iSchema = schema;
+          this.iSchemaLoading = false;
+          window.UMIS = { pageInfo, pageSchema: schema };
+        });
+    },
+    updatePageSchema(schema) {
+      if (this.canSchemaUpdate) {
+        this.iSchemaLoading = true;
+        const timer = setTimeout(() => {
+          this.iSchema = schema;
+          this.iSchemaLoading = false;
+          window.UMIS.pageSchema = schema;
+          clearTimeout(timer);
+        }, 200);
+      }
     },
   },
 };
