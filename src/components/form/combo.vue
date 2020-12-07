@@ -45,9 +45,11 @@
 </template>
 <script>
 import clonedeep from 'lodash.clonedeep';
-import { Button as ElButton } from 'element-ui';
-import { Link as ElLink } from 'element-ui';
-import { FormItem as ElFormItem } from 'element-ui';
+import {
+  Button as ElButton,
+  Link as ElLink,
+  FormItem as ElFormItem,
+} from 'element-ui';
 
 export default {
   name: 'MisCombo',

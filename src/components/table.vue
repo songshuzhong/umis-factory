@@ -106,6 +106,7 @@
       :current-page="iPageIndex"
       :page-sizes="[10, 20, 30, 40]"
       @current-change="handlePageChanged"
+      @size-change="handlePageSizeChanged"
     />
   </div>
 </template>

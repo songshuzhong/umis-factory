@@ -24,9 +24,11 @@
 </template>
 
 <script>
-import { RadioGroup as ElRadioGroup } from 'element-ui';
-import { RadioButton as ElRadioButton } from 'element-ui';
-import { Radio as ElRadio } from 'element-ui';
+import {
+  RadioGroup as ElRadioGroup,
+  RadioButton as ElRadioButton,
+  Radio as ElRadio,
+} from 'element-ui';
 
 export default {
   name: 'MisRadio',

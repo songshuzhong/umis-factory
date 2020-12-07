@@ -15,9 +15,8 @@
     {{ item.name }}
   </el-tag>
 </template>
-
 <script>
-import {Tag as ElTag} from 'element-ui';
+import { Tag as ElTag } from 'element-ui';
 
 export default {
   name: 'MisTag',

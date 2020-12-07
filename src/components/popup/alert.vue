@@ -7,11 +7,10 @@
     :closable="closable"
     :center="center"
     :closeText="closeText"
-  >
-  </el-alert>
+  />
 </template>
 <script>
-import {Alert as ElAlert} from 'element-ui';
+import { Alert as ElAlert } from 'element-ui';
 
 export default {
   name: 'MisAlert',

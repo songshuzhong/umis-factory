@@ -35,6 +35,7 @@
     <el-form-item>
       <template v-for="(item, index) in activeControls">
         <mis-component
+          :ref="item.actionType"
           :key="`${path}/${index}/${item.renderer}`"
           :path="`${path}/${index}/${item.renderer}`"
           :mis-name="item.renderer"
@@ -54,7 +55,6 @@
 import { Form as ElForm } from 'element-ui';
 
 import derivedProp from '../mixin/derived-prop';
-import linkage from '../mixin/linkage';
 import initApi from '../mixin/init-api';
 import initData from '../mixin/init-data';
 
@@ -107,6 +107,14 @@ export default {
       required: false,
       default: false,
     },
+    redirect: {
+      type: String,
+      required: false,
+    },
+    reload: {
+      type: String,
+      required: false,
+    },
     target: {
       type: String,
       required: false,
@@ -122,9 +130,13 @@ export default {
       invisibleField: [],
       data: this.controls.reduce((total, control) => {
         const renderer = control.renderer;
-        const name = control.name || '';
+        const name = control.name;
         const value = control.value;
-        if (name && formItems.includes(renderer) && renderer !== 'mis-button') {
+        if (
+          name &&
+          formItems.includes(renderer) &&
+          !['mis-button', 'mis-action'].includes(renderer)
+        ) {
           total[name] = value;
         }
         return total;
@@ -185,18 +197,22 @@ export default {
       if (this.target) {
         return this.linkageTrigger(this.target, formData);
       }
-      if (this.api && this.api.method) {
-        this.handleFetchApi({
-          url: this.api.url,
-          method: this.api.method,
-          params: formData,
-        });
-      } else if (this.api) {
-        this.handleFetchApi({
-          url: this.api,
-          method: 'post',
-          params: formData,
-        });
+      if (this.api) {
+        this.handleFetchApi(
+          {
+            url: this.api.url || this.api,
+            method: this.api.method || 'post',
+            params: formData,
+          },
+          this.onAfterSubmit
+        );
+      }
+    },
+    onAfterSubmit() {
+      if (this.redirect) {
+        this.$refs['mis-redirect'][0].$children[0].onClick();
+      } else if (this.reload) {
+        this.$eventHub.$emit('mis-component:reload', this.reload);
       }
     },
   },

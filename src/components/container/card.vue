@@ -69,7 +69,7 @@
             :body="getBody(child)"
             :footer="getFooter(child)"
             :props="getFattingProps(child)"
-            :init-data="(data, child)"
+            :init-data="getInitData(data, child)"
           />
         </template>
       </template>

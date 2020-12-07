@@ -34,7 +34,6 @@
 <script>
 import { Menu as ElMenu } from 'element-ui';
 import initData from '../mixin/init-data';
-import linkage from '../mixin/linkage';
 
 export default {
   name: 'MisMenu',

@@ -32,9 +32,11 @@
 </template>
 
 <script>
-import { Dropdown as ElDropdown } from 'element-ui';
-import { DropdownMenu as ElDropdownMenu } from 'element-ui';
-import { DropdownItem as ElDropdownItem } from 'element-ui';
+import {
+  Dropdown as ElDropdown,
+  DropdownMenu as ElDropdownMenu,
+  DropdownItem as ElDropdownItem,
+} from 'element-ui';
 
 import derivedProp from './mixin/derived-prop';
 import initData from './mixin/init-data';

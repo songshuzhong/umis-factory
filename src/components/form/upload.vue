@@ -10,8 +10,7 @@
 </template>
 
 <script>
-import {Upload as ElUpload} from 'element-ui';
-import {Button as ElButton} from 'element-ui';
+import { Upload as ElUpload, Button as ElButton } from 'element-ui';
 
 export default {
   name: 'MisUpload',

@@ -17,15 +17,17 @@
         :body="getBody(body)"
         :footer="getFooter(body)"
         :props="getFattingProps(body)"
-        :init-data="getInitData(data, body)"
+        :init-data="getInitData(item, body)"
       />
     </el-timeline-item>
   </el-timeline>
 </template>
 
 <script>
-import { Timeline as ElTimeline } from 'element-ui';
-import { TimelineItem as ElTimelineItem } from 'element-ui';
+import {
+  Timeline as ElTimeline,
+  TimelineItem as ElTimelineItem,
+} from 'element-ui';
 
 import initApi from './mixin/init-api';
 import derivedProp from './mixin/derived-prop';

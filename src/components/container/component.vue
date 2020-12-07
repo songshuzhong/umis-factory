@@ -18,9 +18,9 @@
       :header="header"
       :body="body"
       :footer="footer"
+      :init-data="data"
       :action="filterAction"
       :linkage-trigger="onLinkageTrigger"
-      :init-data="data"
     />
   </transition>
 </template>
@@ -28,6 +28,7 @@
 <script>
 import copy from 'copy-to-clipboard';
 import { Alert as ElAlert } from 'element-ui';
+
 import derivedProp from '../mixin/derived-prop';
 import linkage from '../mixin/linkage';
 import visible from '../mixin/visible';
@@ -126,26 +127,24 @@ export default {
       }
     },
     handleReload(target) {
-      if (this.props && target === this.props.name) {
+      if (target === 'window') {
+        window.location.reload();
+      } else if (this.props && target === this.props.name) {
         this.forceRerender = false;
         this.$nextTick(() => (this.forceRerender = true));
       }
     },
     handleAjaxAction(feedback) {
-      this.handleFetchApi(this.props.actionApi)
-        .then(() => {
-          this.afterAction();
-        })
-        .finally(() => {
-          feedback();
-        });
+      this.handleFetchApi(this.props.actionApi, feedback).then(() => {
+        this.afterAction();
+      });
     },
     handleUrlAction() {
       const url = this.$getCompiledUrl(this.props.url, this.data);
       this.props.blank ? window.open(url) : (window.location.href = url);
     },
     handleRedirectAction() {
-      const url = this.$getCompiledUrl(this.props.url, this.data);
+      const url = this.$getCompiledUrl(this.props.redirect, this.data);
       if (/^https?:\/\//.test(url)) {
         window.location.replace(url);
       } else {

@@ -117,7 +117,7 @@ export default {
         }
       }, this.interval);
     },
-    handleFetchApi(apiData) {
+    handleFetchApi(apiData, feedback) {
       if (this.iSendOn === false) {
         return;
       }
@@ -183,10 +183,15 @@ export default {
         })
         .finally(() => {
           this.iLoading = false;
+          feedback && feedback();
         });
     },
     handlePageChanged(pageIndex) {
       this.iPageIndex = pageIndex;
+      this.handleFetchApi();
+    },
+    handlePageSizeChanged(pageSize) {
+      this.iPageSize = pageSize;
       this.handleFetchApi();
     },
     shouldUpdateInitApi() {

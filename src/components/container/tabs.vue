@@ -52,8 +52,7 @@
   </el-tabs>
 </template>
 <script>
-import { Tabs as ElTabs } from 'element-ui';
-import { TabPane as ElTabPane } from 'element-ui';
+import { Tabs as ElTabs, TabPane as ElTabPane } from 'element-ui';
 
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';

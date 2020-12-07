@@ -21,7 +21,7 @@ import initData from './mixin/init-data';
 import derivedProp from './mixin/derived-prop';
 
 export default {
-  name: 'MisList',
+  name: 'MisEach',
   props: {
     path: {
       type: String,

@@ -32,8 +32,7 @@
 </template>
 
 <script>
-import { Tooltip as ElTooltip } from 'element-ui';
-import { FormItem as ElFormItem } from 'element-ui';
+import { Tooltip as ElTooltip, FormItem as ElFormItem } from 'element-ui';
 import visible from '../mixin/visible';
 import initData from '../mixin/init-data';
 

@@ -15,7 +15,6 @@
 </template>
 <script>
 import { Switch as ElSwitch } from 'element-ui';
-import linkage from '../mixin/linkage';
 
 export default {
   name: 'MisSwitch',

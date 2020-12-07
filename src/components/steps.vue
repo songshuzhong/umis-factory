@@ -21,8 +21,7 @@
 </template>
 
 <script>
-import { Steps as ElSteps } from 'element-ui';
-import { Step as ElStep } from 'element-ui';
+import { Steps as ElSteps, Step as ElStep } from 'element-ui';
 
 export default {
   name: 'MisSteps',

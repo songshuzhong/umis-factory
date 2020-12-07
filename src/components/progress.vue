@@ -15,7 +15,6 @@
 <script>
 import { Progress as ElProgress } from 'element-ui';
 import initData from './mixin/init-data';
-import linkage from './mixin/linkage';
 
 export default {
   name: 'MisProgress',

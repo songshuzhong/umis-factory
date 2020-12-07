@@ -20,8 +20,7 @@
   </el-select>
 </template>
 <script>
-import { Select as ElSelect } from 'element-ui';
-import { Option as ElOption } from 'element-ui';
+import { Select as ElSelect, Option as ElOption } from 'element-ui';
 import initApi from '../mixin/init-api';
 
 export default {

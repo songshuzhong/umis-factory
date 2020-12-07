@@ -35,9 +35,9 @@ export default {
       );
     });
     Vue.use(Loading);
-    Vue.prototype.$umisConfig = overwrite(options);
     Vue.prototype.$eventHub = new Vue();
     Vue.prototype.$misComponents = misComponents;
+    Vue.prototype.$umisConfig = overwrite(options);
     Vue.prototype.$onExpressionEval = onExpressionEval;
     Vue.prototype.$getRenderedTpl = getRenderedTpl;
     Vue.prototype.$getCompiledUrl = getCompiledUrl;
@@ -48,7 +48,6 @@ export default {
     Vue.prototype.$notice = Notification;
     Vue.prototype.$message = Message;
     Vue.prototype.$api = api(options);
-    window.$getCompiledParams = getCompiledParams;
   },
 };
 
