@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { Aside as ElAside } from 'element-ui';
+import { ElAside } from 'element-plus';
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
 

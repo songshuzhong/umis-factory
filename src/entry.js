@@ -1,4 +1,4 @@
-import { Loading, Notification, Message } from 'element-ui';
+import { ElLoading, ElMessage, ElNotification } from 'element-plus';
 
 import MisSchema from './components/container/schema';
 import MisSetting from './components/setting/index';
@@ -34,7 +34,7 @@ export default {
         componentConfig.default || componentConfig
       );
     });
-    Vue.use(Loading);
+    Vue.use(ElLoading);
     Vue.prototype.$eventHub = new Vue();
     Vue.prototype.$misComponents = misComponents;
     Vue.prototype.$umisConfig = overwrite(options);
@@ -45,8 +45,8 @@ export default {
     Vue.prototype.$json2FormData = json2FormData;
     Vue.prototype.$saveInitStyle = saveInitStyle;
     Vue.prototype.$saveInitFormType = saveInitFormType;
-    Vue.prototype.$notice = Notification;
-    Vue.prototype.$message = Message;
+    Vue.prototype.$notice = ElNotification;
+    Vue.prototype.$message = ElMessage;
     Vue.prototype.$api = api(options);
   },
 };

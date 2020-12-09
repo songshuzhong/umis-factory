@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { Footer as ElFooter } from 'element-ui';
+import { ElFooter } from 'element-plus';
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
 

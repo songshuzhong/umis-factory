@@ -22,7 +22,7 @@
   />
 </template>
 <script>
-import { DatePicker as ElDatePicker } from 'element-ui';
+import { ElDatePicker } from 'element-plus';
 export default {
   name: 'MisDatePicker',
   components: {

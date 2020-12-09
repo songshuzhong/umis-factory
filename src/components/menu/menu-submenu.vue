@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { Submenu as ElSubmenu } from 'element-ui';
+import { ElSubmenu } from 'element-plus';
 import derivedProp from '../mixin/derived-prop';
 
 export default {

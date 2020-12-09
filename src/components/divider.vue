@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { Divider as ElDivider } from 'element-ui';
+import { ElDivider } from 'element-plus';
 import initData from './mixin/init-data';
 
 export default {

@@ -10,7 +10,7 @@
   />
 </template>
 <script>
-import { Alert as ElAlert } from 'element-ui';
+import { ElAlert } from 'element-plus';
 
 export default {
   name: 'MisAlert',

@@ -13,7 +13,7 @@
   />
 </template>
 <script>
-import { Avatar as ElAvatar } from 'element-ui';
+import { ElAvatar } from 'element-plus';
 import initData from './mixin/init-data';
 
 export default {

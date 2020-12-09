@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { MenuItemGroup as ElMenuItemGroup } from 'element-ui';
+import { ElMenuItemGroup } from 'element-plus';
 
 import derivedProp from '../mixin/derived-prop';
 

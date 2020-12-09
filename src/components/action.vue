@@ -99,12 +99,12 @@
 </template>
 <script>
 import {
-  Popconfirm as ElPopconfirm,
-  Tooltip as ElTooltip,
-  Badge as ElBadge,
-  Button as ElButton,
-  ButtonGroup as ElButtonGroup,
-} from 'element-ui';
+  ElPopconfirm,
+  ElTooltip,
+  ElBadge,
+  ElButton,
+  ElButtonGroup,
+} from 'element-plus';
 
 import derivedProp from './mixin/derived-prop';
 import initData from './mixin/init-data';

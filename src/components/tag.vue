@@ -16,7 +16,7 @@
   </el-tag>
 </template>
 <script>
-import { Tag as ElTag } from 'element-ui';
+import { ElTag } from 'element-plus';
 
 export default {
   name: 'MisTag',

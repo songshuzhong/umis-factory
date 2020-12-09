@@ -54,7 +54,7 @@
   </el-form>
 </template>
 <script>
-import { Form as ElForm } from 'element-ui';
+import { ElForm } from 'element-plus';
 
 import derivedProp from '../mixin/derived-prop';
 import initApi from '../mixin/init-api';

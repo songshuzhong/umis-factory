@@ -28,13 +28,7 @@
 </template>
 
 <script>
-import {
-  Container as ElContainer,
-  Header as ElHeader,
-  Aside as ElAside,
-  Main as ElMain,
-  Footer as ElFooter,
-} from 'element-ui';
+import { ElContainer, ElHeader, ElMain, ElAside, ElFooter } from 'element-plus';
 
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';

@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { Main as ElMain } from 'element-ui';
+import { ElMain } from 'element-plus';
 
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';

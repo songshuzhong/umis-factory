@@ -21,10 +21,7 @@
 </template>
 
 <script>
-import {
-  Collapse as ElCollapse,
-  CollapseItem as ElCollapseItem,
-} from 'element-ui';
+import { ElCollapse, ElCollapseItem } from 'element-plus';
 import derivedProp from './mixin/derived-prop';
 import initData from './mixin/init-data';
 

@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { Menu as ElMenu } from 'element-ui';
+import { ElMenu } from 'element-plus';
 import initData from '../mixin/init-data';
 
 export default {

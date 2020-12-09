@@ -24,8 +24,7 @@
   </div>
 </template>
 <script>
-import { Button as ElButton } from 'element-ui';
-import { Alert as ElAlert } from 'element-ui';
+import { ElButton, ElAlert } from 'element-plus';
 
 export default {
   name: 'MisMonaco',

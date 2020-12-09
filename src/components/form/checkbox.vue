@@ -23,11 +23,7 @@
   </el-checkbox-group>
 </template>
 <script>
-import {
-  CheckboxGroup as ElCheckboxGroup,
-  Checkbox as ElCheckbox,
-  CheckboxButton as ElCheckboxButton,
-} from 'element-ui';
+import { ElCheckboxGroup, ElCheckboxButton, ElCheckbox } from 'element-plus';
 
 export default {
   name: 'MisCheckbox',

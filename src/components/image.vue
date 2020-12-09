@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import { Image as ElImage } from 'element-ui';
+import { ElImage } from 'element-plus';
 
 export default {
   name: 'MisImage',

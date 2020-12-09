@@ -71,7 +71,7 @@
   </el-drawer>
 </template>
 <script>
-import { Drawer as ElDrawer } from 'element-ui';
+import { ElDrawer } from 'element-plus';
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
 

@@ -26,7 +26,7 @@
   </el-row>
 </template>
 <script>
-import { Row as ElRow, Col as ElCol } from 'element-ui';
+import { ElRow, ElCol } from 'element-plus';
 
 import derivedProp from '../mixin/derived-prop';
 

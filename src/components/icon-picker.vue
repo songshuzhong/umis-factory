@@ -14,12 +14,7 @@
 </template>
 
 <script>
-import {
-  Row as ElRow,
-  Col as ElCol,
-  Button as ElButton,
-  Card as ElCard,
-} from 'element-ui';
+import { ElRow, ElCol, ElButton, ElCard } from 'element-plus';
 import copy from 'copy-to-clipboard';
 
 export default {

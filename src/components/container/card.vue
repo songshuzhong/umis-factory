@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { Card as ElCard } from 'element-ui';
+import { ElCard } from 'element-plus';
 
 import initApi from '../mixin/init-api';
 import derivedProp from '../mixin/derived-prop';

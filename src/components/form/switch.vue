@@ -14,7 +14,7 @@
   />
 </template>
 <script>
-import { Switch as ElSwitch } from 'element-ui';
+import { ElSwitch } from 'element-plus';
 
 export default {
   name: 'MisSwitch',

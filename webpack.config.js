@@ -20,6 +20,7 @@ module.exports = {
     qs: 'qs',
     axios: 'axios',
     'element-ui': 'element-ui',
+    'element-plus': 'element-plus',
     'deep-equal': 'deep-equal',
     'copy-to-clipboard': 'copy-to-clipboard',
     'lodash.clonedeep': 'lodash.clonedeep',

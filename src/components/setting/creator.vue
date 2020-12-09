@@ -51,19 +51,19 @@
 
 <script>
 import {
-  Form as ElForm,
-  FormItem as ElFormItem,
-  Input as ElInput,
-  Radio as ElRadio,
-  RadioGroup as ElRadioGroup,
-  Select as ElSelect,
-  Option as ElOption,
-  Button as ElButton,
-  Card as ElCard,
-  Dialog as ElDialog,
-  Table as ElTable,
-  TableColumn as ElTableColumn,
-} from 'element-ui';
+  ElForm,
+  ElFormItem,
+  ElInput,
+  ElRadio,
+  ElRadioGroup,
+  ElSelect,
+  ElOption,
+  ElCard,
+  ElDialog,
+  ElButton,
+  ElTable,
+  ElTableColumn,
+} from 'element-plus';
 
 export default {
   name: 'MisCreator',

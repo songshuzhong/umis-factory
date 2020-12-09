@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { Card as ElCard, Steps as ElSteps, Step as ElStep } from 'element-ui';
+import { ElCard, ElSteps, ElStep } from 'element-plus';
 
 import derivedProp from './mixin/derived-prop';
 import initData from './mixin/init-data';

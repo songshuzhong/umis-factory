@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { Header as ElHeader } from 'element-ui';
+import { ElHeader } from 'element-plus';
 
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';

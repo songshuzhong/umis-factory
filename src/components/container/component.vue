@@ -27,7 +27,7 @@
 
 <script>
 import copy from 'copy-to-clipboard';
-import { Alert as ElAlert } from 'element-ui';
+import { ElAlert } from 'element-plus';
 
 import derivedProp from '../mixin/derived-prop';
 import linkage from '../mixin/linkage';

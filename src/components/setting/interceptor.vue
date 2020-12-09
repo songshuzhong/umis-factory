@@ -7,9 +7,7 @@
 </template>
 
 <script>
-import {Card as ElCard} from 'element-ui';
-import {ButtonGroup as ElButtonGroup} from 'element-ui';
-import {Button as ElButton} from 'element-ui';
+import { ElCard, ElButtonGroup, ElButton } from 'element-plus';
 
 export default {
   name: 'SettingInterceptor',

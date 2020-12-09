@@ -46,13 +46,15 @@
 </template>
 <script>
 import clonedeep from 'lodash.clonedeep';
-import { Card as ElCard } from 'element-ui';
-import { RadioGroup as ElRadioGroup } from 'element-ui';
-import { Radio as ElRadio } from 'element-ui';
-import { ButtonGroup as ElButtonGroup } from 'element-ui';
-import { Button as ElButton } from 'element-ui';
-import { Link as ElLink } from 'element-ui';
-import { Input as ElInput } from 'element-ui';
+import {
+  ElCard,
+  ElRadioGroup,
+  ElRadio,
+  ElButtonGroup,
+  ElButton,
+  ElLink,
+  ElInput,
+} from 'element-plus';
 
 export default {
   name: 'SettingDomain',

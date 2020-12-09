@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { MenuItem as ElMenuItem } from 'element-ui';
+import { ElMenuItem } from 'element-plus';
 
 export default {
   name: 'MisMenuItem',

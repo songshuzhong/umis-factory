@@ -35,11 +35,7 @@
   </div>
 </template>
 <script>
-import { Row as ElRow } from 'element-ui';
-import { Col as ElCol } from 'element-ui';
-import { Card as ElCard } from 'element-ui';
-import { Pagination as ElPagination } from 'element-ui';
-
+import { ElRow, ElCol, ElCard, ElPagination } from 'element-plus';
 import initApi from '../mixin/init-api';
 import derivedProp from '../mixin/derived-prop';
 import MisCard from './card';

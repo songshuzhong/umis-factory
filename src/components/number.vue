@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { InputNumber as ElInputNumber } from 'element-ui';
+import { ElInputNumber } from 'element-plus';
 import initData from './mixin/init-data';
 
 export default {

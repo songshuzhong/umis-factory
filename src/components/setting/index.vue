@@ -18,8 +18,7 @@
   </div>
 </template>
 <script>
-import { Card as ElCard } from 'element-ui';
-import { Switch as ElSwitch } from 'element-ui';
+import { ElCard, ElSwitch } from 'element-plus';
 
 import SettingApi from './api';
 import SettingStyle from './style';

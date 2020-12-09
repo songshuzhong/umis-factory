@@ -15,7 +15,7 @@
   </el-button>
 </template>
 <script>
-import { Button as ElButton } from 'element-ui';
+import { ElButton } from 'element-plus';
 import visible from '../mixin/visible';
 import initData from '../mixin/init-data';
 

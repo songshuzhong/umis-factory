@@ -24,10 +24,7 @@
 </template>
 
 <script>
-import {
-  Timeline as ElTimeline,
-  TimelineItem as ElTimelineItem,
-} from 'element-ui';
+import { ElTimeline, ElTimelineItem } from 'element-plus';
 
 import initApi from './mixin/init-api';
 import derivedProp from './mixin/derived-prop';

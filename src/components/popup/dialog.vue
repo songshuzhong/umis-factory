@@ -73,7 +73,7 @@
   </el-dialog>
 </template>
 <script>
-import { Dialog as ElDialog } from 'element-ui';
+import { ElDialog } from 'element-plus';
 
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';

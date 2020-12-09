@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { Progress as ElProgress } from 'element-ui';
+import { ElProgress } from 'element-plus';
 import initData from './mixin/init-data';
 
 export default {

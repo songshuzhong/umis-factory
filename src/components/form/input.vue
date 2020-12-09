@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { Input as ElInput } from 'element-ui';
+import { ElInput } from 'element-plus';
 import derivedProp from '../mixin/derived-prop';
 
 export default {

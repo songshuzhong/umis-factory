@@ -24,10 +24,7 @@
 </template>
 
 <script>
-import {
-  Carousel as ElCarousel,
-  CarouselItem as ElCarouselItem,
-} from 'element-ui';
+import { ElCarousel, ElCarouselItem } from 'element-plus';
 
 import initApi from './mixin/init-api';
 import initData from './mixin/init-data';

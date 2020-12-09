@@ -113,15 +113,15 @@
 
 <script>
 import {
-  Table as ElTable,
-  TableColumn as ElTableColumn,
-  Pagination as ElPagination,
-  Dropdown as ElDropdown,
-  DropdownMenu as ElDropdownMenu,
-  DropdownItem as ElDropdownItem,
-  CheckboxGroup as ElCheckboxGroup,
-  Checkbox as ElCheckbox,
-} from 'element-ui';
+  ElTable,
+  ElTableColumn,
+  ElPagination,
+  ElDropdown,
+  ElDropdownMenu,
+  ElDropdownItem,
+  ElCheckboxGroup,
+  ElCheckbox,
+} from 'element-plus';
 
 import initApi from './mixin/init-api';
 import derivedProp from './mixin/derived-prop';
