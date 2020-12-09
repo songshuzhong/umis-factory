@@ -1,9 +1,10 @@
 <template>
   <fragment>
     <component
-      v-bind="getBody($props)"
-      :path="`${path}/${actionType}`"
-      :is="actionType"
+      v-if="visible"
+      v-bind="actions ? getBody(actions[index]) : getBody($props)"
+      :path="`${path}/${actions ? actions[index].actionType : actionType}`"
+      :is="actions ? actions[index].actionType : actionType"
       :visible="visible"
       :init-data="data"
       :on-action-disvisiable="onDisVisiable"
@@ -35,28 +36,65 @@
       </el-button>
     </el-popconfirm>
     <el-tooltip
-      v-else
+      v-else-if="tipContent"
       :disabled="tipDisabled"
       :effect="tipEffect"
       :content="tipContent"
       :placement="tipPlacement"
     >
-      <el-badge :value="badgeText" :class="badgeClass">
-        <el-button
-          v-loading="iApiLoading"
-          :size="size"
-          :type="type"
-          :plain="plain"
-          :round="round"
-          :circle="circle"
-          :icon="icon"
-          :disabled="iApiLoading"
-          @click="onClick"
-        >
-          {{ text }}
-        </el-button>
-      </el-badge>
+      <el-button
+        v-loading="iApiLoading"
+        :size="size"
+        :type="type"
+        :plain="plain"
+        :round="round"
+        :circle="circle"
+        :icon="icon"
+        :disabled="iApiLoading"
+        @click="onClick"
+      >
+        {{ text }}
+      </el-button>
     </el-tooltip>
+    <el-badge v-else-if="badgeText" :value="badgeText" :class="badgeClass">
+      <el-button
+        v-loading="iApiLoading"
+        :size="size"
+        :type="type"
+        :plain="plain"
+        :round="round"
+        :circle="circle"
+        :icon="icon"
+        :disabled="iApiLoading"
+        @click="onClick"
+      >
+        {{ text }}
+      </el-button>
+    </el-badge>
+    <el-button-group v-else-if="actions">
+      <template v-for="(item, index) in actions">
+        <mis-button
+          v-bind="item"
+          :key="index"
+          :index="index"
+          :action="onClick"
+        />
+      </template>
+    </el-button-group>
+    <el-button
+      v-else
+      v-loading="iApiLoading"
+      :size="size"
+      :type="type"
+      :plain="plain"
+      :round="round"
+      :circle="circle"
+      :icon="icon"
+      :disabled="iApiLoading"
+      @click="onClick"
+    >
+      {{ text }}
+    </el-button>
   </fragment>
 </template>
 <script>
@@ -65,6 +103,7 @@ import {
   Tooltip as ElTooltip,
   Badge as ElBadge,
   Button as ElButton,
+  ButtonGroup as ElButtonGroup,
 } from 'element-ui';
 
 import derivedProp from './mixin/derived-prop';
@@ -77,6 +116,7 @@ export default {
     ElTooltip,
     ElBadge,
     ElButton,
+    ElButtonGroup,
   },
   props: {
     path: {
@@ -94,6 +134,11 @@ export default {
     actionType: {
       type: String,
       required: true,
+    },
+    actions: {
+      type: Array,
+      required: false,
+      default: undefined,
     },
     renderer: {
       type: String,
@@ -202,21 +247,32 @@ export default {
       iApiLoading: false,
       visible: false,
       clipboard: '',
+      index: 0,
     };
   },
   mixins: [derivedProp, initData],
+  computed: {},
   methods: {
     onDisVisiable() {
       this.visible = false;
     },
-    onClick() {
-      if (['mis-dialog', 'mis-drawer'].includes(this.actionType)) {
+    onClick(index) {
+      let actionType = this.actionType;
+      if (this.actions && typeof index === 'number') {
+        actionType = this.actions[index].actionType;
+        this.index = index;
+      }
+      if (['mis-dialog', 'mis-drawer'].includes(actionType)) {
         this.visible = true;
       }
-      if (['mis-ajax'].includes(this.actionType)) {
+      if (['mis-ajax'].includes(actionType)) {
         this.iApiLoading = true;
       }
-      this.action && this.action(this.handleLoading);
+      if (typeof index === 'number') {
+        this.action(this.actions[index], this.handleLoading);
+      } else {
+        this.action && this.action(this.handleLoading);
+      }
     },
     handleLoading() {
       this.iApiLoading = false;

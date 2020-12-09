@@ -1,31 +1,66 @@
 <template>
-  <el-steps
-    :path="path"
-    :active="data.active"
-    :simple="simple"
-    :name="name"
-    :direction="direction"
-    :align-center="alignCenter"
-    :finish-status="finishStatus"
-    :process-status="processStatus"
-  >
-    <template v-for="(item, index) in body" :key="index">
-      <el-step
-        :title="item.title"
-        :icon="item.icon"
-        :status="item.status"
-        :description="item.description"
-      />
-    </template>
-  </el-steps>
+  <div>
+    <el-steps
+      :path="path"
+      :active="data.active"
+      :simple="simple"
+      :name="name"
+      :direction="direction"
+      :align-center="alignCenter"
+      :finish-status="finishStatus"
+      :process-status="processStatus"
+    >
+      <template v-for="(item, index) in header" :key="index">
+        <el-step
+          :title="item.title"
+          :icon="item.icon"
+          :status="item.status"
+          :description="item.description"
+        />
+      </template>
+    </el-steps>
+    <div>
+      <template v-for="(child, index) in body">
+        <mis-component
+          :mis-name="child.renderer"
+          :key="`${path}/${index}/${child.renderer}`"
+          :path="`${path}/${index}/${child.renderer}`"
+          :hidden-on="getHiddenOn(child, index)"
+          :props="getFattingProps(child)"
+          :transition="'el-fade-in-linear'"
+        />
+      </template>
+    </div>
+    <div class="el-card__footer">
+      <template v-for="(item, index) in footer">
+        <mis-component
+          :key="`${path}/${index}/${item.renderer}`"
+          :path="`${path}/${index}/${item.renderer}`"
+          :mis-name="item.renderer"
+          :name="item.name"
+          :props="item"
+          :init-data="data"
+          :hidden-on="item.hiddenOn"
+          :visible-on="item.visibleOn"
+          :disabled-on="activeStatus(item.actionType)"
+          :action="onActiveChanged"
+        />
+      </template>
+    </div>
+  </div>
 </template>
 
 <script>
-import { Steps as ElSteps, Step as ElStep } from 'element-ui';
+import { Card as ElCard, Steps as ElSteps, Step as ElStep } from 'element-ui';
+
+import derivedProp from './mixin/derived-prop';
+import initData from './mixin/init-data';
+import initApi from './mixin/init-api';
 
 export default {
   name: 'MisSteps',
   components: {
+    ElCard,
     ElSteps,
     ElStep,
   },
@@ -62,7 +97,15 @@ export default {
       type: Boolean,
       required: false,
     },
+    header: {
+      type: Array,
+      required: true,
+    },
     body: {
+      type: Array,
+      required: true,
+    },
+    footer: {
       type: Array,
       required: true,
     },
@@ -88,6 +131,34 @@ export default {
         this.data.active = val;
       },
       immediate: true,
+    },
+  },
+  mixins: [initApi, initData, derivedProp],
+  methods: {
+    activeStatus(actionType) {
+      if (actionType === 'mis-next') {
+        return `data.active >= ${this.body.length}`;
+      } else if (actionType === 'mis-previous') {
+        return `data.active <= 0`;
+      }
+    },
+    getHiddenOn(item, index) {
+      return `${this.data.active} !== ${index}`;
+    },
+    onActiveChanged() {
+      const attributes = event.currentTarget.attributes;
+      if (attributes.actionType && attributes.actionType.value === 'mis-next') {
+        if (this.data.active < this.body.length) {
+          this.data.active = this.data.active + 1;
+        }
+      } else if (
+        attributes.actionType &&
+        attributes.actionType.value === 'mis-previous'
+      ) {
+        if (this.data.active > 0) {
+          this.data.active = this.data.active - 1;
+        }
+      }
     },
   },
 };

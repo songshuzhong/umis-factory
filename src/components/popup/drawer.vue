@@ -8,7 +8,7 @@
     :direction="direction"
     :showClose="showClose"
     :size="size"
-    :visible.sync="iVisible"
+    :visible.sync="data.iVisible"
     :wrapperClosable="wrapperClosable"
     :withHeader="withHeader"
     destroy-on-close
@@ -21,20 +21,40 @@
         :action="onClose"
         :after-action="onClose"
         :props="getFattingProps(header)"
+        :header="getHeader(header)"
+        :body="getBody(header)"
+        :footer="getFooter(header)"
         :init-data="getInitData(data, header)"
       />
     </template>
-    <template v-for="(item, index) in body">
-      <mis-component
-        :mis-name="item.renderer"
-        :key="index"
-        :path="`${path}/${index}/${item.renderer}`"
-        :footer="item.footer"
-        :action="onClose"
-        :props="getFattingProps(item)"
-        :init-data="getInitData(data, item)"
-      />
+    <template v-if="Object.prototype.toString.call(body) === '[object Array]'">
+      <template v-for="(item, index) in body">
+        <mis-component
+          :mis-name="item.renderer"
+          :key="index"
+          :path="`${path}/${index}/${item.renderer}`"
+          :footer="item.footer"
+          :action="onClose"
+          :props="getFattingProps(item)"
+          :header="getHeader(item)"
+          :body="getBody(item)"
+          :footer="getFooter(item)"
+          :init-data="getInitData(data, item)"
+        />
+      </template>
     </template>
+    <mis-component
+      v-else
+      :mis-name="body.renderer"
+      :path="`${path}/${body.renderer}`"
+      :footer="body.footer"
+      :action="onClose"
+      :props="getFattingProps(body)"
+      :header="getHeader(body)"
+      :body="getBody(body)"
+      :footer="getFooter(body)"
+      :init-data="getInitData(data, body)"
+    />
     <template v-if="footer">
       <template v-for="(item, index) in footer">
         <mis-component
@@ -145,18 +165,23 @@ export default {
   },
   data() {
     return {
-      iVisible: false,
+      data: {
+        iVisible: false,
+      },
     };
   },
   mixins: [derivedProp, initData],
   watch: {
-    visible(val) {
-      this.iVisible = val;
+    visible: {
+      handler(val) {
+        this.data.iVisible = val;
+      },
+      immediate: true,
     },
   },
   methods: {
     onClose() {
-      this.iVisible = false;
+      this.data.iVisible = false;
       this.onActionDisvisiable && this.onActionDisvisiable();
     },
   },

@@ -1,11 +1,12 @@
 <template>
   <el-button
     :type="type"
+    :size="size"
     :plain="plain"
     :round="round"
     :circle="circle"
     :loading="loading"
-    :disabled="iDisabled"
+    :disabled="disabled"
     :icon="icon"
     :nativeType="nativeType"
     @click="onClick"
@@ -30,6 +31,10 @@ export default {
     },
     afterAction: {
       type: Function,
+      required: false,
+    },
+    index: {
+      type: String,
       required: false,
     },
     text: {
@@ -64,6 +69,10 @@ export default {
       type: String,
       required: false,
     },
+    size: {
+      type: String,
+      required: false,
+    },
     nativeType: {
       type: String,
       required: false,
@@ -76,7 +85,11 @@ export default {
   mixins: [initData, visible],
   methods: {
     onClick() {
-      this.action();
+      if (typeof this.index === 'number') {
+        this.action(this.index);
+      } else {
+        this.action();
+      }
     },
   },
 };

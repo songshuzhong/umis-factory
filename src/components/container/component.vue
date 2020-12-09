@@ -98,30 +98,40 @@ export default {
     this.$eventHub.$on('mis-component:reload', this.handleReload);
   },
   methods: {
-    filterAction(feedback) {
-      if (['mis-submit', 'mis-reset'].includes(this.props.actionType)) {
+    filterAction(props, feedback) {
+      if (this.props.renderer === 'mis-action' && this.props.actions) {
+        if (['mis-submit', 'mis-reset'].includes(props.actionType)) {
+          return this.action();
+        }
+        return this.dispatchAction(props, feedback);
+      } else if (
+        ['mis-submit', 'mis-reset', 'mis-next', 'mis-previous'].includes(
+          this.props.actionType
+        )
+      ) {
         return this.action();
+      } else {
+        return this.dispatchAction(this.props, feedback);
       }
-      return this.dispatchAction(feedback);
     },
-    dispatchAction(feedback) {
-      switch (this.props.actionType) {
+    dispatchAction(props, feedback) {
+      switch (props.actionType) {
         case 'mis-ajax':
-          this.handleAjaxAction(feedback);
+          this.handleAjaxAction(props, feedback);
           break;
         case 'mis-redirect':
-          this.handleRedirectAction();
+          this.handleRedirectAction(props);
           break;
         case 'mis-url':
-          this.handleUrlAction();
+          this.handleUrlAction(props);
           break;
         case 'mis-copy':
-          this.handleCopyAction();
+          this.handleCopyAction(props);
           break;
       }
     },
-    afterAction() {
-      const { reload } = this.props;
+    afterAction(props) {
+      const { reload } = props;
       if (reload) {
         this.$eventHub.$emit('mis-component:reload', reload);
       }
@@ -134,25 +144,25 @@ export default {
         this.$nextTick(() => (this.forceRerender = true));
       }
     },
-    handleAjaxAction(feedback) {
-      this.handleFetchApi(this.props.actionApi, feedback).then(() => {
-        this.afterAction();
+    handleAjaxAction(props, feedback) {
+      this.handleFetchApi(props.actionApi, feedback).then(() => {
+        this.afterAction(props);
       });
     },
-    handleUrlAction() {
-      const url = this.$getCompiledUrl(this.props.url, this.data);
-      this.props.blank ? window.open(url) : (window.location.href = url);
+    handleUrlAction(props) {
+      const url = this.$getCompiledUrl(props.url, this.data);
+      props.blank ? window.open(url) : (window.location.href = url);
     },
-    handleRedirectAction() {
-      const url = this.$getCompiledUrl(this.props.redirect, this.data);
+    handleRedirectAction(props) {
+      const url = this.$getCompiledUrl(props.redirect, this.data);
       if (/^https?:\/\//.test(url)) {
         window.location.replace(url);
       } else {
         this.$router.push(url);
       }
     },
-    handleCopyAction() {
-      const content = this.$getCompiledUrl(this.props.content, this.data);
+    handleCopyAction(props) {
+      const content = this.$getCompiledUrl(props.content, this.data);
       copy(content);
       this.$message({
         showClose: true,
