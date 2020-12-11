@@ -46,9 +46,9 @@ function successInterceptor(response, silent, apiName) {
   if (
     response &&
     response.data &&
-    (response.data.code === 10000 ||
-      response.data.code === 1000 ||
-      response.data.code === 0)
+    (response.data.status === 10000 ||
+      response.data.status === 1000 ||
+      response.data.status === 0)
   ) {
     return response.data;
   }
@@ -58,12 +58,12 @@ function successInterceptor(response, silent, apiName) {
       response.data &&
       response.data.error &&
       Array.isArray(response.data.error) &&
-      !response.data.message &&
+      !response.data.msg &&
       !response.data.error_message
     ) {
       const errors = [];
       response.data.error.forEach(error => {
-        errors.push(error.error_message || error.message);
+        errors.push(error.error_message || error.msg);
       });
       showError(errors.join('<br>'), apiName);
       return Promise.reject(response);
@@ -71,9 +71,9 @@ function successInterceptor(response, silent, apiName) {
     if (
       response &&
       response.data &&
-      (response.data.message || response.data.error_message)
+      (response.data.msg || response.data.error_message)
     ) {
-      showError(response.data.error_message || response.data.message, apiName);
+      showError(response.data.error_message || response.data.msg, apiName);
     } else {
       showError('接口错误，请重试', apiName);
     }
@@ -86,7 +86,7 @@ function errorInterceptor(error, silent, apiName) {
     if (error.response && error.response.status === 500) {
       showError('系统超时，请重试', apiName);
     } else if (
-      error.code === 'ECONNABORTED' ||
+      error.status === 'ECONNABORTED' ||
       (error.response && error.response.status === 408)
     ) {
       showError('连接失败，请检查您的网络状况', apiName);

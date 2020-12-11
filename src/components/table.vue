@@ -31,11 +31,12 @@
       :show-header="showHeader"
       :highlight-current-row="highlightCurrentRow"
     >
-      <template v-for="(column, index) in columns" :key="index">
+      <template v-for="(column, index) in columns">
         <template v-if="!dynamicColumn.includes(column.name)">
           <el-table-column
             v-if="column.headSlot"
             :path="`${path}/${index}/${column.name}`"
+            :key="`${path}/${index}/${column.name}`"
             :prop="column.name || ''"
             :label="column.label"
             :fixed="column.fixed"
@@ -73,17 +74,34 @@
             :width="column.width"
           >
             <template slot-scope="scope">
-              <template v-for="(item, jndex) in column.body" :key="jndex">
-                <mis-component
-                  :path="`${path}/${index}/${item.renderer}`"
-                  :mis-name="item.renderer"
-                  :header="getHeader(item)"
-                  :body="getBody(item)"
-                  :footer="getFooter(item)"
-                  :init-data="scope.row"
-                  :props="getFattingProps(item, scope.row)"
-                />
+              <template
+                v-if="
+                  Object.prototype.toString.call(column.body) ===
+                    '[object Array]'
+                "
+              >
+                <template v-for="(item, jndex) in column.body" :key="jndex">
+                  <mis-component
+                    :path="`${path}/${index}/${item.renderer}`"
+                    :mis-name="item.renderer"
+                    :header="getHeader(item)"
+                    :body="getBody(item)"
+                    :footer="getFooter(item)"
+                    :init-data="scope.row"
+                    :props="getFattingProps(item, scope.row)"
+                  />
+                </template>
               </template>
+              <mis-component
+                v-else
+                :path="`${path}/${column.body.renderer}`"
+                :mis-name="column.body.renderer"
+                :header="getHeader(column.body)"
+                :body="getBody(column.body)"
+                :footer="getFooter(column.body)"
+                :init-data="scope.row"
+                :props="getFattingProps(column.body, scope.row)"
+              />
             </template>
           </el-table-column>
           <el-table-column
@@ -126,6 +144,8 @@ import {
 import initApi from './mixin/init-api';
 import derivedProp from './mixin/derived-prop';
 import initData from './mixin/init-data';
+import syncHistory from './mixin/sync-history';
+import pageInfo from './mixin/page-info';
 
 export default {
   name: 'MisTable',
@@ -195,6 +215,6 @@ export default {
       dynamicColumn: [],
     };
   },
-  mixins: [initData, initApi, derivedProp],
+  mixins: [initData, initApi, derivedProp, syncHistory, pageInfo],
 };
 </script>

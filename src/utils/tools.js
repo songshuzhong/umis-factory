@@ -20,7 +20,7 @@ const getCompiledUrl = (tpl, data) => {
   return temporaryTpl;
 };
 
-const getCompiledParams = (params, data = {}, method) => {
+const getCompiledParams = (params, data = {}) => {
   let compiledParams = {};
 
   if (params) {

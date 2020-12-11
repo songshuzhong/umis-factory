@@ -1,4 +1,6 @@
+import qs from 'qs';
 import deepEqual from 'deep-equal';
+import clonedeep from 'lodash.clonedeep';
 
 export default {
   props: {
@@ -27,13 +29,14 @@ export default {
       type: Boolean,
       required: false,
     },
+    syncLocation: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
   },
   data() {
     return {
-      iTotal: 0,
-      iPageIndex: 1,
-      iPageSize: 10,
-      iHasMore: true,
       iLoading: false,
       iStopAutoRefresh: false,
       data: {},
@@ -59,15 +62,8 @@ export default {
       },
     },
     data: {
-      handler(val, old) {
-        if (
-          this.isMounted &&
-          val !== old &&
-          this.initApi &&
-          !['mis-component', 'mis-service'].includes(
-            this.$options['_componentTag']
-          )
-        ) {
+      handler() {
+        if (this.isMounted && this.initApi) {
           this.shouldUpdateInitApi();
         }
       },
@@ -87,8 +83,8 @@ export default {
   mounted() {
     this.isMounted = true;
     this.intervalFetcher = null;
-    this.compiledCacheUrl = null;
-    this.compiledCacheParams = null;
+    this.compiledCacheUrl = '';
+    this.compiledCacheParams = {};
     if (this.initApi && this.$options['_componentTag'] !== 'mis-component') {
       this.handleFetchApi();
 
@@ -122,35 +118,41 @@ export default {
         return;
       }
       const { method, url, params } = apiData || this.initApi;
-      const compiledUrl = this.$getCompiledUrl(url, this.data);
       let compiledParams = params;
+      let compiledUrl;
+      let mergedData;
       let fetchBody;
 
-      if (params) {
-        compiledParams = this.$getCompiledParams(params, this.data);
+      if (this.syncLocation) {
+        mergedData = this.useSyncLocation(this.data);
       }
 
+      if (params) {
+        compiledParams = this.$getCompiledParams(params, mergedData);
+        this.compiledCacheParams = clonedeep(compiledParams);
+      }
+
+      compiledUrl = this.$getCompiledUrl(url, mergedData);
+      this.compiledCacheUrl = compiledUrl;
+
+      if (this.usePageInfo) {
+        compiledParams = this.usePageInfo(compiledParams);
+      }
       if (method === 'get') {
         fetchBody = {
-          params: {
-            pageIndex: this.iPageIndex,
-            pageSize: this.iPageSize,
-            ...this.$route.query,
-            ...compiledParams,
-          },
+          params: compiledParams,
         };
       } else {
-        fetchBody = {
-          pageIndex: this.iPageIndex,
-          pageSize: this.iPageSize,
-          ...this.$route.query,
-          ...compiledParams,
-        };
+        fetchBody = compiledParams;
       }
 
       this.iLoading = true;
-      this.compiledCacheUrl = compiledUrl;
-      this.compiledCacheParams = compiledParams;
+      if (this.useSyncHistory) {
+        this.useSyncHistory({
+          pageIndex: this.iPageIndex,
+          pageSize: this.iPageSize,
+        });
+      }
 
       fetchBody = this.$json2FormData(this.$umisConfig.isFormData, fetchBody);
 
@@ -169,14 +171,14 @@ export default {
           }
           !this.silentMessage &&
             this.$message({
-              message: res.message,
+              message: res.msg,
               showClose: true,
               type: 'success',
             });
         })
         .catch(error => {
           this.$message({
-            message: error.message,
+            message: error.msg,
             showClose: true,
             type: 'error',
           });
@@ -185,14 +187,6 @@ export default {
           this.iLoading = false;
           feedback && feedback();
         });
-    },
-    handlePageChanged(pageIndex) {
-      this.iPageIndex = pageIndex;
-      this.handleFetchApi();
-    },
-    handlePageSizeChanged(pageSize) {
-      this.iPageSize = pageSize;
-      this.handleFetchApi();
     },
     shouldUpdateInitApi() {
       const { url, params } = this.initApi;
@@ -203,8 +197,15 @@ export default {
         compiledUrl !== this.compiledCacheUrl ||
         !deepEqual(compiledParams, this.compiledCacheParams)
       ) {
+        console.log(compiledParams, this.compiledCacheParams);
         this.handleFetchApi();
       }
     },
+    useSyncLocation(mergedData) {
+      const defaultQuery = qs.parse(window.location.search.substr(1));
+      return Object.assign({}, mergedData, defaultQuery);
+    },
+    useCompiledParams() {},
+    useCompiledUrl() {},
   },
 };

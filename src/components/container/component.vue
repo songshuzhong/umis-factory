@@ -33,7 +33,6 @@ import derivedProp from '../mixin/derived-prop';
 import linkage from '../mixin/linkage';
 import visible from '../mixin/visible';
 import initData from '../mixin/init-data';
-import initApi from '../mixin/init-api';
 
 export default {
   name: 'mis-Component',
@@ -70,7 +69,7 @@ export default {
       required: false,
     },
   },
-  mixins: [visible, initApi, initData, linkage, derivedProp],
+  mixins: [visible, initData, linkage, derivedProp],
   data() {
     return {
       error: '',
@@ -145,7 +144,7 @@ export default {
       }
     },
     handleAjaxAction(props, feedback) {
-      this.handleFetchApi(props.actionApi, feedback).then(() => {
+      this.$children[0].handleFetchApi(props.actionApi, feedback).then(() => {
         this.afterAction(props);
       });
     },

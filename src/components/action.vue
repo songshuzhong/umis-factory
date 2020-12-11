@@ -1,14 +1,16 @@
 <template>
   <fragment>
-    <component
-      v-if="visible"
-      v-bind="actions ? getBody(actions[index]) : getBody($props)"
-      :path="`${path}/${actions ? actions[index].actionType : actionType}`"
-      :is="actions ? actions[index].actionType : actionType"
-      :visible="visible"
-      :init-data="data"
-      :on-action-disvisiable="onDisVisiable"
-    />
+    <transition name="el-fade-in">
+      <component
+        v-if="visible"
+        v-bind="actions ? getBody(actions[index]) : getBody($props)"
+        :path="`${path}/${actions ? actions[index].actionType : actionType}`"
+        :is="actions ? actions[index].actionType : actionType"
+        :visible="visible"
+        :init-data="data"
+        :on-action-disvisiable="onDisVisiable"
+      />
+    </transition>
     <el-popconfirm
       v-if="confirmTitle"
       :confirm-button-text="confirmBtnText"
@@ -71,12 +73,13 @@
         {{ text }}
       </el-button>
     </el-badge>
-    <el-button-group v-else-if="actions">
+    <el-button-group v-else-if="actions" v-loading="iApiLoading">
       <template v-for="(item, index) in actions">
         <mis-button
           v-bind="item"
-          :key="index"
+          :key="`${path}/${index}`"
           :index="index"
+          :disabled="iApiLoading"
           :action="onClick"
         />
       </template>
@@ -108,6 +111,7 @@ import {
 
 import derivedProp from './mixin/derived-prop';
 import initData from './mixin/init-data';
+import initApi from './mixin/init-api';
 
 export default {
   name: 'MisAction',
@@ -250,7 +254,7 @@ export default {
       index: 0,
     };
   },
-  mixins: [derivedProp, initData],
+  mixins: [derivedProp, initData, initApi],
   computed: {},
   methods: {
     onDisVisiable() {
@@ -264,19 +268,18 @@ export default {
       }
       if (['mis-dialog', 'mis-drawer'].includes(actionType)) {
         this.visible = true;
-      }
-      if (['mis-ajax'].includes(actionType)) {
+      } else if (['mis-ajax'].includes(actionType)) {
         this.iApiLoading = true;
       }
       if (typeof index === 'number') {
         this.action(this.actions[index], this.handleLoading);
       } else {
-        this.action && this.action(this.handleLoading);
+        this.action && this.action(undefined, this.handleLoading);
       }
     },
     handleLoading() {
       this.iApiLoading = false;
-      this.linkageTrigger(this.target);
+      this.linkageTrigger(this.target, this.data);
     },
   },
 };

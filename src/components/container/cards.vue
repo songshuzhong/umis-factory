@@ -35,14 +35,18 @@
   </div>
 </template>
 <script>
-import { Row as ElRow } from 'element-ui';
-import { Col as ElCol } from 'element-ui';
-import { Card as ElCard } from 'element-ui';
-import { Pagination as ElPagination } from 'element-ui';
+import {
+  Row as ElRow,
+  Col as ElCol,
+  Card as ElCard,
+  Pagination as ElPagination,
+} from 'element-ui';
 
+import MisCard from './card';
 import initApi from '../mixin/init-api';
 import derivedProp from '../mixin/derived-prop';
-import MisCard from './card';
+import syncHistory from '../mixin/sync-history';
+import pageInfo from '../mixin/page-info';
 
 export default {
   name: 'MisCards',
@@ -108,7 +112,7 @@ export default {
       default: [24, 12, 8, 4],
     },
   },
-  mixins: [initApi, derivedProp],
+  mixins: [initApi, derivedProp, syncHistory, pageInfo],
   watch: {
     body: {
       handler(val) {
