@@ -6,8 +6,8 @@
       <component
         v-for="(item, index) in iSchema"
         v-bind="item"
-        :key="index"
         :is="item.renderer"
+        :key="`${path}/${index}/${item.renderer}`"
         :path="`${path}/${index}/${item.renderer}`"
       />
     </template>
@@ -15,9 +15,10 @@
       v-if="Object.prototype.toString.call(iSchema) === '[object Object]'"
     >
       <component
+        v-if="!iSchemaLoading"
         v-bind="iSchema"
         :is="iSchema.renderer"
-        :key="iSchema.name"
+        :key="`${path}/${iSchema.renderer}`"
         :path="`${path}/${iSchema.renderer}`"
       />
     </template>
@@ -64,7 +65,7 @@ export default {
   },
   computed: {
     path() {
-      return this.$route.path;
+      return this.canSchemaUpdate ? this.$route.path : '/website';
     },
   },
   mounted() {

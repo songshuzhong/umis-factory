@@ -5,7 +5,7 @@
       <span slot="title">{{ title }}</span>
     </template>
     <template v-else>
-      {{ label }}
+      {{ title }}
     </template>
   </el-menu-item>
 </template>
@@ -19,10 +19,6 @@ export default {
     ElMenuItem,
   },
   props: {
-    label: {
-      type: String,
-      required: false,
-    },
     title: {
       type: String,
       required: false,

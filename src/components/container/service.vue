@@ -30,7 +30,6 @@
 <script>
 import derivedProp from '../mixin/derived-prop';
 import initApi from '../mixin/init-api';
-import linkage from '../mixin/linkage';
 
 export default {
   name: 'MisService',

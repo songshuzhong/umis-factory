@@ -34,7 +34,7 @@
         :icon="icon"
         :disabled="iApiLoading"
       >
-        {{ text }}
+        {{ renderText }}
       </el-button>
     </el-popconfirm>
     <el-tooltip
@@ -96,7 +96,7 @@
       :disabled="iApiLoading"
       @click="onClick"
     >
-      {{ text }}
+      {{ renderText }}
     </el-button>
   </fragment>
 </template>
@@ -255,7 +255,11 @@ export default {
     };
   },
   mixins: [derivedProp, initData, initApi],
-  computed: {},
+  computed: {
+    renderText() {
+      return this.$getRenderedTpl(this.text, this.data);
+    },
+  },
   methods: {
     onDisVisiable() {
       this.visible = false;

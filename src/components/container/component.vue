@@ -1,13 +1,14 @@
 <template>
   <transition :name="transition">
-    <el-alert v-if="showErrorBoundary" title="错误: 渲染失败了" type="error">
-      <pre class="umis-component__not-find">{{
-        `{
-    "name": "${misName}"
-    "path": "${path}"
-    "error": "${error}"
-}`
-      }}</pre>
+    <el-alert
+      v-if="showErrorBoundary"
+      type="error"
+      class="umis-component__not-find"
+    >
+      <template slot="title">
+        错误：{{ error }}<br />路径：{{ path }}
+      </template>
+      <pre>{{ props }}</pre>
     </el-alert>
     <component
       v-if="iVisible && forceRerender"
@@ -78,8 +79,7 @@ export default {
     };
   },
   errorCaptured(err, vm, info) {
-    this.error = `'${err.message}' is found in ${info} of component`;
-    console.error(err);
+    this.error = `'${err.message}' is found in ${info} of ${this.misName} component`;
     return false;
   },
   computed: {
@@ -173,15 +173,21 @@ export default {
 };
 </script>
 <style lang="scss">
-.el-alert__content {
-  width: 100%;
-}
 .umis-component__not-find {
-  width: 100%;
-  background-color: white;
-  font-size: 14px;
-  text-align: left;
-  color: #606266;
-  overflow-x: scroll;
+  .el-alert__title {
+    display: block;
+    text-align: left;
+  }
+  .el-alert__content {
+    width: 100%;
+  }
+  .el-alert__description {
+    width: 100%;
+    background-color: white;
+    font-size: 14px;
+    text-align: left;
+    color: #606266;
+    overflow-x: scroll;
+  }
 }
 </style>

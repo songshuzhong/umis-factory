@@ -1,4 +1,4 @@
-import qs from 'qs';
+import { getUrlParams, constructUrl } from '../../utils/url';
 
 export default {
   data() {
@@ -10,15 +10,12 @@ export default {
     };
   },
   created() {
-    const defaultQuery = qs.parse(window.location.search.substr(1));
-    const defaultPageIndex = defaultQuery.pageIndex || this.iPageIndex;
-    const defaultPageSize = defaultQuery.pageSize || this.iPageSize;
+    const defaultQuery = getUrlParams();
+    const { pageIndex, pageSize } = defaultQuery;
+    const defaultPageIndex = pageIndex || this.iPageIndex;
+    const defaultPageSize = pageSize || this.iPageSize;
     this.iPageIndex = defaultPageIndex;
     this.iPageSize = defaultPageSize;
-    this.useSyncHistory({
-      pageIndex: defaultPageIndex,
-      pageSize: defaultPageSize,
-    });
   },
   methods: {
     handlePageChanged(pageIndex) {
@@ -33,7 +30,21 @@ export default {
     usePageInfo(params = {}) {
       params['pageIndex'] = this.iPageIndex;
       params['pageSize'] = this.iPageSize;
+      this.syncPageHistory();
       return params;
+    },
+    syncPageHistory() {
+      const defaultQuery = getUrlParams();
+      defaultQuery['pageIndex'] = this.iPageIndex;
+      defaultQuery['pageSize'] = this.iPageSize;
+      const newUrl = constructUrl(
+        '',
+        location.pathname,
+        defaultQuery,
+        location.hash,
+        location.protocol
+      );
+      window.history.replaceState({}, window.document.title, newUrl);
     },
   },
 };

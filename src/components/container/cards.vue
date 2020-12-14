@@ -45,7 +45,6 @@ import {
 import MisCard from './card';
 import initApi from '../mixin/init-api';
 import derivedProp from '../mixin/derived-prop';
-import syncHistory from '../mixin/sync-history';
 import pageInfo from '../mixin/page-info';
 
 export default {
@@ -112,7 +111,7 @@ export default {
       default: [24, 12, 8, 4],
     },
   },
-  mixins: [initApi, derivedProp, syncHistory, pageInfo],
+  mixins: [initApi, derivedProp, pageInfo],
   watch: {
     body: {
       handler(val) {

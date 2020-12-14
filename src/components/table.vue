@@ -144,7 +144,6 @@ import {
 import initApi from './mixin/init-api';
 import derivedProp from './mixin/derived-prop';
 import initData from './mixin/init-data';
-import syncHistory from './mixin/sync-history';
 import pageInfo from './mixin/page-info';
 
 export default {
@@ -215,6 +214,6 @@ export default {
       dynamicColumn: [],
     };
   },
-  mixins: [initData, initApi, derivedProp, syncHistory, pageInfo],
+  mixins: [initData, initApi, derivedProp, pageInfo],
 };
 </script>
