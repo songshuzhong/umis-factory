@@ -1,7 +1,6 @@
 <template>
-  <v-chart v-loading="iApiLoading" :options="iOptions" />
+  <v-chart v-loading="iApiLoading" :options="data" @click="handleClick" />
 </template>
-
 <script>
 import VChart from 'vue-echarts';
 import 'echarts/lib/chart/bar';
@@ -21,26 +20,44 @@ import 'echarts/lib/component/dataset';
 
 import initData from './mixin/init-data';
 import initApi from './mixin/init-api';
+import derivedProp from './mixin/derived-prop';
 
 export default {
-  name: 'MisCharts',
+  name: 'MisChart',
   components: {
     'v-chart': VChart,
   },
-  data() {
-    return {
-      iOptions: {},
-    };
-  },
-  watch: {
-    data: {
-      handler(val) {
-        this.iOptions = val;
-      },
-      immediate: true,
-      deep: true,
+  props: {
+    name: {
+      type: String,
+      required: false,
+    },
+    path: {
+      type: String,
+      required: true,
+    },
+    action: {
+      type: Function,
+      required: true,
+    },
+    actionType: {
+      type: String,
+      required: true,
+    },
+    body: {
+      type: Object,
+      required: false,
     },
   },
-  mixins: [initData, initApi],
+  mixins: [derivedProp, initData, initApi],
+  methods: {
+    handleClick({ data }) {
+      this.action({
+        data: data,
+        body: this.body,
+        actionType: this.actionType,
+      });
+    },
+  },
 };
 </script>

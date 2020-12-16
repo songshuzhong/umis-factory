@@ -22,6 +22,18 @@
         :path="`${path}/${iSchema.renderer}`"
       />
     </template>
+    <template v-if="canSchemaUpdate">
+      <template v-for="path in portalList">
+        <component
+          v-bind="portalMap[path].body"
+          :path="path"
+          :visible="portalMap[path].visible"
+          :is="portalMap[path].actionType"
+          :init-data="portalMap[path].data"
+          :on-popup-invisible="handleInVisiable"
+        />
+      </template>
+    </template>
   </div>
 </template>
 <script>
@@ -47,6 +59,8 @@ export default {
       iSchemaLoading: false,
       iStopAutoRefresh: false,
       iSchema: {},
+      portalList: [],
+      portalMap: {},
     };
   },
   watch: {
@@ -71,11 +85,25 @@ export default {
   mounted() {
     this.isMounted = true;
     this.$eventHub.$on('mis-schema:change', this.updatePageSchema);
+    this.$eventHub.$on('mis-portal:create', this.createProtal);
+    this.$eventHub.$on('mis-portal:destroy', this.destroyProtal);
     if (this.initSchema) {
       this.getPageSchema();
     }
   },
   methods: {
+    createProtal(path, popupProps) {
+      this.portalMap[path] = popupProps;
+      this.portalList = [...this.portalList, path];
+    },
+    destroyProtal(path) {
+      this.portalList = this.portalList.filter(item => item !== path);
+      delete this.portalMap[path];
+    },
+    handleInVisiable(path) {
+      this.portalList = this.portalList.filter(item => item !== path);
+      delete this.portalMap[path];
+    },
     getPageSchema() {
       const { method, url, params = {} } = this.initSchema;
       let fetchBody = params;

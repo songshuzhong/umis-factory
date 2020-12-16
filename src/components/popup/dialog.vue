@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-bind="$props"
-    :visible.sync="data.iVisible"
+    :visible.sync="iVisible"
     :title="renderTitle"
     :width="width"
     :fullscreen="fullscreen"
@@ -13,7 +13,7 @@
     :destroy-on-close="destroyOnClose"
     @close="onClose"
   >
-    <template v-if="data.iVisible">
+    <template v-if="iVisible">
       <template
         v-if="Object.prototype.toString.call(body) === '[object Object]'"
       >
@@ -150,7 +150,7 @@ export default {
       type: String,
       required: false,
     },
-    onActionDisvisiable: {
+    onPopupInvisible: {
       type: Function,
       required: false,
     },
@@ -163,7 +163,7 @@ export default {
   watch: {
     visible: {
       handler(val) {
-        this.data.iVisible = val;
+        this.iVisible = val;
       },
       immediate: true,
       deep: true,
@@ -176,16 +176,14 @@ export default {
   },
   data() {
     return {
-      data: {
-        iVisible: false,
-      },
+      iVisible: false,
     };
   },
   mixins: [derivedProp, initData],
   methods: {
     onClose() {
-      this.data.iVisible = false;
-      this.onActionDisvisiable && this.onActionDisvisiable();
+      this.iVisible = false;
+      this.onPopupInvisible && this.onPopupInvisible(this.path);
     },
   },
 };

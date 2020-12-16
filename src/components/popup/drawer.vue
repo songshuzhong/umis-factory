@@ -8,7 +8,7 @@
     :direction="direction"
     :showClose="showClose"
     :size="size"
-    :visible.sync="data.iVisible"
+    :visible.sync="iVisible"
     :wrapperClosable="wrapperClosable"
     :withHeader="withHeader"
     destroy-on-close
@@ -158,31 +158,29 @@ export default {
       type: [Array, Object],
       required: false,
     },
-    onActionDisvisiable: {
+    onPopupInvisible: {
       type: Function,
       required: false,
     },
   },
   data() {
     return {
-      data: {
-        iVisible: false,
-      },
+      iVisible: false,
     };
   },
   mixins: [derivedProp, initData],
   watch: {
     visible: {
       handler(val) {
-        this.data.iVisible = val;
+        this.iVisible = val;
       },
       immediate: true,
     },
   },
   methods: {
     onClose() {
-      this.data.iVisible = false;
-      this.onActionDisvisiable && this.onActionDisvisiable();
+      this.iVisible = false;
+      this.onPopupInvisible && this.onPopupInvisible(this.path);
     },
   },
 };

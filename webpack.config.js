@@ -6,6 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const externalDependencies = require('./externals');
 
 module.exports = {
   mode: 'production',
@@ -16,37 +17,7 @@ module.exports = {
     libraryTarget: 'commonjs2',
     library: 'UmisFactory',
   },
-  externals: {
-    qs: 'qs',
-    axios: 'axios',
-    echarts: 'echarts',
-    'echarts/lib/chart/bar': 'echarts/lib/chart/bar',
-    'echarts/lib/chart/line': 'echarts/lib/chart/line',
-    'echarts/lib/chart/pie': 'echarts/lib/chart/pie',
-    'echarts/lib/chart/map': 'echarts/lib/chart/map',
-    'echarts/lib/chart/radar': 'echarts/lib/chart/radar',
-    'echarts/lib/chart/scatter': 'echarts/lib/chart/scatter',
-    'echarts/lib/chart/effectScatter': 'echarts/lib/chart/effectScatter',
-    'echarts/lib/component/tooltip': 'echarts/lib/component/tooltip',
-    'echarts/lib/component/polar': 'echarts/lib/component/polar',
-    'echarts/lib/component/geo': 'echarts/lib/component/geo',
-    'echarts/lib/component/legend': 'echarts/lib/component/legend',
-    'echarts/lib/component/title': 'echarts/lib/component/title',
-    'echarts/lib/component/visualMap': 'echarts/lib/component/visualMap',
-    'echarts/lib/component/dataset': 'echarts/lib/component/dataset',
-    'element-ui': 'element-ui',
-    'vue-echarts': 'vue-echarts',
-    'deep-equal': 'deep-equal',
-    'copy-to-clipboard': 'copy-to-clipboard',
-    'lodash.clonedeep': 'lodash.clonedeep',
-    'lodash.template': 'lodash.template',
-    vue: {
-      root: 'Vue',
-      commonjs: 'vue',
-      commonjs2: 'vue',
-      amd: 'vue',
-    },
-  },
+  externals: externalDependencies,
   module: {
     rules: [
       /*{

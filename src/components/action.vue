@@ -1,16 +1,5 @@
 <template>
   <fragment>
-    <transition name="el-fade-in">
-      <component
-        v-if="visible"
-        v-bind="actions ? getBody(actions[index]) : getBody($props)"
-        :path="`${path}/${actions ? actions[index].actionType : actionType}`"
-        :is="actions ? actions[index].actionType : actionType"
-        :visible="visible"
-        :init-data="data"
-        :on-action-disvisiable="onDisVisiable"
-      />
-    </transition>
     <el-popconfirm
       v-if="confirmTitle"
       :confirm-button-text="confirmBtnText"
@@ -131,6 +120,10 @@ export default {
       type: String,
       required: true,
     },
+    body: {
+      type: Object,
+      required: false,
+    },
     action: {
       type: Function,
       required: false,
@@ -152,8 +145,8 @@ export default {
       type: String,
       required: false,
     },
-    body: {
-      type: [Array, Object],
+    showPopup: {
+      type: Boolean,
       required: false,
     },
     size: {
@@ -248,11 +241,20 @@ export default {
   },
   data() {
     return {
-      iApiLoading: false,
-      visible: false,
-      clipboard: '',
+      iShowPopup: false,
       index: 0,
     };
+  },
+  watch: {
+    showPopup: {
+      handler(val) {
+        this.iShowPopup = val;
+      },
+      immediate: true,
+    },
+    iShowPopup(val) {
+      this.$emit('update:showPopup', val);
+    },
   },
   mixins: [derivedProp, initData, initApi],
   computed: {
@@ -261,8 +263,8 @@ export default {
     },
   },
   methods: {
-    onDisVisiable() {
-      this.visible = false;
+    handleInVisiable() {
+      this.iShowPopup = false;
     },
     onClick(index) {
       let actionType = this.actionType;
@@ -270,19 +272,13 @@ export default {
         actionType = this.actions[index].actionType;
         this.index = index;
       }
-      if (['mis-dialog', 'mis-drawer'].includes(actionType)) {
-        this.visible = true;
-      } else if (['mis-ajax'].includes(actionType)) {
-        this.iApiLoading = true;
-      }
       if (typeof index === 'number') {
-        this.action(this.actions[index], this.handleLoading);
+        this.action(this.actions[index], this.handleAfterAction);
       } else {
-        this.action && this.action(undefined, this.handleLoading);
+        this.action && this.action(undefined, this.handleAfterAction);
       }
     },
-    handleLoading() {
-      this.iApiLoading = false;
+    handleAfterAction() {
       this.linkageTrigger(this.target, this.data);
     },
   },
