@@ -37,6 +37,10 @@ export default {
       type: String,
       required: false,
     },
+    body: {
+      type: Object,
+      required: false,
+    },
     text: {
       type: String,
       required: true,

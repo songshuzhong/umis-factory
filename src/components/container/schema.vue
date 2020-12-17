@@ -22,25 +22,25 @@
         :path="`${path}/${iSchema.renderer}`"
       />
     </template>
-    <template v-if="canSchemaUpdate">
-      <transition name="el-fade-in-linear">
-        <template v-for="(value, key) in popMap" :key="key">
-          <component
-            v-bind="value.body"
-            :path="key"
-            :visible="value.visible"
-            :is="value.actionType"
-            :init-data="value.data"
-            :on-popup-invisible="destroyProtal"
-          />
-        </template>
-      </transition>
-    </template>
+    <transition-group v-if="canSchemaUpdate" name="el-fade-in-linear" tag="div">
+      <template v-for="({ actionType, body, data, visible }, path) in popMap">
+        <component
+          v-bind="body"
+          :path="path"
+          :key="path"
+          :is="actionType"
+          :visible="visible"
+          :init-data="data"
+          :on-popup-invisible="destroyProtal"
+        />
+      </template>
+    </transition-group>
   </div>
 </template>
 <script>
 import clonedeep from 'lodash.clonedeep';
 import derivedProp from '../mixin/derived-prop';
+
 export default {
   name: 'MisSchema',
   props: {
@@ -63,7 +63,6 @@ export default {
       iSchemaLoading: false,
       iStopAutoRefresh: false,
       iSchema: {},
-      popList: [],
       popMap: {},
     };
   },

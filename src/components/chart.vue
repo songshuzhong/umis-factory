@@ -40,19 +40,15 @@ export default {
       type: Function,
       required: true,
     },
-    footer: {
+    actions: {
       type: Object,
-      required: false,
+      required: true,
     },
   },
   mixins: [derivedProp, initData, initApi],
   methods: {
     handleClick({ data }) {
-      this.action({
-        data: data,
-        body: this.footer.body,
-        actionType: this.footer.actionType,
-      });
+      this.action(this.actions, data);
     },
   },
 };

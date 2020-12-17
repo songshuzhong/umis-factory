@@ -263,9 +263,6 @@ export default {
     },
   },
   methods: {
-    handleInVisiable() {
-      this.iShowPopup = false;
-    },
     onClick(index) {
       let actionType = this.actionType;
       if (this.actions && typeof index === 'number') {
@@ -273,9 +270,26 @@ export default {
         this.index = index;
       }
       if (typeof index === 'number') {
-        this.action(this.actions[index], this.handleAfterAction);
+        this.action(
+          {
+            actions: true,
+            ...this.actions[index],
+          },
+          this.data,
+          this.handleAfterAction
+        );
       } else {
-        this.action && this.action(undefined, this.handleAfterAction);
+        const { renderer, actionType } = this.$props;
+        const { header, footer, disabled, ...other } = this.$attrs;
+        this.action(
+          {
+            renderer,
+            actionType,
+            ...other,
+          },
+          this.data,
+          this.handleAfterAction
+        );
       }
     },
     handleAfterAction() {
