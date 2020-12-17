@@ -59,6 +59,10 @@ export default {
       type: Function,
       required: false,
     },
+    actions: {
+      type: Array,
+      required: false,
+    },
   },
   mixins: [visible, initData, linkage, derivedProp],
   data() {
@@ -98,7 +102,7 @@ export default {
     filterAction(props, feedback) {
       if (
         (this.props.renderer === 'mis-action' && this.props.actions) ||
-        (this.props.renderer === 'mis-chart' && this.body)
+        (this.props.renderer === 'mis-chart' && this.footer.actionType)
       ) {
         if (props && ['mis-submit', 'mis-reset'].includes(props.actionType)) {
           return this.action();

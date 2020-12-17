@@ -23,20 +23,24 @@
       />
     </template>
     <template v-if="canSchemaUpdate">
-      <template v-for="path in portalList">
-        <component
-          v-bind="portalMap[path].body"
-          :path="path"
-          :visible="portalMap[path].visible"
-          :is="portalMap[path].actionType"
-          :init-data="portalMap[path].data"
-          :on-popup-invisible="handleInVisiable"
-        />
-      </template>
+      <transition name="el-fade-in-linear">
+        <template v-for="(value, key) in popMap" :key="key">
+          <component
+            v-bind="value.body"
+            :path="key"
+            :visible="value.visible"
+            :is="value.actionType"
+            :init-data="value.data"
+            :on-popup-invisible="destroyProtal"
+          />
+        </template>
+      </transition>
     </template>
   </div>
 </template>
 <script>
+import clonedeep from 'lodash.clonedeep';
+import derivedProp from '../mixin/derived-prop';
 export default {
   name: 'MisSchema',
   props: {
@@ -59,8 +63,8 @@ export default {
       iSchemaLoading: false,
       iStopAutoRefresh: false,
       iSchema: {},
-      portalList: [],
-      portalMap: {},
+      popList: [],
+      popMap: {},
     };
   },
   watch: {
@@ -82,6 +86,7 @@ export default {
       return this.canSchemaUpdate ? this.$route.path : '/website';
     },
   },
+  mixins: [derivedProp],
   mounted() {
     this.isMounted = true;
     this.$eventHub.$on('mis-schema:change', this.updatePageSchema);
@@ -92,17 +97,15 @@ export default {
     }
   },
   methods: {
-    createProtal(path, popupProps) {
-      this.portalMap[path] = popupProps;
-      this.portalList = [...this.portalList, path];
+    createProtal(path, pop) {
+      const popMap = this.popMap;
+      popMap[path] = pop;
+      this.popMap = clonedeep(popMap);
     },
     destroyProtal(path) {
-      this.portalList = this.portalList.filter(item => item !== path);
-      delete this.portalMap[path];
-    },
-    handleInVisiable(path) {
-      this.portalList = this.portalList.filter(item => item !== path);
-      delete this.portalMap[path];
+      const popMap = this.popMap;
+      delete popMap[path];
+      this.popMap = clonedeep(popMap);
     },
     getPageSchema() {
       const { method, url, params = {} } = this.initSchema;

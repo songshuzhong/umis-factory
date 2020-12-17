@@ -40,11 +40,7 @@ export default {
       type: Function,
       required: true,
     },
-    actionType: {
-      type: String,
-      required: true,
-    },
-    body: {
+    footer: {
       type: Object,
       required: false,
     },
@@ -54,8 +50,8 @@ export default {
     handleClick({ data }) {
       this.action({
         data: data,
-        body: this.body,
-        actionType: this.actionType,
+        body: this.footer.body,
+        actionType: this.footer.actionType,
       });
     },
   },
