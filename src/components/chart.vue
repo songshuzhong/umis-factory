@@ -47,8 +47,9 @@ export default {
   },
   mixins: [derivedProp, initData, initApi],
   methods: {
-    handleClick({ data }) {
-      this.action(this.actions, data);
+    handleClick(data) {
+      const { $vars, encode, event, dimensionNames, ...other } = data;
+      this.action(this.actions, other);
     },
   },
 };

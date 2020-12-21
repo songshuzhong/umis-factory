@@ -147,9 +147,12 @@ export default {
   },
   computed: {
     activeControls() {
-      return this.controls.filter(item =>
-        ['mis-action', 'mis-button'].includes(item.renderer)
-      );
+      return this.controls.filter(item => {
+        if (['mis-action', 'mis-button'].includes(item.renderer)) {
+          item.actionApi = this.api;
+          return item;
+        }
+      });
     },
     inactiveControls() {
       return this.controls.filter(

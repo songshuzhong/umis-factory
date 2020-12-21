@@ -29,6 +29,10 @@ export default {
       type: Function,
       required: false,
     },
+    actionApi: {
+      type: Object,
+      required: false,
+    },
     afterAction: {
       type: Function,
       required: false,
@@ -92,7 +96,11 @@ export default {
       if (typeof this.index === 'number') {
         this.action(this.index);
       } else {
-        this.action();
+        const { renderer, actionType } = this.$attrs;
+        this.action({
+          renderer,
+          actionType,
+        });
       }
     },
   },

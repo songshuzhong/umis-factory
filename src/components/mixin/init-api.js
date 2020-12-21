@@ -162,6 +162,7 @@ export default {
               showClose: true,
               type: 'success',
             });
+          return 'resolve';
         })
         .catch(error => {
           this.$message({
@@ -169,10 +170,12 @@ export default {
             showClose: true,
             type: 'error',
           });
+          return 'reject';
         })
-        .finally(() => {
+        .finally(status => {
           this.iLoading = false;
           feedback && feedback();
+          return status;
         });
     },
     shouldUpdateInitApi(val) {

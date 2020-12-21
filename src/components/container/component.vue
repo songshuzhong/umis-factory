@@ -132,7 +132,7 @@ export default {
           break;
       }
     },
-    afterAction(props) {
+    onReloadAction(props) {
       const { reload } = props;
       if (reload) {
         this.$eventHub.$emit('mis-component:reload', reload);
@@ -147,9 +147,13 @@ export default {
       }
     },
     handleAjaxAction(props, context, feedback) {
-      this.$children[0].handleFetchApi(props.actionApi, feedback).then(() => {
-        this.afterAction(props);
-      });
+      this.$children[0]
+        .handleFetchApi(props.actionApi, feedback)
+        .then(status => {
+          if (status === 'resolve') {
+            this.onReloadAction(props);
+          }
+        });
     },
     handleUrlAction(props, context) {
       const url = this.$getCompiledUrl(props.url, context);
@@ -166,11 +170,7 @@ export default {
     handleCopyAction(props, context) {
       const content = this.$getCompiledUrl(props.content, context);
       copy(content);
-      this.$message({
-        showClose: true,
-        message: `已复制：${content}.`,
-        type: 'success',
-      });
+      this.$message.success(`已复制：${content}.`);
     },
     handleShowPopup(props, context) {
       this.$eventHub.$emit('mis-portal:create', this.path, {

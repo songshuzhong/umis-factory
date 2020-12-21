@@ -38,7 +38,7 @@
           />
         </template>
       </template>
-      <div slot="footer">
+      <div v-if="footer" slot="footer">
         <template
           v-if="Object.prototype.toString.call(footer) === '[object Array]'"
         >

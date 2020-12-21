@@ -1,80 +1,38 @@
 <template>
-  <fragment>
-    <el-popconfirm
-      v-if="confirmTitle"
-      :confirm-button-text="confirmBtnText"
-      :cancel-button-text="confirmCancelBtnText"
-      :confirm-button-type="confirmBtnType"
-      :cancel-button-type="confirmCancelBtnType"
-      :icon="confirmIcon"
-      :icon-color="confirmIconColor"
-      :hide-icon="confirmHideIcon"
-      :title="confirmTitle"
-      @confirm="onClick"
-    >
-      <el-button
-        v-loading="iApiLoading"
-        slot="reference"
-        :size="size"
-        :type="type"
-        :plain="plain"
-        :round="round"
-        :circle="circle"
-        :icon="icon"
-        :disabled="iApiLoading"
-      >
-        {{ renderText }}
-      </el-button>
-    </el-popconfirm>
-    <el-tooltip
-      v-else-if="tipContent"
-      :disabled="tipDisabled"
-      :effect="tipEffect"
-      :content="tipContent"
-      :placement="tipPlacement"
-    >
-      <el-button
-        v-loading="iApiLoading"
-        :size="size"
-        :type="type"
-        :plain="plain"
-        :round="round"
-        :circle="circle"
-        :icon="icon"
-        :disabled="iApiLoading"
-        @click="onClick"
-      >
-        {{ text }}
-      </el-button>
-    </el-tooltip>
-    <el-badge v-else-if="badgeText" :value="badgeText" :class="badgeClass">
-      <el-button
-        v-loading="iApiLoading"
-        :size="size"
-        :type="type"
-        :plain="plain"
-        :round="round"
-        :circle="circle"
-        :icon="icon"
-        :disabled="iApiLoading"
-        @click="onClick"
-      >
-        {{ text }}
-      </el-button>
-    </el-badge>
-    <el-button-group v-else-if="actions" v-loading="iApiLoading">
-      <template v-for="(item, index) in actions">
-        <mis-button
-          v-bind="item"
-          :key="`${path}/${index}`"
-          :index="index"
-          :disabled="iApiLoading"
-          :action="onClick"
-        />
-      </template>
-    </el-button-group>
+  <el-popconfirm
+    v-if="confirmTitle"
+    :confirm-button-text="confirmBtnText"
+    :cancel-button-text="confirmCancelBtnText"
+    :confirm-button-type="confirmBtnType"
+    :cancel-button-type="confirmCancelBtnType"
+    :icon="confirmIcon"
+    :icon-color="confirmIconColor"
+    :hide-icon="confirmHideIcon"
+    :title="confirmTitle"
+    @confirm="onClick"
+  >
     <el-button
-      v-else
+      v-loading="iApiLoading"
+      slot="reference"
+      :size="size"
+      :type="type"
+      :plain="plain"
+      :round="round"
+      :circle="circle"
+      :icon="icon"
+      :disabled="iApiLoading"
+    >
+      {{ renderText }}
+    </el-button>
+  </el-popconfirm>
+  <el-tooltip
+    v-else-if="tipContent"
+    :disabled="tipDisabled"
+    :effect="tipEffect"
+    :content="tipContent"
+    :placement="tipPlacement"
+  >
+    <el-button
       v-loading="iApiLoading"
       :size="size"
       :type="type"
@@ -85,9 +43,49 @@
       :disabled="iApiLoading"
       @click="onClick"
     >
-      {{ renderText }}
+      {{ text }}
     </el-button>
-  </fragment>
+  </el-tooltip>
+  <el-badge v-else-if="badgeText" :value="badgeText" :class="badgeClass">
+    <el-button
+      v-loading="iApiLoading"
+      :size="size"
+      :type="type"
+      :plain="plain"
+      :round="round"
+      :circle="circle"
+      :icon="icon"
+      :disabled="iApiLoading"
+      @click="onClick"
+    >
+      {{ text }}
+    </el-button>
+  </el-badge>
+  <el-button-group v-else-if="actions" v-loading="iApiLoading">
+    <template v-for="(item, index) in actions">
+      <mis-button
+        v-bind="item"
+        :key="`${path}/${index}`"
+        :index="index"
+        :disabled="iApiLoading"
+        :action="onClick"
+      />
+    </template>
+  </el-button-group>
+  <el-button
+    v-else
+    v-loading="iApiLoading"
+    :size="size"
+    :type="type"
+    :plain="plain"
+    :round="round"
+    :circle="circle"
+    :icon="icon"
+    :disabled="iApiLoading"
+    @click.native="onClick"
+  >
+    {{ renderText }}
+  </el-button>
 </template>
 <script>
 import {
@@ -128,9 +126,9 @@ export default {
       type: Function,
       required: false,
     },
-    actionType: {
-      type: String,
-      required: true,
+    actionApi: {
+      type: Object,
+      required: false,
     },
     actions: {
       type: Array,
@@ -264,7 +262,7 @@ export default {
   },
   methods: {
     onClick(index) {
-      let actionType = this.actionType;
+      let actionType = this.$attrs.actionType;
       if (this.actions && typeof index === 'number') {
         actionType = this.actions[index].actionType;
         this.index = index;
@@ -279,12 +277,13 @@ export default {
           this.handleAfterAction
         );
       } else {
-        const { renderer, actionType } = this.$props;
+        const { renderer, actionApi } = this.$props;
         const { header, footer, disabled, ...other } = this.$attrs;
         this.action(
           {
             renderer,
             actionType,
+            actionApi,
             ...other,
           },
           this.data,

@@ -325,11 +325,7 @@ export default {
   methods: {
     handleClick(icon) {
       copy(icon);
-      this.$message({
-        showClose: true,
-        message: '复制成功',
-        type: 'success',
-      });
+      this.$message.success('复制成功');
     },
   },
 };
@@ -337,7 +333,7 @@ export default {
 
 <style lang="scss">
 .umis-icon-picker {
-  font-size: 36px !important;
+  font-size: 16px !important;
   color: #606266;
 }
 </style>
