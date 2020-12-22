@@ -1,7 +1,9 @@
 module.exports = {
   qs: 'qs',
+  xlsx: 'xlsx',
   axios: 'axios',
   echarts: 'echarts',
+  'file-saver': 'file-saver',
   'echarts/lib/chart/bar': 'echarts/lib/chart/bar',
   'echarts/lib/chart/line': 'echarts/lib/chart/line',
   'echarts/lib/chart/pie': 'echarts/lib/chart/pie',

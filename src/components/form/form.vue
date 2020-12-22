@@ -202,16 +202,14 @@ export default {
       if (this.target) {
         return this.linkageTrigger(this.target, formData);
       }
-      if (this.api) {
-        this.handleFetchApi(
-          {
-            url: this.api.url || this.api,
-            method: this.api.method || 'post',
-            params: formData,
-          },
-          this.onAfterSubmit
-        );
-      }
+      this.handleFetchApi(
+        {
+          url: this.api.url || this.api,
+          method: this.api.method || 'post',
+          params: formData,
+        },
+        this.onAfterSubmit
+      );
     },
     onAfterSubmit() {
       if (this.redirect) {

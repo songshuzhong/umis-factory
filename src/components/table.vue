@@ -1,26 +1,73 @@
 <template>
   <div class="umis-crud__container">
-    <el-dropdown
-      v-if="showDynamicColumn"
-      size="mini"
-      split-button
-      placement="bottom-start"
+    <div
+      v-if="showDynamicColumn || showExport || actions"
+      class="umis-crud__container__header"
+      :class="{ border: border }"
     >
-      <i class="el-icon-s-grid" />
-      <el-dropdown-menu slot="dropdown">
-        <el-checkbox-group v-model="dynamicColumn">
-          <template v-for="(column, index) in columns">
-            <el-dropdown-item v-if="column.name" :key="index">
-              <el-checkbox :label="column.name">
-                {{ column.label }}
-              </el-checkbox>
+      <div class="umis-crud__container__title">
+        {{ title }}
+      </div>
+      <div class="umis-crud__container__tools">
+        <el-dropdown
+          v-if="showDynamicColumn"
+          class="umis-crud__container__tool"
+          size="mini"
+          split-button
+          placement="bottom-start"
+        >
+          <i class="el-icon-s-grid" />
+          <el-dropdown-menu slot="dropdown">
+            <el-checkbox-group v-model="dynamicColumn">
+              <template v-for="(column, index) in columns">
+                <el-dropdown-item v-if="column.name" :key="index">
+                  <el-checkbox :label="column.name">
+                    {{ column.label }}
+                  </el-checkbox>
+                </el-dropdown-item>
+              </template>
+            </el-checkbox-group>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-dropdown
+          v-if="actions"
+          class="umis-crud__container__tool"
+          size="mini"
+          split-button
+          trigger="click"
+          placement="bottom-start"
+        >
+          <i class="el-icon-shopping-cart-full" />
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item
+              v-for="(item, index) in actions"
+              :key="`${path}/${index}`"
+            >
+              <mis-component
+                :path="`${path}/${index}/${item.renderer}`"
+                :mis-name="item.renderer"
+                :props="getFattingProps(item)"
+                :init-data="multipleSelection"
+                :disabled-on="`${multipleSelection.length} === 0`"
+                :action="action"
+              />
             </el-dropdown-item>
-          </template>
-        </el-checkbox-group>
-      </el-dropdown-menu>
-    </el-dropdown>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-button
+          v-if="showExport"
+          class="umis-crud__container__tool"
+          size="mini"
+          icon="el-icon-download"
+          @click="handleExportExcel"
+        >
+          导出
+        </el-button>
+      </div>
+    </div>
     <el-table
       v-loading="iApiLoading"
+      ref="table"
       :data="rows"
       :height="height"
       :stripe="stripe"
@@ -30,6 +77,7 @@
       :max-height="maxHeight"
       :show-header="showHeader"
       :highlight-current-row="highlightCurrentRow"
+      @selection-change="handleSelectionChange"
     >
       <template v-for="(column, index) in columns">
         <template v-if="!dynamicColumn.includes(column.name)">
@@ -117,6 +165,7 @@
       </template>
     </el-table>
     <el-pagination
+      class="umis-crud__container__pagination"
       background
       layout="prev, pager, next, total, sizes, jumper"
       :total="iTotal"
@@ -139,7 +188,10 @@ import {
   DropdownItem as ElDropdownItem,
   CheckboxGroup as ElCheckboxGroup,
   Checkbox as ElCheckbox,
+  Divider as ElDivider,
 } from 'element-ui';
+import FileSaver from 'file-saver';
+import XLSX from 'xlsx';
 
 import initApi from './mixin/init-api';
 import derivedProp from './mixin/derived-prop';
@@ -157,18 +209,31 @@ export default {
     ElDropdownItem,
     ElCheckboxGroup,
     ElCheckbox,
+    ElDivider,
   },
   props: {
+    path: {
+      type: String,
+      required: true,
+    },
     name: {
       type: String,
       required: true,
     },
-    path: {
+    title: {
       type: String,
       required: true,
     },
     columns: {
       type: Array,
+      required: true,
+    },
+    actions: {
+      type: Array,
+      required: false,
+    },
+    action: {
+      type: Function,
       required: true,
     },
     height: {
@@ -208,12 +273,79 @@ export default {
       required: false,
       default: true,
     },
+    showExport: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   data() {
     return {
       dynamicColumn: [],
+      multipleSelection: [],
     };
   },
   mixins: [initData, initApi, derivedProp, pageInfo],
+  methods: {
+    handleSelectionChange(val) {
+      const selectedIds = val.map(item => item.id);
+      this.multipleSelection = { selectedIds };
+    },
+    handleExportExcel() {
+      const dom = this.$refs.table.$el.querySelector('.el-table__fixed');
+      const wb = XLSX.utils.table_to_book(dom);
+      const wbout = XLSX.write(wb, {
+        bookType: 'xlsx',
+        bookSST: true,
+        type: 'array',
+      });
+      try {
+        FileSaver.saveAs(
+          new Blob([wbout], { type: 'application/octet-stream' }),
+          'sheetjs.xlsx'
+        );
+      } catch (e) {
+        if (typeof console !== 'undefined') console.log(e, wbout);
+      }
+      return wbout;
+    },
+  },
 };
 </script>
+
+<style lang="scss">
+.umis-crud__container__header {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  background: #fafafa;
+  white-space: nowrap;
+  &.border {
+    border: 1px solid #ebeef5;
+    border-bottom: 0;
+  }
+}
+.umis-crud__container__title {
+  width: 50%;
+  display: inline-block;
+  font-weight: 500;
+  font-size: 16px;
+  color: #606266;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  white-space: nowrap;
+}
+.umis-crud__container__tools {
+  width: 50%;
+  display: inline-block;
+  text-align: right;
+}
+.umis-crud__container__tool {
+  margin-left: 10px;
+}
+.umis-crud__container__pagination {
+  margin-top: 10px;
+}
+</style>

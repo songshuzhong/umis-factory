@@ -63,13 +63,15 @@
   </el-badge>
   <el-button-group v-else-if="actions" v-loading="iApiLoading">
     <template v-for="(item, index) in actions">
-      <mis-button
+      <el-button
         v-bind="item"
         :key="`${path}/${index}`"
         :index="index"
         :disabled="iApiLoading"
-        :action="onClick"
-      />
+        @click="onClick"
+      >
+        {{ item.text }}
+      </el-button>
     </template>
   </el-button-group>
   <el-button
@@ -81,7 +83,7 @@
     :round="round"
     :circle="circle"
     :icon="icon"
-    :disabled="iApiLoading"
+    :disabled="disabled || iApiLoading"
     @click.native="onClick"
   >
     {{ renderText }}
@@ -134,6 +136,10 @@ export default {
       type: Array,
       required: false,
       default: undefined,
+    },
+    disabled: {
+      type: Boolean,
+      required: false,
     },
     renderer: {
       type: String,
@@ -261,13 +267,17 @@ export default {
     },
   },
   methods: {
-    onClick(index) {
-      let actionType = this.$attrs.actionType;
-      if (this.actions && typeof index === 'number') {
+    onClick() {
+      let index;
+      let actionType;
+      if (this.actions) {
+        index = event.currentTarget.attributes.index.value;
         actionType = this.actions[index].actionType;
         this.index = index;
+      } else {
+        actionType = this.$attrs.actionType;
       }
-      if (typeof index === 'number') {
+      if (typeof index === 'string') {
         this.action(
           {
             actions: true,
@@ -278,7 +288,7 @@ export default {
         );
       } else {
         const { renderer, actionApi } = this.$props;
-        const { header, footer, disabled, ...other } = this.$attrs;
+        const { header, footer, ...other } = this.$attrs;
         this.action(
           {
             renderer,
