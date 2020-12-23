@@ -26,22 +26,3 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-.umis-component__not-find {
-  .el-alert__title {
-    display: block;
-    text-align: left;
-  }
-  .el-alert__content {
-    width: 100%;
-  }
-  .el-alert__description {
-    width: 100%;
-    background-color: white;
-    font-size: 14px;
-    text-align: left;
-    color: #606266;
-    overflow-x: scroll;
-  }
-}
-</style>

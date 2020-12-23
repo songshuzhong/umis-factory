@@ -68,16 +68,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.umis-setting__cards {
-  .umis-setting__card-margin {
-    margin: 10px 0;
-  }
-  .umis-setting__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-}
-</style>

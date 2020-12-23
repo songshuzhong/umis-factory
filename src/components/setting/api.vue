@@ -132,28 +132,3 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-.umis-setting__api-editor {
-  width: 100%;
-}
-.umis-setting__api-editor__item {
-  display: flex;
-  padding: 11px 0;
-  background: #f5f5f5;
-}
-.umis-setting__api-editor__plus {
-  padding: 11px 0;
-  background: #f5f5f5;
-}
-.umis-setting__api-editor__delete {
-  margin: 0 10px;
-}
-.umis-setting__api-editor__label,
-.umis-setting__api-editor__value {
-  padding: 0 12px 0 0;
-}
-.umis-setting__api-editor__radio {
-  display: flex;
-  align-items: center;
-}
-</style>

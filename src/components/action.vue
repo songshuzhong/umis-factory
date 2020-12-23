@@ -14,6 +14,7 @@
     <el-button
       v-loading="iApiLoading"
       slot="reference"
+      :class="classname"
       :size="size"
       :type="type"
       :plain="plain"
@@ -49,6 +50,7 @@
   <el-badge v-else-if="badgeText" :value="badgeText" :class="badgeClass">
     <el-button
       v-loading="iApiLoading"
+      :class="classname"
       :size="size"
       :type="type"
       :plain="plain"
@@ -77,6 +79,7 @@
   <el-button
     v-else
     v-loading="iApiLoading"
+    :class="classname"
     :size="size"
     :type="type"
     :plain="plain"
@@ -238,6 +241,10 @@ export default {
       type: String,
       required: false,
     },
+    remoteForm: {
+      type: String,
+      required: false,
+    },
     linkageTrigger: {
       type: Function,
       required: false,
@@ -277,7 +284,9 @@ export default {
       } else {
         actionType = this.$attrs.actionType;
       }
-      if (typeof index === 'string') {
+      if (this.remoteForm) {
+        this.$eventHub.$emit('mis-component:form', this.remoteForm, actionType);
+      } else if (typeof index === 'string') {
         this.action(
           {
             actions: true,

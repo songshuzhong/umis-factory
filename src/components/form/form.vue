@@ -1,8 +1,8 @@
 <template>
   <el-form
     v-loading="iApiLoading"
-    class="mis-form"
-    ref="mis-form"
+    ref="form"
+    class="umis-form__container"
     :label-width="labelWidth"
     :label-position="labelPosition"
     :model="data"
@@ -33,23 +33,25 @@
       />
     </template>
     <el-form-item>
-      <template v-for="(item, index) in activeControls">
-        <mis-component
-          :ref="item.actionType"
-          :key="`${path}/${index}/${item.renderer}`"
-          :path="`${path}/${index}/${item.renderer}`"
-          :mis-name="item.renderer"
-          :header="getHeader(item)"
-          :body="getBody(item)"
-          :footer="getFooter(item)"
-          :props="getFattingProps(item)"
-          :init-data="data"
-          :hidden-on="item.hiddenOn"
-          :visible-on="item.visibleOn"
-          :disabled-on="item.disabledOn"
-          :action="onBeforeSubmit"
-        />
-      </template>
+      <div class="umis-form__actions">
+        <template v-for="(item, index) in activeControls">
+          <mis-component
+            :ref="item.actionType"
+            :key="`${path}/${index}/${item.renderer}`"
+            :path="`${path}/${index}/${item.renderer}`"
+            :mis-name="item.renderer"
+            :header="getHeader(item)"
+            :body="getBody(item)"
+            :footer="getFooter(item)"
+            :props="getFattingProps(item)"
+            :init-data="data"
+            :hidden-on="item.hiddenOn"
+            :visible-on="item.visibleOn"
+            :disabled-on="item.disabledOn"
+            :action="onBeforeSubmit"
+          />
+        </template>
+      </div>
     </el-form-item>
   </el-form>
 </template>
@@ -97,7 +99,7 @@ export default {
     labelWidth: {
       type: Number,
       required: false,
-      default: '130px',
+      default: 'auto',
     },
     labelPosition: {
       type: String,
@@ -161,6 +163,9 @@ export default {
     },
   },
   mixins: [initApi, initData, derivedProp],
+  mounted() {
+    this.$eventHub.$on('mis-component:form', this.handleRemoteSubmit);
+  },
   methods: {
     handleInvisible(visible, field) {
       if (visible) {
@@ -171,9 +176,23 @@ export default {
         this.invisibleField.push(field);
       }
     },
+    handleRemoteSubmit(target, actionType) {
+      if (this.name && this.name === target) {
+        const form = this.$refs['form'];
+        if (form && actionType === 'mis-reset') {
+          form.resetFields();
+        } else if (form && actionType === 'mis-submit') {
+          form.validate(valid => {
+            if (valid) {
+              this.sendFormData();
+            }
+          });
+        }
+      }
+    },
     onBeforeSubmit() {
       const attributes = event.currentTarget.attributes;
-      const form = this.$refs['mis-form'];
+      const form = this.$refs['form'];
       if (
         attributes.actionType &&
         attributes.actionType.value === 'mis-reset'

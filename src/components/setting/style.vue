@@ -81,15 +81,3 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-.umis-setting__style-editor {
-  height: 300px;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  text-align: left;
-  .monaco-editor {
-    width: 100% !important;
-  }
-}
-</style>

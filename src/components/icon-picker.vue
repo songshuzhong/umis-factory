@@ -330,10 +330,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.umis-icon-picker {
-  font-size: 16px !important;
-  color: #606266;
-}
-</style>

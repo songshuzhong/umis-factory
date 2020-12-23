@@ -1,5 +1,5 @@
 <template>
-  <div v-if="title" class="umis-avatar__wrapper">
+  <div v-if="title" class="umis-avatar__container">
     <div class="umis-avatar__logo">
       <el-avatar
         :classname="classname"
@@ -151,38 +151,3 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-.umis-avatar__wrapper {
-  display: flex;
-  .umis-avatar__logo {
-    margin-right: 15px;
-  }
-  .umis-avatar__content {
-    overflow: hidden;
-  }
-  .umis-avatar__title {
-    margin-right: 30px;
-    margin-bottom: 3px;
-    font-weight: 500;
-    font-size: 16px;
-    color: #606266;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .umis-avatar__subtitle {
-    text-align: left;
-    color: #909399;
-    font-weight: 400;
-    font-size: 14px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .umis-avatar__description {
-    font-size: 13px;
-    color: #303133;
-    line-height: 1.5;
-  }
-}
-</style>

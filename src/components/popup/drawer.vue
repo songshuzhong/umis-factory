@@ -1,5 +1,6 @@
 <template>
   <el-drawer
+    class="umis-popup__container"
     :appendToBody="appendToBody"
     :closeOnPressEscape="closeOnPressEscape"
     :custom-class="classname"
@@ -27,35 +28,39 @@
         :init-data="getInitData(data, header)"
       />
     </template>
-    <template v-if="Object.prototype.toString.call(body) === '[object Array]'">
-      <template v-for="(item, index) in body">
-        <mis-component
-          :mis-name="item.renderer"
-          :key="index"
-          :path="`${path}/${index}/${item.renderer}`"
-          :footer="item.footer"
-          :action="onClose"
-          :props="getFattingProps(item)"
-          :header="getHeader(item)"
-          :body="getBody(item)"
-          :footer="getFooter(item)"
-          :init-data="getInitData(data, item)"
-        />
+    <el-main class="umis-popup__container__body">
+      <template
+        v-if="Object.prototype.toString.call(body) === '[object Array]'"
+      >
+        <template v-for="(item, index) in body">
+          <mis-component
+            :mis-name="item.renderer"
+            :key="index"
+            :path="`${path}/${index}/${item.renderer}`"
+            :footer="item.footer"
+            :action="onClose"
+            :props="getFattingProps(item)"
+            :header="getHeader(item)"
+            :body="getBody(item)"
+            :footer="getFooter(item)"
+            :init-data="getInitData(data, item)"
+          />
+        </template>
       </template>
-    </template>
-    <mis-component
-      v-else
-      :mis-name="body.renderer"
-      :path="`${path}/${body.renderer}`"
-      :footer="body.footer"
-      :action="onClose"
-      :props="getFattingProps(body)"
-      :header="getHeader(body)"
-      :body="getBody(body)"
-      :footer="getFooter(body)"
-      :init-data="getInitData(data, body)"
-    />
-    <template v-if="footer">
+      <mis-component
+        v-else
+        :mis-name="body.renderer"
+        :path="`${path}/${body.renderer}`"
+        :footer="body.footer"
+        :action="onClose"
+        :props="getFattingProps(body)"
+        :header="getHeader(body)"
+        :body="getBody(body)"
+        :footer="getFooter(body)"
+        :init-data="getInitData(data, body)"
+      />
+    </el-main>
+    <div v-if="footer" class="umis-popup__container__footer">
       <template v-for="(item, index) in footer">
         <mis-component
           :mis-name="item.renderer"
@@ -67,17 +72,18 @@
           :init-data="getInitData(data, item)"
         />
       </template>
-    </template>
+    </div>
   </el-drawer>
 </template>
 <script>
-import { Drawer as ElDrawer } from 'element-ui';
+import { Drawer as ElDrawer, Main as ElMain } from 'element-ui';
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
 
 export default {
   name: 'MisDrawer',
   components: {
+    ElMain,
     ElDrawer,
   },
   props: {

@@ -1,6 +1,7 @@
 <template>
   <el-dialog
     v-bind="$props"
+    class="umis-popup__container"
     :visible.sync="iVisible"
     :title="renderTitle"
     :width="width"
@@ -13,7 +14,7 @@
     :destroy-on-close="destroyOnClose"
     @close="onClose"
   >
-    <template v-if="iVisible">
+    <el-main class="umis-popup__container__body">
       <template
         v-if="Object.prototype.toString.call(body) === '[object Object]'"
       >
@@ -38,42 +39,42 @@
           />
         </template>
       </template>
-      <div v-if="footer" slot="footer">
-        <template
-          v-if="Object.prototype.toString.call(footer) === '[object Array]'"
-        >
-          <template v-for="(item, index) in footer">
-            <mis-component
-              :mis-name="item.renderer"
-              :key="`${path}/${index}/${item.renderer}`"
-              :path="`${path}/${index}/${item.renderer}`"
-              :header="getHeader(item)"
-              :body="getBody(item)"
-              :footer="getFooter(item)"
-              :props="getFattingProps(item)"
-              :init-data="getInitData(data, item)"
-            />
-          </template>
-        </template>
-        <template
-          v-if="Object.prototype.toString.call(footer) === '[object Object]'"
-        >
+    </el-main>
+    <div v-if="footer" slot="footer" class="umis-popup__container__footer">
+      <template
+        v-if="Object.prototype.toString.call(footer) === '[object Array]'"
+      >
+        <template v-for="(item, index) in footer">
           <mis-component
-            :mis-name="footer.renderer"
-            :path="`${path}/${footer.renderer}`"
-            :header="getHeader(footer)"
-            :body="getBody(footer)"
-            :footer="getFooter(footer)"
-            :props="getFattingProps(footer)"
-            :init-data="getInitData(data, footer)"
+            :mis-name="item.renderer"
+            :key="`${path}/${index}/${item.renderer}`"
+            :path="`${path}/${index}/${item.renderer}`"
+            :header="getHeader(item)"
+            :body="getBody(item)"
+            :footer="getFooter(item)"
+            :props="getFattingProps(item)"
+            :init-data="getInitData(data, item)"
           />
         </template>
-      </div>
-    </template>
+      </template>
+      <template
+        v-if="Object.prototype.toString.call(footer) === '[object Object]'"
+      >
+        <mis-component
+          :mis-name="footer.renderer"
+          :path="`${path}/${footer.renderer}`"
+          :header="getHeader(footer)"
+          :body="getBody(footer)"
+          :footer="getFooter(footer)"
+          :props="getFattingProps(footer)"
+          :init-data="getInitData(data, footer)"
+        />
+      </template>
+    </div>
   </el-dialog>
 </template>
 <script>
-import { Dialog as ElDialog } from 'element-ui';
+import { Dialog as ElDialog, Main as ElMain } from 'element-ui';
 
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
@@ -81,6 +82,7 @@ import initData from '../mixin/init-data';
 export default {
   name: 'MisDialog',
   components: {
+    ElMain,
     ElDialog,
   },
   props: {

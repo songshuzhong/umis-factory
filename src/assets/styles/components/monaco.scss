@@ -1,0 +1,25 @@
+.monaco-editor {
+  width: 100%;
+  height: calc(100vh - 110px);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  text-align: left;
+}
+
+.umis-editor__container {
+  width: 100%;
+  margin: 0 auto;
+  background-color: #282a36 !important;
+}
+.umis-editor__container__tools {
+  height: 50px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.umis-editor__container__error-info {
+  line-height: 12px;
+  text-align: left;
+}

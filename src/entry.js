@@ -14,6 +14,8 @@ import {
   saveInitFormType,
 } from './utils/tools';
 
+import './assets/styles/index.scss';
+
 const requireComponent = require.context('./components', true, /[\w-]+\.vue$/);
 
 export default {

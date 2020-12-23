@@ -1,9 +1,9 @@
 <template>
-  <div class="umis-editor-container">
+  <div class="umis-editor__container">
     <transition name="el-zoom-in-center">
       <el-alert
         v-if="showErrorBoundary"
-        class="monaco-editor__error-info"
+        class="umis-editor__container__error-info"
         :title="errorInfo"
         type="error"
         show-icon
@@ -12,7 +12,7 @@
     </transition>
     <div ref="editor" class="monaco-editor" />
     <transition name="el-zoom-in-bottom">
-      <div v-if="!showErrorBoundary" class="umis-editor-tools">
+      <div v-if="!showErrorBoundary" class="umis-editor__container__tools">
         <el-button type="primary" plain @click="onSave">
           保存到本地
         </el-button>
@@ -129,30 +129,3 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-.monaco-editor {
-  width: 100%;
-  height: calc(100vh - 110px);
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  text-align: left;
-}
-
-.umis-editor-container {
-  width: 100%;
-  margin: 0 auto;
-  background-color: #282a36 !important;
-}
-.umis-editor-tools {
-  height: 50px;
-  padding: 0 20px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-.monaco-editor__error-info {
-  line-height: 12px;
-  text-align: left;
-}
-</style>
