@@ -296,8 +296,8 @@ export default {
       const wb = XLSX.utils.table_to_book(dom);
       const wbout = XLSX.write(wb, {
         bookType: 'xlsx',
-        bookSST: true,
         type: 'array',
+        bookSST: true,
       });
       try {
         FileSaver.saveAs(

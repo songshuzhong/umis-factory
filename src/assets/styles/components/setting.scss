@@ -1,6 +1,9 @@
 .umis-setting__cards {
   .umis-setting__card-margin {
     margin: 10px 0;
+    .el-card__header {
+      padding: 8px 20px;
+    }
   }
   .umis-setting__header {
     display: flex;

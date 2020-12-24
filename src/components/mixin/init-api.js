@@ -139,7 +139,7 @@ export default {
       fetchBody = this.$json2FormData(this.$umisConfig.isFormData, fetchBody);
       this.iLoading = true;
       return this.$api
-        .slientApi()
+        .slientApi(this.$umisConfig)
         [method](compiledUrl, fetchBody)
         .then(res => {
           const data = res.data;

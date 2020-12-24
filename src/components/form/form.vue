@@ -136,11 +136,7 @@ export default {
         const renderer = control.renderer;
         const name = control.name;
         const value = control.value;
-        if (
-          name &&
-          formItems.includes(renderer) &&
-          !['mis-button', 'mis-action'].includes(renderer)
-        ) {
+        if (name && formItems.includes(renderer) && 'mis-action' !== renderer) {
           total[name] = value;
         }
         return total;
@@ -150,16 +146,14 @@ export default {
   computed: {
     activeControls() {
       return this.controls.filter(item => {
-        if (['mis-action', 'mis-button'].includes(item.renderer)) {
+        if ('mis-action' === item.renderer) {
           item.actionApi = this.api;
           return item;
         }
       });
     },
     inactiveControls() {
-      return this.controls.filter(
-        item => !['mis-action', 'mis-button'].includes(item.renderer)
-      );
+      return this.controls.filter(item => 'mis-action' !== item.renderer);
     },
   },
   mixins: [initApi, initData, derivedProp],

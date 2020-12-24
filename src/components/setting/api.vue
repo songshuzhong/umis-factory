@@ -1,7 +1,12 @@
 <template>
   <el-card class="umis-setting__card-margin">
     <div slot="header" class="umis-setting__header">
-      <span>接口拦截器</span>
+      <el-tooltip
+        content="选中的域名将作为接口请求的路径前缀"
+        placement="top-start"
+      >
+        <span>域名选择器 <i class="el-icon-info" /> </span>
+      </el-tooltip>
       <el-button-group>
         <el-button plain size="mini" type="primary" @click="onAdd">
           添加
@@ -46,13 +51,16 @@
 </template>
 <script>
 import clonedeep from 'lodash.clonedeep';
-import { Card as ElCard } from 'element-ui';
-import { RadioGroup as ElRadioGroup } from 'element-ui';
-import { Radio as ElRadio } from 'element-ui';
-import { ButtonGroup as ElButtonGroup } from 'element-ui';
-import { Button as ElButton } from 'element-ui';
-import { Link as ElLink } from 'element-ui';
-import { Input as ElInput } from 'element-ui';
+import {
+  Card as ElCard,
+  RadioGroup as ElRadioGroup,
+  Radio as ElRadio,
+  ButtonGroup as ElButtonGroup,
+  Button as ElButton,
+  Link as ElLink,
+  Input as ElInput,
+  Tooltip as ElTooltip,
+} from 'element-ui';
 
 export default {
   name: 'SettingDomain',
@@ -64,6 +72,7 @@ export default {
     ElButton,
     ElLink,
     ElInput,
+    ElTooltip,
   },
   props: {
     value: {

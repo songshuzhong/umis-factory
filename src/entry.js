@@ -12,6 +12,7 @@ import {
   json2FormData,
   saveInitStyle,
   saveInitFormType,
+  saveAdaptor,
 } from './utils/tools';
 
 import './assets/styles/index.scss';
@@ -47,6 +48,7 @@ export default {
     Vue.prototype.$json2FormData = json2FormData;
     Vue.prototype.$saveInitStyle = saveInitStyle;
     Vue.prototype.$saveInitFormType = saveInitFormType;
+    Vue.prototype.$saveAdaptor = saveAdaptor;
     Vue.prototype.$notice = Notification;
     Vue.prototype.$message = Message;
     Vue.prototype.$api = api(options);

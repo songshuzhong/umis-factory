@@ -60,6 +60,19 @@ const saveInitFormType = (ctx, isFormData) => {
   ctx.$umisConfig.isFormData = isFormData;
 };
 
+const saveAdaptor = (ctx, script) => {
+  return new Promise((resolve, reject) => {
+    ctx.$umisConfig.adaptor = script;
+    ctx.$umisConfig.isAdaptorChanged = true;
+    ctx.$notice({
+      type: 'success',
+      title: '通知',
+      message: '接口适配器修改成功！',
+    });
+    resolve();
+  });
+};
+
 const saveInitStyle = (ctx, style) => {
   return new Promise((resolve, reject) => {
     try {
@@ -96,4 +109,5 @@ export {
   json2FormData,
   saveInitStyle,
   saveInitFormType,
+  saveAdaptor,
 };

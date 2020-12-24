@@ -2,29 +2,32 @@
   <el-card class="umis-setting__card-margin">
     <div slot="header" class="umis-setting__header">
       <el-tooltip
-        content="应用后的样式将全局作用于当前工作区"
+        content="可在代码块中根据[api路径]和[method类型]适配指定的Reponse数据"
         placement="top-start"
       >
-        <span>全局样式 <i class="el-icon-info" /> </span>
+        <span>接口适配器 <i class="el-icon-info" /> </span>
       </el-tooltip>
       <el-button plain size="mini" type="primary" @click="onSave">
         应用
       </el-button>
     </div>
-    <div ref="umisStyleEditor" class="umis-setting__style-editor" />
+    <div ref="umisAdaptorEditor" class="umis-setting__style-editor" />
   </el-card>
 </template>
+
 <script>
 import {
   Card as ElCard,
+  ButtonGroup as ElButtonGroup,
   Button as ElButton,
   Tooltip as ElTooltip,
 } from 'element-ui';
 
 export default {
-  name: 'SettingStyle',
+  name: 'SettingAdaptor',
   components: {
     ElCard,
+    ElButtonGroup,
     ElButton,
     ElTooltip,
   },
@@ -37,7 +40,9 @@ export default {
   watch: {
     value: {
       handler(val) {
-        this.schema = val;
+        if (val) {
+          this.schema = val;
+        }
       },
       immediate: true,
     },
@@ -57,9 +62,9 @@ export default {
   },
   methods: {
     createMonacoEditor() {
-      this.editor = window.monaco.editor.create(this.$refs.umisStyleEditor, {
+      this.editor = window.monaco.editor.create(this.$refs.umisAdaptorEditor, {
         fontSize: '14px',
-        language: 'css',
+        language: 'javascript',
         autoIndent: true,
         formatOnType: true,
         formatOnPaste: true,
@@ -72,7 +77,7 @@ export default {
           enabled: false,
         },
       });
-
+      window.adaptor = this.editor;
       this.editor.setValue(this.schema);
       this.onFormatSchema();
     },
@@ -84,7 +89,7 @@ export default {
     },
     onSave() {
       const json = this.editor.getValue();
-      this.$saveInitStyle(this, json).then(() => {
+      this.$saveAdaptor(this, json).then(() => {
         this.schema = json;
       });
     },

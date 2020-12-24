@@ -2,7 +2,9 @@
   <div class="umis-setting__cards">
     <el-card class="umis-setting__card-margin">
       <div slot="header">
-        <span>表单类型</span>
+        <el-tooltip content="全局数据提交类型" placement="top-start">
+          <span>表单类型 <i class="el-icon-info" /> </span>
+        </el-tooltip>
       </div>
       <el-switch
         v-model="isFormData"
@@ -13,17 +15,20 @@
     </el-card>
     <setting-creator />
     <setting-api v-model="domains" :on-api-changed="handleApiChanged" />
-    <setting-interceptor />
+    <setting-adaptor v-model="adaptor" />
     <setting-style v-model="style" />
   </div>
 </template>
 <script>
-import { Card as ElCard } from 'element-ui';
-import { Switch as ElSwitch } from 'element-ui';
+import {
+  Card as ElCard,
+  Switch as ElSwitch,
+  Tooltip as ElTooltip,
+} from 'element-ui';
 
 import SettingApi from './api';
 import SettingStyle from './style';
-import SettingInterceptor from './interceptor';
+import SettingAdaptor from './adaptor';
 import SettingCreator from './creator';
 
 export default {
@@ -31,9 +36,10 @@ export default {
   components: {
     ElCard,
     ElSwitch,
+    ElTooltip,
     SettingApi,
     SettingStyle,
-    SettingInterceptor,
+    SettingAdaptor,
     SettingCreator,
   },
   data() {
@@ -43,6 +49,7 @@ export default {
       style,
       script,
       domains,
+      adaptor,
     } = this.$umisConfig;
 
     return {
@@ -51,6 +58,7 @@ export default {
       style,
       script,
       domains,
+      adaptor,
     };
   },
   watch: {
