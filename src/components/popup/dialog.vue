@@ -40,7 +40,7 @@
         </template>
       </template>
     </el-main>
-    <div v-if="footer" slot="footer" class="umis-popup__container__footer">
+    <div v-if="footer" class="umis-popup__container__footer">
       <template
         v-if="Object.prototype.toString.call(footer) === '[object Array]'"
       >
@@ -54,6 +54,7 @@
             :footer="getFooter(item)"
             :props="getFattingProps(item)"
             :init-data="getInitData(data, item)"
+            :after-action="item.closable ? onClose : ''"
           />
         </template>
       </template>
@@ -68,6 +69,7 @@
           :footer="getFooter(footer)"
           :props="getFattingProps(footer)"
           :init-data="getInitData(data, footer)"
+          :after-action="footer.closable ? onClose : ''"
         />
       </template>
     </div>

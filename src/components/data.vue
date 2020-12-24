@@ -1,11 +1,11 @@
 <template>
-  <pre class="umis-form__static"
-    >{{ data }}
+  <pre class="umis-data__debug">
+    {{ data }}
   </pre>
 </template>
 
 <script>
-import initData from '../mixin/init-data';
+import initData from './mixin/init-data';
 
 export default {
   name: 'MisStatic',

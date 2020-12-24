@@ -64,12 +64,13 @@
       <template v-for="(item, index) in footer">
         <mis-component
           :mis-name="item.renderer"
-          :key="index"
+          :key="`${path}/${index}/${item.renderer}`"
           :path="`${path}/${index}/${item.renderer}`"
           :footer="item.footer"
-          :action="onClose"
           :props="getFattingProps(item)"
           :init-data="getInitData(data, item)"
+          :after-action="item.closable ? onClose : ''"
+          :action="onClose"
         />
       </template>
     </div>

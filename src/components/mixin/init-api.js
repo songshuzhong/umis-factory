@@ -122,15 +122,10 @@ export default {
       let compiledUrl = url;
       let fetchBody;
 
-      if (this.syncLocation) {
-        mergedData = this.useMergeUrlParams(mergedData);
-      }
-      if (/\$\{.+?\}/g.test(JSON.stringify(params))) {
-        compiledParams = this.useCompiledParams(params, mergedData);
-      }
-      if (/\$\{.+?\}/g.test(url)) {
-        compiledUrl = this.useCompiledUrl(url, mergedData);
-      }
+      mergedData = this.useMergeUrlParams(mergedData);
+      compiledParams = this.useCompiledParams(params, mergedData);
+      compiledUrl = this.useCompiledUrl(url, mergedData);
+
       if (this.usePageInfo) {
         compiledParams = this.usePageInfo(compiledParams);
       }
@@ -197,18 +192,33 @@ export default {
       }
     },
     useMergeUrlParams(mergedData) {
-      const defaultQuery = getUrlParams();
-      return Object.assign({}, mergedData, defaultQuery);
+      if (this.syncLocation) {
+        const defaultQuery = getUrlParams();
+        return Object.assign({}, mergedData, defaultQuery);
+      }
+      return mergedData;
     },
     useCompiledParams(params, mergedData) {
-      const compiledParams = this.$getCompiledParams(params, mergedData);
-      this.compiledCacheParams = clonedeep(compiledParams);
-      return compiledParams;
+      let shouldCompiled = false;
+      for (const key in params) {
+        if (params.hasOwnProperty(key) && /^\$\{.+?\}/g.test(params[key])) {
+          shouldCompiled = true;
+        }
+      }
+      if (shouldCompiled) {
+        const compiledParams = this.$getCompiledParams(params, mergedData);
+        this.compiledCacheParams = clonedeep(compiledParams);
+        return compiledParams;
+      }
+      return params;
     },
     useCompiledUrl(url, mergedData) {
-      const compiledUrl = this.$getCompiledUrl(url, mergedData);
-      this.compiledCacheUrl = compiledUrl;
-      return compiledUrl;
+      if (/\$\{.+?\}/g.test(url)) {
+        const compiledUrl = this.$getCompiledUrl(url, mergedData);
+        this.compiledCacheUrl = compiledUrl;
+        return compiledUrl;
+      }
+      return url;
     },
   },
 };

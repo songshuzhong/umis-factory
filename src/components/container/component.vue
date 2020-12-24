@@ -12,6 +12,7 @@
       :init-data="data"
       :error-info="errorInfo"
       :action="filterAction"
+      :after-action="afterAction"
       :linkage-trigger="onLinkageTrigger"
     />
   </transition>
@@ -52,6 +53,10 @@ export default {
       required: false,
     },
     action: {
+      type: Function,
+      required: false,
+    },
+    afterAction: {
       type: Function,
       required: false,
     },

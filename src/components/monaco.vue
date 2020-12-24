@@ -13,10 +13,10 @@
     <div ref="editor" class="monaco-editor" />
     <transition name="el-zoom-in-bottom">
       <div v-if="!showErrorBoundary" class="umis-editor__container__tools">
-        <el-button type="primary" plain @click="onSave">
+        <el-button type="primary" @click="onSave">
           保存到本地
         </el-button>
-        <el-button type="primary" plain @click="onSaveRemote">
+        <el-button type="primary" @click="onSaveRemote">
           保存到远程
         </el-button>
       </div>

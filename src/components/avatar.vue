@@ -146,7 +146,13 @@ export default {
   },
   methods: {
     onClick() {
-      this.action && this.action();
+      const { renderer, content } = this.$attrs;
+      if (this.action && typeof this.action === 'function') {
+        this.action(
+          { renderer, content, actionType: this.actionType },
+          this.data
+        );
+      }
     },
   },
 };

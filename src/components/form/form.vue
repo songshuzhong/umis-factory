@@ -176,7 +176,7 @@ export default {
         this.invisibleField.push(field);
       }
     },
-    handleRemoteSubmit(target, actionType) {
+    handleRemoteSubmit(actionType, target, feedback) {
       if (this.name && this.name === target) {
         const form = this.$refs['form'];
         if (form && actionType === 'mis-reset') {
@@ -184,7 +184,7 @@ export default {
         } else if (form && actionType === 'mis-submit') {
           form.validate(valid => {
             if (valid) {
-              this.sendFormData();
+              this.sendFormData(feedback);
             }
           });
         }
@@ -209,8 +209,9 @@ export default {
         });
       }
     },
-    sendFormData() {
+    sendFormData(feedback) {
       const formData = {};
+
       for (let name in this.data) {
         if (
           this.data.hasOwnProperty(name) &&
@@ -227,7 +228,10 @@ export default {
           method: this.api.method || 'post',
           params: formData,
         },
-        this.onAfterSubmit
+        () => {
+          feedback && feedback();
+          this.onAfterSubmit();
+        }
       );
     },
     onAfterSubmit() {

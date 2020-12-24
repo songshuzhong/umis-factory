@@ -131,6 +131,10 @@ export default {
       type: Function,
       required: false,
     },
+    afterAction: {
+      type: Function,
+      required: false,
+    },
     actionApi: {
       type: Object,
       required: false,
@@ -285,7 +289,12 @@ export default {
         actionType = this.$attrs.actionType;
       }
       if (this.remoteForm) {
-        this.$eventHub.$emit('mis-component:form', this.remoteForm, actionType);
+        this.$eventHub.$emit(
+          'mis-component:form',
+          actionType,
+          this.remoteForm,
+          this.handleAfterAction
+        );
       } else if (typeof index === 'string') {
         this.action(
           {
@@ -311,7 +320,12 @@ export default {
       }
     },
     handleAfterAction() {
-      this.linkageTrigger(this.target, this.data);
+      if (this.afterAction && typeof this.afterAction === 'function') {
+        this.afterAction();
+      }
+      if (this.target) {
+        this.linkageTrigger(this.target, this.data);
+      }
     },
   },
 };
