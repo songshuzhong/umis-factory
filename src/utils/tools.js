@@ -58,36 +58,38 @@ const json2FormData = (isFormData, data) => {
 
 const saveInitFormType = (ctx, isFormData) => {
   ctx.$umisConfig.isFormData = isFormData;
+  ctx.$notice({
+    type: 'success',
+    title: '通知',
+    message: '提交内容类型修改成功',
+  });
 };
 
 const saveAdaptor = (ctx, script) => {
-  return new Promise((resolve, reject) => {
-    ctx.$umisConfig.adaptor = script;
-    ctx.$umisConfig.isAdaptorChanged = true;
-    ctx.$notice({
-      type: 'success',
-      title: '通知',
-      message: '接口适配器修改成功！',
-    });
-    resolve();
+  ctx.$umisConfig.adaptor = script;
+  ctx.$umisConfig.isAdaptorChanged = true;
+  ctx.$notice({
+    type: 'success',
+    title: '通知',
+    message: '接口适配器修改成功',
   });
 };
 
 const saveInitStyle = (ctx, style) => {
   return new Promise((resolve, reject) => {
     try {
-      let ele = document.getElementById('umis-setting-style');
+      let ele = document.getElementById('umis-setting__style');
 
       if (!ele) {
         ele = document.createElement('style');
-        ele.id = 'umis-setting-style';
+        ele.id = 'umis-setting__style';
         document.head.appendChild(ele);
       }
       ele.innerHTML = style;
       ctx.$notice({
         type: 'success',
         title: '通知',
-        message: '保存成功！',
+        message: '保存成功',
       });
       resolve();
     } catch (e) {

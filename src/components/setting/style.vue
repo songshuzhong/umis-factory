@@ -21,6 +21,9 @@ import {
   Tooltip as ElTooltip,
 } from 'element-ui';
 
+import beautify from 'beautify';
+import monaco from '../mixin/monaco';
+
 export default {
   name: 'SettingStyle',
   components: {
@@ -52,35 +55,19 @@ export default {
       schema: '',
     };
   },
+  mixins: [monaco],
   mounted() {
     window.requestIdleCallback(this.createMonacoEditor);
   },
   methods: {
     createMonacoEditor() {
       this.editor = window.monaco.editor.create(this.$refs.umisStyleEditor, {
-        fontSize: '14px',
         language: 'css',
-        autoIndent: true,
-        formatOnType: true,
-        formatOnPaste: true,
-        selectOnLineNumbers: true,
-        scrollBeyondLastLine: false,
-        folding: true,
-        theme: 'vs',
-        automaticLayout: true,
-        minimap: {
-          enabled: false,
-        },
+        ...this.defaultConfig,
       });
-
-      this.editor.setValue(this.schema);
-      this.onFormatSchema();
-    },
-    onFormatSchema() {
-      const timer = setTimeout(() => {
-        this.editor.getAction(['editor.action.formatDocument']).run();
-        clearTimeout(timer);
-      }, 100);
+      const style = beautify(this.schema, { format: 'css' });
+      this.editor.setValue(style);
+      this.handleFormatSchema(this.editor);
     },
     onSave() {
       const json = this.editor.getValue();

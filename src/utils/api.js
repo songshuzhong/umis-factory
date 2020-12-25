@@ -3,6 +3,7 @@ import { config } from './config';
 const isCancel = axios.isCancel;
 const cancelToken = axios.CancelToken;
 let adaptorFunction;
+let umisApi = null;
 
 function successInterceptor(response) {
   if (
@@ -61,8 +62,6 @@ function factory(baseUrl, configs) {
   );
   return instance;
 }
-
-let umisApi = null;
 
 function apiFactory() {
   config.domains['VUE_APP_API_BASE'] = process.env.VUE_APP_API_BASE;

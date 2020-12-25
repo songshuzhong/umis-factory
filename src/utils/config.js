@@ -13,7 +13,8 @@ const overwrite = options => {
   config.isApiChanged = options.isApiChanged || false;
   config.isInterceptChanged = options.isInterceptChanged || false;
   config.adaptor =
-    options.adaptor || `if(api.includes('/api/user')) {res.data.bla=123;}`;
+    options.adaptor ||
+    `if(api.includes('/api/user')) {res.data.adaptor='这个是适配器补充字段';}`;
   config.domains = options.domains || {};
   config.style = options.style || '';
   config.script = options.script || '';

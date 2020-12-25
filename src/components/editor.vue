@@ -27,8 +27,10 @@
 import { Button as ElButton } from 'element-ui';
 import { Alert as ElAlert } from 'element-ui';
 
+import monaco from './mixin/monaco';
+
 export default {
-  name: 'MisMonaco',
+  name: 'MisEditor',
   components: {
     ElButton,
     ElAlert,
@@ -37,30 +39,18 @@ export default {
     return {
       errorInfo: '',
       schema: {},
-      showErrorBoundary: false,
       pageInfo: {},
+      showErrorBoundary: false,
     };
   },
-  created() {
-    this.onFormatSchema();
-  },
+  mixins: [monaco],
   mounted() {
     const { pageSchema, pageInfo } = window.UMIS;
     this.pageInfo = pageInfo;
     this.editor = window.monaco.editor.create(this.$refs.editor, {
-      fontSize: '14px',
+      ...this.defaultConfig,
       language: 'json',
-      autoIndent: true,
-      formatOnType: true,
-      formatOnPaste: true,
-      selectOnLineNumbers: true,
-      scrollBeyondLastLine: false,
-      folding: true,
       theme: 'vs-dark',
-      automaticLayout: true,
-      minimap: {
-        enabled: false,
-      },
     });
     this.updateSchema(pageSchema);
   },
@@ -71,13 +61,7 @@ export default {
         ...pageSchema,
       };
       this.editor.setValue(JSON.stringify(this.schema));
-      this.onFormatSchema();
-    },
-    onFormatSchema() {
-      const timer = setTimeout(() => {
-        this.editor.getAction(['editor.action.formatDocument']).run();
-        clearTimeout(timer);
-      }, 100);
+      this.handleFormatSchema(this.editor);
     },
     onSaveRemote() {
       this.onSave().then(pageSchema => {
@@ -105,7 +89,7 @@ export default {
           const json = this.editor.getValue();
           const schema = JSON.parse(json);
           this.$eventHub.$emit('mis-schema:change', schema);
-          this.onFormatSchema();
+          this.handleFormatSchema(this.editor);
           this.$message({
             message: '保存成功',
             showClose: true,

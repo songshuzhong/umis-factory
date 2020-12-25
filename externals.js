@@ -3,6 +3,7 @@ module.exports = {
   xlsx: 'xlsx',
   axios: 'axios',
   echarts: 'echarts',
+  beautify: 'beautify',
   'file-saver': 'file-saver',
   'echarts/lib/chart/bar': 'echarts/lib/chart/bar',
   'echarts/lib/chart/line': 'echarts/lib/chart/line',
