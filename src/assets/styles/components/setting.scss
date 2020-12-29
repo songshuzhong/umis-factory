@@ -1,4 +1,5 @@
-.umis-setting__cards {
+.umis-setting__container {
+  padding-bottom: 44px;
   .umis-setting__card-margin {
     margin: 10px 0;
     .el-card__header {
@@ -40,4 +41,14 @@
   padding: 0;
   overflow: hidden;
   text-align: left;
+}
+.umis-setting__container__footer {
+  position: fixed;
+  bottom: 0;
+  text-align: right;
+  background: #fff;
+  box-shadow: 0 -8px 16px rgba(28, 43, 54, 0.15);
+  .el-button {
+    margin: 8px 20px;
+  }
 }

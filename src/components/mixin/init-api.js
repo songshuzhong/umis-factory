@@ -143,13 +143,15 @@ export default {
         [method](compiledUrl, fetchBody)
         .then(res => {
           const data = res.data;
-          if (data && data.hasOwnProperty('rows')) {
-            const { count, rows, hasMore } = data;
-            this.iTotal = count;
-            this.iHasMore = hasMore;
-            this.rows = rows;
-          } else {
-            this.data = data;
+          if (data) {
+            if (data.hasOwnProperty('rows')) {
+              const { count, rows, hasMore } = data;
+              this.iTotal = count;
+              this.iHasMore = hasMore;
+              this.rows = rows;
+            } else {
+              this.data = data;
+            }
           }
           !this.silentMessage &&
             this.$message({

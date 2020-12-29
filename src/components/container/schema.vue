@@ -118,7 +118,7 @@ export default {
 
       this.iSchemaLoading = true;
       this.$api
-        .slientApi()
+        .slientApi(this.$umisConfig)
         [method](url, fetchBody)
         .then(res => {
           const { pageSchema, ...pageInfo } = res.data;

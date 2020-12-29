@@ -1,4 +1,5 @@
 import { Loading, Notification, Message } from 'element-ui';
+import resize from 'vue-element-resize-detector';
 
 import MisSchema from './components/container/schema';
 import MisSetting from './components/setting/index';
@@ -38,6 +39,7 @@ export default {
       );
     });
     Vue.use(Loading);
+    Vue.use(resize);
     Vue.prototype.$eventHub = new Vue();
     Vue.prototype.$misComponents = misComponents;
     Vue.prototype.$umisConfig = overwrite(options);

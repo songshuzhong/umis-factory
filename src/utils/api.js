@@ -16,12 +16,20 @@ function successInterceptor(response) {
   ) {
     const {
       data,
-      config: { url, method },
+      config: { url, method, params },
     } = response;
     if (!adaptorFunction) {
-      adaptorFunction = new Function('api', 'res', 'method', config.adaptor);
+      adaptorFunction = new Function(
+        'api',
+        'method',
+        'params',
+        'res',
+        config.adaptor
+      );
     }
-    adaptorFunction(url, data, method);
+    if (data.data) {
+      adaptorFunction(url, method, params, data);
+    }
     return data;
   }
   return Promise.reject(response);

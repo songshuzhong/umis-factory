@@ -1,5 +1,5 @@
 <template>
-  <el-card class="umis-setting__card-margin">
+  <el-card class="umis-setting__card-margin" shadow="hover">
     <div slot="header" class="umis-setting__header">
       <el-tooltip
         content="应用后的样式将全局作用于当前工作区"
@@ -18,6 +18,7 @@
 import {
   Card as ElCard,
   Button as ElButton,
+  ButtonGroup as ElButtonGroup,
   Tooltip as ElTooltip,
 } from 'element-ui';
 
@@ -29,6 +30,7 @@ export default {
   components: {
     ElCard,
     ElButton,
+    ElButtonGroup,
     ElTooltip,
   },
   props: {
@@ -69,11 +71,27 @@ export default {
       this.editor.setValue(style);
       this.handleFormatSchema(this.editor);
     },
-    onSave() {
+    onSave(silent) {
       const json = this.editor.getValue();
-      this.$saveInitStyle(this, json).then(() => {
-        this.schema = json;
-      });
+      return this.$saveInitStyle(this, json)
+        .then(() => {
+          this.schema = json;
+          if (silent === true) {
+            return;
+          }
+          this.$notice({
+            type: 'success',
+            title: '通知',
+            message: '样式修改成功',
+          });
+        })
+        .catch(e => {
+          this.$notice({
+            type: 'error',
+            title: '警告',
+            message: e.toString(),
+          });
+        });
     },
   },
 };

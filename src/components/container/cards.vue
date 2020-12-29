@@ -18,6 +18,8 @@
           :header="header"
           :body="body"
           :footer="footer"
+          :actions="actions"
+          :action="action"
           :init-data="item"
         />
       </el-col>
@@ -80,6 +82,14 @@ export default {
     initApi: {
       type: [String, Object],
       required: false,
+    },
+    actions: {
+      type: Object,
+      required: false,
+    },
+    action: {
+      type: Function,
+      required: true,
     },
     classname: {
       type: String,

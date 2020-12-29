@@ -1,5 +1,5 @@
 <template>
-  <el-card class="umis-setting__card-margin">
+  <el-card class="umis-setting__card-margin" shadow="hover">
     <div slot="header" class="umis-setting__header">
       <el-tooltip
         content="可在代码块中根据[api路径]和[method类型]适配指定的Reponse数据"
@@ -73,10 +73,18 @@ export default {
       this.editor.setValue(javascript);
       this.handleFormatSchema(this.editor);
     },
-    onSave() {
+    onSave(silent) {
       const json = this.editor.getValue();
-      this.$saveAdaptor(this, json).then(() => {
+      return this.$saveAdaptor(this, json).then(() => {
         this.schema = json;
+        if (silent === true) {
+          return;
+        }
+        this.$notice({
+          type: 'success',
+          title: '通知',
+          message: '接口适配器修改成功',
+        });
       });
     },
   },

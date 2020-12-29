@@ -17,6 +17,7 @@ import 'echarts/lib/component/legend';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/visualMap';
 import 'echarts/lib/component/dataset';
+import 'echarts/lib/component/markArea';
 
 import initData from './mixin/init-data';
 import initApi from './mixin/init-api';

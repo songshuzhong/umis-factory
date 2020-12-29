@@ -58,20 +58,13 @@ const json2FormData = (isFormData, data) => {
 
 const saveInitFormType = (ctx, isFormData) => {
   ctx.$umisConfig.isFormData = isFormData;
-  ctx.$notice({
-    type: 'success',
-    title: '通知',
-    message: '提交内容类型修改成功',
-  });
 };
 
 const saveAdaptor = (ctx, script) => {
-  ctx.$umisConfig.adaptor = script;
-  ctx.$umisConfig.isAdaptorChanged = true;
-  ctx.$notice({
-    type: 'success',
-    title: '通知',
-    message: '接口适配器修改成功',
+  return new Promise((resolve, reject) => {
+    ctx.$umisConfig.adaptor = script;
+    ctx.$umisConfig.isAdaptorChanged = true;
+    resolve();
   });
 };
 
@@ -86,19 +79,9 @@ const saveInitStyle = (ctx, style) => {
         document.head.appendChild(ele);
       }
       ele.innerHTML = style;
-      ctx.$notice({
-        type: 'success',
-        title: '通知',
-        message: '保存成功',
-      });
       resolve();
     } catch (e) {
-      ctx.$notice({
-        type: 'error',
-        title: '警告',
-        message: e.toString(),
-      });
-      reject();
+      reject(e);
     }
   });
 };

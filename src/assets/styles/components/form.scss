@@ -1,7 +1,4 @@
 .umis-form__container {
-  .el-form-item .el-form-item {
-    margin-bottom: 20px !important;
-  }
   .umis-form__field {
     display: inline-block;
   }
@@ -12,20 +9,21 @@
     text-overflow: clip;
   }
   .umis-form__combo {
+    padding: 10px;
     border: 1px dashed #dee2e6;
     &:hover {
       border: 1px dashed #409eff;
     }
+    .el-form-item {
+      margin: 0 10px !important;
+    }
+    .el-form-item__label-wrap {
+      margin-left: 0 !important;
+    }
   }
   .umis-form__combo__item {
     display: flex;
-    padding: 11px 0;
-  }
-  .umis-form__combo__plus {
-    padding: 11px 0;
-  }
-  .umis-form__combo__delete {
-    margin: 0 10px;
+    margin-bottom: 20px;
   }
 }
 .umis-data__debug {

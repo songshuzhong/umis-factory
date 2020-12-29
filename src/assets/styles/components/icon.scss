@@ -1,0 +1,12 @@
+.umis-icon__container {
+  display: inline-block;
+  color: var(--color);
+  background-color: var(--gbColor);
+  transition: background 0.5s ease;
+  &.invert {
+    &:hover {
+      color: var(--bgColor);
+      background-color: var(--color);
+    }
+  }
+}

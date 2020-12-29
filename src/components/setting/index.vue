@@ -1,31 +1,26 @@
 <template>
-  <div class="umis-setting__cards">
-    <el-card class="umis-setting__card-margin">
-      <div slot="header">
-        <el-tooltip content="全局数据提交类型" placement="top-start">
-          <span>表单类型 <i class="el-icon-info" /> </span>
-        </el-tooltip>
-      </div>
-      <el-switch
-        v-model="isFormData"
-        active-text="formdata"
-        inactive-text="application/json"
-        @change="handleFormTypeChange"
-      />
-    </el-card>
-    <setting-creator />
-    <setting-api v-model="domains" :on-api-changed="handleApiChanged" />
-    <setting-adaptor v-model="adaptor" />
-    <setting-style v-model="style" />
+  <div v-resize class="umis-setting__container" @resize="handleResize">
+    <div class="umis-setting__container__body">
+      <setting-form v-model="isFormData" />
+      <setting-api v-model="domains" :on-api-changed="handleApiChanged" />
+      <setting-adaptor v-model="adaptor" ref="adaptor" />
+      <setting-style v-model="style" ref="style" />
+    </div>
+    <div
+      class="umis-setting__container__footer"
+      :style="{ width: `${elasticWidth}px` }"
+    >
+      <el-popconfirm title="确定保存到数据库吗？" @confirm="handleSaveRemote">
+        <el-button slot="reference" plain size="mini" type="primary">
+          保存
+        </el-button>
+      </el-popconfirm>
+    </div>
   </div>
 </template>
 <script>
-import {
-  Card as ElCard,
-  Switch as ElSwitch,
-  Tooltip as ElTooltip,
-} from 'element-ui';
-
+import { Button as ElButton, Popconfirm as ElPopconfirm } from 'element-ui';
+import SettingForm from './form';
 import SettingApi from './api';
 import SettingStyle from './style';
 import SettingAdaptor from './adaptor';
@@ -34,9 +29,9 @@ import SettingCreator from './creator';
 export default {
   name: 'UmisSettings',
   components: {
-    ElCard,
-    ElSwitch,
-    ElTooltip,
+    ElButton,
+    ElPopconfirm,
+    SettingForm,
     SettingApi,
     SettingStyle,
     SettingAdaptor,
@@ -59,19 +54,57 @@ export default {
       script,
       domains,
       adaptor,
+      elasticWidth: 0,
     };
   },
-  watch: {
-    domains: {
-      handler(val) {},
-    },
+  created() {
+    this.$eventHub.$on('mis-config:update', this.updateUmisConfig);
+  },
+  mounted() {
+    window.requestIdleCallback(this.handleInitAll);
   },
   methods: {
-    handleFormTypeChange(val) {
-      this.$saveInitFormType(this, val);
+    updateUmisConfig(config) {
+      this.isFormData = config.isFormData;
+      this.style = config.groupStyle;
+      this.adaptor = config.groupAdaptor;
     },
     handleApiChanged() {
       this.isApiChanged = true;
+    },
+    handleInitAll() {
+      const saveStyle = this.$refs['style'].onSave;
+      const saveAdaptor = this.$refs['adaptor'].onSave;
+
+      Promise.all([saveStyle(true), saveAdaptor(true)]).then(() => {
+        this.$message({
+          showClose: true,
+          message: '初始化成功',
+          type: 'success',
+        });
+      });
+    },
+    handleSaveRemote() {
+      const umisConfig = {
+        isFormData: this.isFormData,
+        groupStyle: this.style,
+        groupAdaptor: this.adaptor,
+        groupDomain: this.$umisConfig.VUE_APP_API_ACTIVE,
+        groupId: '0767bea4-c7e7-4aa7-a1b5-2fd5e1ec4a7f',
+      };
+      this.$api
+        .slientApi(this.$umisConfig)
+        .put('/api/group', umisConfig)
+        .then(res => {
+          this.$message({
+            message: res.msg,
+            showClose: true,
+            type: 'success',
+          });
+        });
+    },
+    handleResize(e) {
+      this.elasticWidth = e.detail.width;
     },
   },
 };

@@ -19,10 +19,12 @@ module.exports = {
   'echarts/lib/component/title': 'echarts/lib/component/title',
   'echarts/lib/component/visualMap': 'echarts/lib/component/visualMap',
   'echarts/lib/component/dataset': 'echarts/lib/component/dataset',
+  'echarts/lib/component/markArea': 'echarts/lib/component/markArea',
   'element-ui': 'element-ui',
   'vue-echarts': 'vue-echarts',
   'deep-equal': 'deep-equal',
   'copy-to-clipboard': 'copy-to-clipboard',
+  'vue-element-resize-detector': 'vue-element-resize-detector',
   'lodash.clonedeep': 'lodash.clonedeep',
   'lodash.template': 'lodash.template',
   vue: {

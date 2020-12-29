@@ -1,5 +1,5 @@
 <template>
-  <el-card class="umis-setting__card-margin">
+  <el-card class="umis-setting__card-margin" shadow="hover">
     <div slot="header" class="umis-setting__header">
       <el-tooltip
         content="选中的域名将作为接口请求的路径前缀"

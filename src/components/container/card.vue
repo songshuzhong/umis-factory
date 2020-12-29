@@ -1,7 +1,7 @@
 <template>
   <el-card
     :shadow="shadow"
-    :body-style="{ padding: 0 }"
+    :body-style="bodyStyle"
     :class="classname"
     @click.native="handleClick"
   >
@@ -144,6 +144,7 @@ export default {
     bodyStyle: {
       type: Object,
       required: false,
+      default: { padding: 0 },
     },
     shadow: {
       type: String,
@@ -158,7 +159,21 @@ export default {
       return this.$getRenderedTpl(this.header, data);
     },
     handleClick() {
-      this.action && this.action(this.actions, this.data);
+      if (this.actions) {
+        if (Object.prototype.toString.call(this.actions) === '[object Array]') {
+          let props = this.actions.find(item => {
+            if (
+              item.actionOn &&
+              this.$onExpressionEval(item.actionOn, this.data)
+            ) {
+              return item;
+            }
+          });
+          this.actions && this.action(props, this.data);
+        } else {
+          this.actions && this.action(this.actions, this.data);
+        }
+      }
     },
   },
 };

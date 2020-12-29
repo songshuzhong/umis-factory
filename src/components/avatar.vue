@@ -32,7 +32,6 @@
   <el-avatar
     v-else
     :classname="classname"
-    :icon="icon"
     :shape="shape"
     :size="size"
     :fit="fit"
@@ -115,6 +114,22 @@ export default {
       required: false,
       default: false,
     },
+    color: {
+      type: String,
+      required: false,
+    },
+    bgColor: {
+      type: String,
+      required: false,
+    },
+    borderRadius: {
+      type: Number,
+      required: false,
+    },
+    invert: {
+      type: Boolean,
+      required: false,
+    },
     action: {
       type: Function,
       required: false,
@@ -127,22 +142,44 @@ export default {
   data() {
     return {
       computedSrc: '',
+      iconProps: {},
     };
   },
   computed: {
     renderTitle() {
-      return this.$getRenderedTpl(this.title, this.data);
+      if (this.title) {
+        return this.$getRenderedTpl(this.title, this.data);
+      }
+      return undefined;
     },
     renderSubTitle() {
-      return this.$getRenderedTpl(this.subTitle, this.data);
+      if (this.subTitle) {
+        return this.$getRenderedTpl(this.subTitle, this.data);
+      }
+      return undefined;
     },
     renderDescription() {
-      return this.$getRenderedTpl(this.description, this.data);
+      if (this.description) {
+        return this.$getRenderedTpl(this.description, this.data);
+      }
+      return undefined;
     },
   },
   mixins: [initData],
   created() {
-    this.computedSrc = this.$getCompiledUrl(this.src, this.data);
+    if (this.src) {
+      this.computedSrc = this.$getCompiledUrl(this.src, this.data);
+    }
+    this.iconProps = {
+      size: this.size,
+      color: this.color,
+      bgColor: this.bgColor,
+      icon: this.icon,
+      invert: this.invert,
+      borderRadius: this.borderRadius,
+      action: this.action,
+      actionType: this.actionType,
+    };
   },
   methods: {
     onClick() {

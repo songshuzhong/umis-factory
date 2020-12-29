@@ -89,6 +89,7 @@ export default {
   },
   errorCaptured(err, vm, info) {
     this.error = `'${err.message}' is found in ${info} of ${this.misName} component`;
+    console.error(err);
     return false;
   },
   created() {
@@ -166,8 +167,14 @@ export default {
     },
     handleRedirectAction(props, context) {
       const url = this.$getCompiledUrl(props.redirect, context);
+      const params = this.$getCompiledParams(props.params, context);
       if (/^https?:\/\//.test(url)) {
         window.location.replace(url);
+      } else if (props.redirectType === 'routeName') {
+        this.$router.push({
+          name: url,
+          params,
+        });
       } else {
         this.$router.push(url);
       }
