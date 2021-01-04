@@ -84,7 +84,7 @@ function apiFactory() {
         config.isAdaptorChanged = false;
         adaptorFunction = '';
         umisApi = factory(
-          config.VUE_APP_API_ACTIVE,
+          config.domains['VUE_APP_API_ACTIVE'],
           {
             withCredentials: true,
           },

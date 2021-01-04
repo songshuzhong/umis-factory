@@ -2,7 +2,7 @@
   <el-card class="umis-setting__card-margin" shadow="hover">
     <div slot="header" class="umis-setting__header">
       <el-tooltip
-        content="可在代码块中根据[api路径]和[method类型]适配指定的Reponse数据"
+        content="可在代码块中根据【api】、【method】和【params】适配指定的Reponse数据"
         placement="top-start"
       >
         <span>接口适配器 <i class="el-icon-info" /> </span>

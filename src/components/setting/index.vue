@@ -1,13 +1,14 @@
 <template>
   <div v-resize class="umis-setting__container" @resize="handleResize">
     <div class="umis-setting__container__body">
-      <setting-form v-model="isFormData" />
+      <setting-formdata v-model="isFormData" />
       <setting-api v-model="domains" :on-api-changed="handleApiChanged" />
       <setting-adaptor v-model="adaptor" ref="adaptor" />
       <setting-style v-model="style" ref="style" />
     </div>
     <div
       class="umis-setting__container__footer"
+      :class="{ fixed: fixed }"
       :style="{ width: `${elasticWidth}px` }"
     >
       <el-popconfirm title="确定保存到数据库吗？" @confirm="handleSaveRemote">
@@ -20,7 +21,7 @@
 </template>
 <script>
 import { Button as ElButton, Popconfirm as ElPopconfirm } from 'element-ui';
-import SettingForm from './form';
+import SettingFormdata from './formdata';
 import SettingApi from './api';
 import SettingStyle from './style';
 import SettingAdaptor from './adaptor';
@@ -31,7 +32,7 @@ export default {
   components: {
     ElButton,
     ElPopconfirm,
-    SettingForm,
+    SettingFormdata,
     SettingApi,
     SettingStyle,
     SettingAdaptor,
@@ -55,12 +56,16 @@ export default {
       domains,
       adaptor,
       elasticWidth: 0,
+      fixed: true,
     };
   },
   created() {
     this.$eventHub.$on('mis-config:update', this.updateUmisConfig);
   },
   mounted() {
+    this.body = document.querySelector('.umis-setting__container__body');
+    this.container = document.querySelector('.umis-layout__container__main');
+    this.container.addEventListener('scroll', this.handleScrolling);
     window.requestIdleCallback(this.handleInitAll);
   },
   methods: {
@@ -68,6 +73,16 @@ export default {
       this.isFormData = config.isFormData;
       this.style = config.groupStyle;
       this.adaptor = config.groupAdaptor;
+    },
+    handleScrolling() {
+      const clientHeight = document.body.clientHeight;
+      const offsetHeight = this.body.offsetHeight;
+      // 60 + 44 + 20
+      if (clientHeight + this.container.scrollTop > offsetHeight + 124) {
+        this.fixed = false;
+      } else {
+        this.fixed = true;
+      }
     },
     handleApiChanged() {
       this.isApiChanged = true;

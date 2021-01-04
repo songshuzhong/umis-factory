@@ -20,7 +20,7 @@ import {
   Tooltip as ElTooltip,
 } from 'element-ui';
 export default {
-  name: 'SettingForm',
+  name: 'SettingFormdata',
   components: {
     ElCard,
     ElSwitch,
@@ -29,22 +29,26 @@ export default {
   props: {
     value: {
       type: Boolean,
-      required: true,
+      required: false,
     },
   },
   data() {
     return {
-      isFormData: false,
+      isFormData: this.value,
     };
   },
   watch: {
     value: {
-      handle(val) {
+      handler(val) {
         this.isFormData = val;
       },
+      immediate: true,
+      deep: true,
     },
-    isFormData(val) {
-      this.$emit('input', val);
+    isFormData: {
+      handler(val) {
+        this.$emit('input', val);
+      },
     },
   },
   methods: {
