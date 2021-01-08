@@ -1,4 +1,5 @@
 import { ElLoading, ElMessage, ElNotification } from 'element-plus';
+import mitt from 'mitt';
 
 import MisSchema from './components/container/schema';
 import MisSetting from './components/setting/index';
@@ -14,10 +15,10 @@ import {
   saveInitFormType,
 } from './utils/tools';
 
-const requireComponent = require.context('./components', true, /[\w-]+\.vue$/);
+const requireComponent = require.context('./components', true, /[\w-]+\.app$/);
 
 export default {
-  install(Vue, options) {
+  install(app, options) {
     const misComponents = [];
 
     requireComponent.keys().forEach(filePath => {
@@ -29,25 +30,25 @@ export default {
         .map(kebab => kebab.charAt(0).toUpperCase() + kebab.slice(1))
         .join('');
 
-      Vue.component(
+      app.component(
         `Mis${componentName}`,
         componentConfig.default || componentConfig
       );
     });
-    Vue.use(ElLoading);
-    Vue.prototype.$eventHub = new Vue();
-    Vue.prototype.$misComponents = misComponents;
-    Vue.prototype.$umisConfig = overwrite(options);
-    Vue.prototype.$onExpressionEval = onExpressionEval;
-    Vue.prototype.$getRenderedTpl = getRenderedTpl;
-    Vue.prototype.$getCompiledUrl = getCompiledUrl;
-    Vue.prototype.$getCompiledParams = getCompiledParams;
-    Vue.prototype.$json2FormData = json2FormData;
-    Vue.prototype.$saveInitStyle = saveInitStyle;
-    Vue.prototype.$saveInitFormType = saveInitFormType;
-    Vue.prototype.$notice = ElNotification;
-    Vue.prototype.$message = ElMessage;
-    Vue.prototype.$api = api(options);
+    app.use(ElLoading);
+    app.config.globalProperties.$eventHub = mitt();
+    app.config.globalProperties.$misComponents = misComponents;
+    app.config.globalProperties.$umisConfig = overwrite(options);
+    app.config.globalProperties.$onExpressionEval = onExpressionEval;
+    app.config.globalProperties.$getRenderedTpl = getRenderedTpl;
+    app.config.globalProperties.$getCompiledUrl = getCompiledUrl;
+    app.config.globalProperties.$getCompiledParams = getCompiledParams;
+    app.config.globalProperties.$json2FormData = json2FormData;
+    app.config.globalProperties.$saveInitStyle = saveInitStyle;
+    app.config.globalProperties.$saveInitFormType = saveInitFormType;
+    app.config.globalProperties.$notice = ElNotification;
+    app.config.globalProperties.$message = ElMessage;
+    app.config.globalProperties.$api = api(options);
   },
 };
 
