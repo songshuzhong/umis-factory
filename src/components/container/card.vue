@@ -1,5 +1,10 @@
 <template>
-  <el-card :shadow="shadow" :body-style="{ padding: 0 }" :class="classname">
+  <el-card
+    :shadow="shadow"
+    :body-style="bodyStyle"
+    :class="classname"
+    @click.native="handleClick"
+  >
     <template v-if="header" slot="header">
       <template
         v-if="Object.prototype.toString.call(header) === '[object Array]'"
@@ -120,6 +125,14 @@ export default {
       type: [Array, Object],
       required: false,
     },
+    actions: {
+      type: Object,
+      required: false,
+    },
+    action: {
+      type: Function,
+      required: true,
+    },
     initApi: {
       type: [String, Object],
       required: false,
@@ -131,6 +144,7 @@ export default {
     bodyStyle: {
       type: Object,
       required: false,
+      default: { padding: 0 },
     },
     shadow: {
       type: String,
@@ -143,6 +157,23 @@ export default {
   methods: {
     renderHeader(data) {
       return this.$getRenderedTpl(this.header, data);
+    },
+    handleClick() {
+      if (this.actions) {
+        if (Object.prototype.toString.call(this.actions) === '[object Array]') {
+          let props = this.actions.find(item => {
+            if (
+              item.actionOn &&
+              this.$onExpressionEval(item.actionOn, this.data)
+            ) {
+              return item;
+            }
+          });
+          this.actions && this.action(props, this.data);
+        } else {
+          this.actions && this.action(this.actions, this.data);
+        }
+      }
     },
   },
 };

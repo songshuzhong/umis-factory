@@ -5,6 +5,7 @@ export default {
     initData: {
       type: Object,
       required: false,
+      default: {},
     },
   },
   data() {

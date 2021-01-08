@@ -2,6 +2,7 @@
   <el-select
     v-model="iValue"
     :name="name"
+    :size="size"
     :disabled="disabled"
     :clearable="clearable"
     :multiple="multiple"
@@ -40,6 +41,10 @@ export default {
     },
     value: {
       type: [Array, String, Number],
+      required: false,
+    },
+    size: {
+      type: String,
       required: false,
     },
     disabled: {

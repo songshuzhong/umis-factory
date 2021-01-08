@@ -1,5 +1,6 @@
 <template>
   <el-drawer
+    class="umis-popup__container"
     :appendToBody="appendToBody"
     :closeOnPressEscape="closeOnPressEscape"
     :custom-class="classname"
@@ -8,7 +9,7 @@
     :direction="direction"
     :showClose="showClose"
     :size="size"
-    :visible.sync="data.iVisible"
+    :visible.sync="iVisible"
     :wrapperClosable="wrapperClosable"
     :withHeader="withHeader"
     destroy-on-close
@@ -27,57 +28,63 @@
         :init-data="getInitData(data, header)"
       />
     </template>
-    <template v-if="Object.prototype.toString.call(body) === '[object Array]'">
-      <template v-for="(item, index) in body">
-        <mis-component
-          :mis-name="item.renderer"
-          :key="index"
-          :path="`${path}/${index}/${item.renderer}`"
-          :footer="item.footer"
-          :action="onClose"
-          :props="getFattingProps(item)"
-          :header="getHeader(item)"
-          :body="getBody(item)"
-          :footer="getFooter(item)"
-          :init-data="getInitData(data, item)"
-        />
+    <el-main class="umis-popup__container__body">
+      <template
+        v-if="Object.prototype.toString.call(body) === '[object Array]'"
+      >
+        <template v-for="(item, index) in body">
+          <mis-component
+            :mis-name="item.renderer"
+            :key="index"
+            :path="`${path}/${index}/${item.renderer}`"
+            :footer="item.footer"
+            :action="onClose"
+            :props="getFattingProps(item)"
+            :header="getHeader(item)"
+            :body="getBody(item)"
+            :footer="getFooter(item)"
+            :init-data="getInitData(data, item)"
+          />
+        </template>
       </template>
-    </template>
-    <mis-component
-      v-else
-      :mis-name="body.renderer"
-      :path="`${path}/${body.renderer}`"
-      :footer="body.footer"
-      :action="onClose"
-      :props="getFattingProps(body)"
-      :header="getHeader(body)"
-      :body="getBody(body)"
-      :footer="getFooter(body)"
-      :init-data="getInitData(data, body)"
-    />
-    <template v-if="footer">
+      <mis-component
+        v-else
+        :mis-name="body.renderer"
+        :path="`${path}/${body.renderer}`"
+        :footer="body.footer"
+        :action="onClose"
+        :props="getFattingProps(body)"
+        :header="getHeader(body)"
+        :body="getBody(body)"
+        :footer="getFooter(body)"
+        :init-data="getInitData(data, body)"
+      />
+    </el-main>
+    <div v-if="footer" class="umis-popup__container__footer">
       <template v-for="(item, index) in footer">
         <mis-component
           :mis-name="item.renderer"
-          :key="index"
+          :key="`${path}/${index}/${item.renderer}`"
           :path="`${path}/${index}/${item.renderer}`"
           :footer="item.footer"
-          :action="onClose"
           :props="getFattingProps(item)"
           :init-data="getInitData(data, item)"
+          :after-action="item.closable ? onClose : ''"
+          :action="onClose"
         />
       </template>
-    </template>
+    </div>
   </el-drawer>
 </template>
 <script>
-import { ElDrawer } from 'element-plus';
+import { ElDrawer, ElMain } from 'element-plus';
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
 
 export default {
   name: 'MisDrawer',
   components: {
+    ElMain,
     ElDrawer,
   },
   props: {
@@ -158,31 +165,29 @@ export default {
       type: [Array, Object],
       required: false,
     },
-    onActionDisvisiable: {
+    onPopupInvisible: {
       type: Function,
       required: false,
     },
   },
   data() {
     return {
-      data: {
-        iVisible: false,
-      },
+      iVisible: false,
     };
   },
   mixins: [derivedProp, initData],
   watch: {
     visible: {
       handler(val) {
-        this.data.iVisible = val;
+        this.iVisible = val;
       },
       immediate: true,
     },
   },
   methods: {
     onClose() {
-      this.data.iVisible = false;
-      this.onActionDisvisiable && this.onActionDisvisiable();
+      this.iVisible = false;
+      this.onPopupInvisible && this.onPopupInvisible(this.path);
     },
   },
 };

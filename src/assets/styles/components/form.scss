@@ -1,0 +1,41 @@
+.umis-form__container {
+  .umis-form__field {
+    display: inline-block;
+  }
+  .umis-form__field__label {
+    padding-right: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+  }
+  .umis-form__combo {
+    padding: 10px;
+    border: 1px dashed #dee2e6;
+    &:hover {
+      border: 1px dashed #409eff;
+    }
+    .el-form-item {
+      margin: 0 10px !important;
+    }
+    .el-form-item__label-wrap {
+      margin-left: 0 !important;
+    }
+  }
+  .umis-form__combo__item {
+    display: flex;
+    margin-bottom: 20px;
+  }
+}
+.umis-data__debug {
+  display: block;
+  padding: 10px;
+  margin: 0 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+}

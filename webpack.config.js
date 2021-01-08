@@ -6,6 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const externalDependencies = require('./externals');
 
 module.exports = {
   mode: 'production',
@@ -52,9 +53,6 @@ module.exports = {
             scss: [
               {
                 loader: MiniCssExtractPlugin.loader,
-                options: {
-                  publicPath: '../',
-                },
               },
               'css-loader',
               {
@@ -82,9 +80,6 @@ module.exports = {
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: '../',
-            },
           },
           'css-loader',
           {

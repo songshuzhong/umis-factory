@@ -13,7 +13,10 @@ import {
   json2FormData,
   saveInitStyle,
   saveInitFormType,
+  saveAdaptor,
 } from './utils/tools';
+
+import './assets/styles/index.scss';
 
 const requireComponent = require.context('./components', true, /[\w-]+\.app$/);
 
@@ -46,6 +49,7 @@ export default {
     app.config.globalProperties.$json2FormData = json2FormData;
     app.config.globalProperties.$saveInitStyle = saveInitStyle;
     app.config.globalProperties.$saveInitFormType = saveInitFormType;
+    app.config.globalProperties.$saveAdaptor = saveAdaptor;
     app.config.globalProperties.$notice = ElNotification;
     app.config.globalProperties.$message = ElMessage;
     app.config.globalProperties.$api = api(options);

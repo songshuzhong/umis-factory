@@ -21,6 +21,7 @@
         :body="getBody(child)"
         :footer="getFooter(child)"
         :props="getFattingProps(child)"
+        :init-data="getInitData(data, child)"
       />
     </el-col>
   </el-row>

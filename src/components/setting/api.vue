@@ -1,7 +1,12 @@
 <template>
-  <el-card class="umis-setting__card-margin">
+  <el-card class="umis-setting__card-margin" shadow="hover">
     <div slot="header" class="umis-setting__header">
-      <span>接口拦截器</span>
+      <el-tooltip
+        content="选中的域名将作为接口请求的路径前缀"
+        placement="top-start"
+      >
+        <span>域名选择器 <i class="el-icon-info" /> </span>
+      </el-tooltip>
       <el-button-group>
         <el-button plain size="mini" type="primary" @click="onAdd">
           添加
@@ -54,6 +59,7 @@ import {
   ElButton,
   ElLink,
   ElInput,
+  ElTooltip,
 } from 'element-plus';
 
 export default {
@@ -66,6 +72,7 @@ export default {
     ElButton,
     ElLink,
     ElInput,
+    ElTooltip
   },
   props: {
     value: {
@@ -134,28 +141,3 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-.umis-setting__api-editor {
-  width: 100%;
-}
-.umis-setting__api-editor__item {
-  display: flex;
-  padding: 11px 0;
-  background: #f5f5f5;
-}
-.umis-setting__api-editor__plus {
-  padding: 11px 0;
-  background: #f5f5f5;
-}
-.umis-setting__api-editor__delete {
-  margin: 0 10px;
-}
-.umis-setting__api-editor__label,
-.umis-setting__api-editor__value {
-  padding: 0 12px 0 0;
-}
-.umis-setting__api-editor__radio {
-  display: flex;
-  align-items: center;
-}
-</style>

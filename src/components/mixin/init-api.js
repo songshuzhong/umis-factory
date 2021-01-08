@@ -1,4 +1,6 @@
 import deepEqual from 'deep-equal';
+import clonedeep from 'lodash.clonedeep';
+import { getUrlParams } from '../../utils/url';
 
 export default {
   props: {
@@ -27,13 +29,14 @@ export default {
       type: Boolean,
       required: false,
     },
+    syncLocation: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
   },
   data() {
     return {
-      iTotal: 0,
-      iPageIndex: 1,
-      iPageSize: 10,
-      iHasMore: true,
       iLoading: false,
       iStopAutoRefresh: false,
       data: {},
@@ -59,16 +62,9 @@ export default {
       },
     },
     data: {
-      handler(val, old) {
-        if (
-          this.isMounted &&
-          val !== old &&
-          this.initApi &&
-          !['mis-component', 'mis-service'].includes(
-            this.$options['_componentTag']
-          )
-        ) {
-          this.shouldUpdateInitApi();
+      handler(val, oldVal) {
+        if (this.isMounted && this.initApi) {
+          this.shouldUpdateInitApi(val, oldVal);
         }
       },
     },
@@ -89,9 +85,8 @@ export default {
     this.intervalFetcher = null;
     this.compiledCacheUrl = null;
     this.compiledCacheParams = null;
-    if (this.initApi && this.$options['_componentTag'] !== 'mis-component') {
+    if (this.initApi) {
       this.handleFetchApi();
-
       if (this.interval) {
         this.handleIntervalFetch();
       }
@@ -122,89 +117,110 @@ export default {
         return;
       }
       const { method, url, params } = apiData || this.initApi;
-      const compiledUrl = this.$getCompiledUrl(url, this.data);
+      let mergedData = this.data;
       let compiledParams = params;
+      let compiledUrl = url;
       let fetchBody;
 
-      if (params) {
-        compiledParams = this.$getCompiledParams(params, this.data);
-      }
+      mergedData = this.useMergeUrlParams(mergedData);
+      compiledParams = this.useCompiledParams(params, mergedData);
+      compiledUrl = this.useCompiledUrl(url, mergedData);
 
+      if (this.usePageInfo) {
+        compiledParams = this.usePageInfo(compiledParams);
+      }
       if (method === 'get') {
         fetchBody = {
-          params: {
-            pageIndex: this.iPageIndex,
-            pageSize: this.iPageSize,
-            ...this.$route.query,
-            ...compiledParams,
-          },
+          params: compiledParams,
         };
       } else {
-        fetchBody = {
-          pageIndex: this.iPageIndex,
-          pageSize: this.iPageSize,
-          ...this.$route.query,
-          ...compiledParams,
-        };
+        fetchBody = compiledParams;
       }
-
-      this.iLoading = true;
-      this.compiledCacheUrl = compiledUrl;
-      this.compiledCacheParams = compiledParams;
-
       fetchBody = this.$json2FormData(this.$umisConfig.isFormData, fetchBody);
-
+      this.iLoading = true;
       return this.$api
-        .slientApi()
+        .slientApi(this.$umisConfig)
         [method](compiledUrl, fetchBody)
         .then(res => {
           const data = res.data;
-          if (data && data.hasOwnProperty('rows')) {
-            const { count, rows, hasMore } = data;
-            this.iTotal = count;
-            this.iHasMore = hasMore;
-            this.rows = rows;
-          } else {
-            this.data = data;
+          if (data) {
+            if (data.hasOwnProperty('rows')) {
+              const { count, rows, hasMore } = data;
+              this.iTotal = count;
+              this.iHasMore = hasMore;
+              this.rows = rows;
+            } else {
+              this.data = data;
+            }
           }
           !this.silentMessage &&
             this.$message({
-              message: res.message,
+              message: res.msg,
               showClose: true,
               type: 'success',
             });
+          return 'resolve';
         })
         .catch(error => {
           this.$message({
-            message: error.message,
+            message: error.msg,
             showClose: true,
             type: 'error',
           });
+          return 'reject';
         })
-        .finally(() => {
+        .finally(status => {
           this.iLoading = false;
           feedback && feedback();
+          return status;
         });
     },
-    handlePageChanged(pageIndex) {
-      this.iPageIndex = pageIndex;
-      this.handleFetchApi();
-    },
-    handlePageSizeChanged(pageSize) {
-      this.iPageSize = pageSize;
-      this.handleFetchApi();
-    },
-    shouldUpdateInitApi() {
+    shouldUpdateInitApi(val) {
+      let mergedData = val;
       const { url, params } = this.initApi;
-      const compiledUrl = this.$getCompiledUrl(url, this.data);
-      const compiledParams = this.$getCompiledParams(params, this.data);
+      if (this.syncLocation) {
+        mergedData = this.useMergeUrlParams(mergedData);
+      }
+      const compiledUrl = this.$getCompiledUrl(url, mergedData);
+      const compiledParams = this.$getCompiledParams(params, mergedData);
 
       if (
-        compiledUrl !== this.compiledCacheUrl ||
-        !deepEqual(compiledParams, this.compiledCacheParams)
+        (/\$\{.+?\}/g.test(url) && !this.compiledCacheUrl && compiledUrl) ||
+        (this.compiledCacheUrl && this.compiledCacheUrl !== compiledUrl) ||
+        (this.compiledCacheParams &&
+          !deepEqual(compiledParams, this.compiledCacheParams))
       ) {
         this.handleFetchApi();
       }
+    },
+    useMergeUrlParams(mergedData) {
+      if (this.syncLocation) {
+        const defaultQuery = getUrlParams();
+        return Object.assign({}, mergedData, defaultQuery);
+      }
+      return mergedData;
+    },
+    useCompiledParams(params, mergedData) {
+      let shouldCompiled = false;
+      for (const key in params) {
+        if (params.hasOwnProperty(key) && /^\$\{.+?\}/g.test(params[key])) {
+          shouldCompiled = true;
+        }
+      }
+      if (shouldCompiled) {
+        const compiledParams = this.$getCompiledParams(params, mergedData);
+        this.compiledCacheParams = clonedeep(compiledParams);
+        return compiledParams;
+      }
+      return params;
+    },
+    useCompiledUrl(url, mergedData) {
+      if (/\$\{.+?\}/g.test(url)) {
+        const compiledUrl = this.$getCompiledUrl(url, mergedData);
+        this.compiledCacheUrl = compiledUrl;
+        return compiledUrl;
+      }
+      return url;
     },
   },
 };

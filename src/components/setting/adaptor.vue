@@ -2,30 +2,35 @@
   <el-card class="umis-setting__card-margin" shadow="hover">
     <div slot="header" class="umis-setting__header">
       <el-tooltip
-        content="应用后的样式将全局作用于当前工作区"
+        content="可在代码块中根据【api】、【method】和【params】适配指定的Reponse数据"
         placement="top-start"
       >
-        <span>全局样式 <i class="el-icon-info" /> </span>
+        <span>接口适配器 <i class="el-icon-info" /> </span>
       </el-tooltip>
       <el-button plain size="mini" type="primary" @click="onSave">
         应用
       </el-button>
     </div>
-    <div ref="umisStyleEditor" class="umis-setting__style-editor" />
+    <div ref="umisAdaptorEditor" class="umis-setting__style-editor" />
   </el-card>
 </template>
-<script>
-import { ElCard, ElButton, ElButtonGroup, ElTooltip } from 'element-plus';
 
+<script>
+import {
+  Card as ElCard,
+  ButtonGroup as ElButtonGroup,
+  Button as ElButton,
+  Tooltip as ElTooltip,
+} from 'element-ui';
 import beautify from 'beautify';
 import monaco from '../mixin/monaco';
 
 export default {
-  name: 'SettingStyle',
+  name: 'SettingAdaptor',
   components: {
     ElCard,
-    ElButton,
     ElButtonGroup,
+    ElButton,
     ElTooltip,
   },
   props: {
@@ -37,7 +42,9 @@ export default {
   watch: {
     value: {
       handler(val) {
-        this.schema = val;
+        if (val) {
+          this.schema = val;
+        }
       },
       immediate: true,
     },
@@ -58,35 +65,27 @@ export default {
   },
   methods: {
     createMonacoEditor() {
-      this.editor = window.monaco.editor.create(this.$refs.umisStyleEditor, {
-        language: 'css',
+      this.editor = window.monaco.editor.create(this.$refs.umisAdaptorEditor, {
+        language: 'javascript',
         ...this.defaultConfig,
       });
-      const style = beautify(this.schema, { format: 'css' });
-      this.editor.setValue(style);
+      const javascript = beautify(this.schema, { format: 'js' });
+      this.editor.setValue(javascript);
       this.handleFormatSchema(this.editor);
     },
     onSave(silent) {
       const json = this.editor.getValue();
-      return this.$saveInitStyle(this, json)
-        .then(() => {
-          this.schema = json;
-          if (silent === true) {
-            return;
-          }
-          this.$notice({
-            type: 'success',
-            title: '通知',
-            message: '样式修改成功',
-          });
-        })
-        .catch(e => {
-          this.$notice({
-            type: 'error',
-            title: '警告',
-            message: e.toString(),
-          });
+      return this.$saveAdaptor(this, json).then(() => {
+        this.schema = json;
+        if (silent === true) {
+          return;
+        }
+        this.$notice({
+          type: 'success',
+          title: '通知',
+          message: '接口适配器修改成功',
         });
+      });
     },
   },
 };

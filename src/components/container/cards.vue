@@ -18,6 +18,8 @@
           :header="header"
           :body="body"
           :footer="footer"
+          :actions="actions"
+          :action="action"
           :init-data="item"
         />
       </el-col>
@@ -36,9 +38,10 @@
 </template>
 <script>
 import { ElRow, ElCol, ElCard, ElPagination } from 'element-plus';
+import MisCard from './card';
 import initApi from '../mixin/init-api';
 import derivedProp from '../mixin/derived-prop';
-import MisCard from './card';
+import pageInfo from '../mixin/page-info';
 
 export default {
   name: 'MisCards',
@@ -74,6 +77,14 @@ export default {
       type: [String, Object],
       required: false,
     },
+    actions: {
+      type: Object,
+      required: false,
+    },
+    action: {
+      type: Function,
+      required: true,
+    },
     classname: {
       type: String,
       required: false,
@@ -104,7 +115,7 @@ export default {
       default: [24, 12, 8, 4],
     },
   },
-  mixins: [initApi, derivedProp],
+  mixins: [initApi, derivedProp, pageInfo],
   watch: {
     body: {
       handler(val) {

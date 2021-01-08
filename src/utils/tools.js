@@ -20,7 +20,7 @@ const getCompiledUrl = (tpl, data) => {
   return temporaryTpl;
 };
 
-const getCompiledParams = (params, data = {}, method) => {
+const getCompiledParams = (params, data = {}) => {
   let compiledParams = {};
 
   if (params) {
@@ -60,30 +60,28 @@ const saveInitFormType = (ctx, isFormData) => {
   ctx.$umisConfig.isFormData = isFormData;
 };
 
+const saveAdaptor = (ctx, script) => {
+  return new Promise((resolve, reject) => {
+    ctx.$umisConfig.adaptor = script;
+    ctx.$umisConfig.isAdaptorChanged = true;
+    resolve();
+  });
+};
+
 const saveInitStyle = (ctx, style) => {
   return new Promise((resolve, reject) => {
     try {
-      let ele = document.getElementById('umis-setting-style');
+      let ele = document.getElementById('umis-setting__style');
 
       if (!ele) {
         ele = document.createElement('style');
-        ele.id = 'umis-setting-style';
+        ele.id = 'umis-setting__style';
         document.head.appendChild(ele);
       }
       ele.innerHTML = style;
-      ctx.$notice({
-        type: 'success',
-        title: '通知',
-        message: '保存成功！',
-      });
       resolve();
     } catch (e) {
-      ctx.$notice({
-        type: 'error',
-        title: '警告',
-        message: e.toString(),
-      });
-      reject();
+      reject(e);
     }
   });
 };
@@ -96,4 +94,5 @@ export {
   json2FormData,
   saveInitStyle,
   saveInitFormType,
+  saveAdaptor,
 };

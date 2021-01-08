@@ -1,88 +1,39 @@
 <template>
-  <fragment>
-    <component
-      v-if="visible"
-      v-bind="actions ? getBody(actions[index]) : getBody($props)"
-      :path="`${path}/${actions ? actions[index].actionType : actionType}`"
-      :is="actions ? actions[index].actionType : actionType"
-      :visible="visible"
-      :init-data="data"
-      :on-action-disvisiable="onDisVisiable"
-    />
-    <el-popconfirm
-      v-if="confirmTitle"
-      :confirm-button-text="confirmBtnText"
-      :cancel-button-text="confirmCancelBtnText"
-      :confirm-button-type="confirmBtnType"
-      :cancel-button-type="confirmCancelBtnType"
-      :icon="confirmIcon"
-      :icon-color="confirmIconColor"
-      :hide-icon="confirmHideIcon"
-      :title="confirmTitle"
-      @confirm="onClick"
-    >
-      <el-button
-        v-loading="iApiLoading"
-        slot="reference"
-        :size="size"
-        :type="type"
-        :plain="plain"
-        :round="round"
-        :circle="circle"
-        :icon="icon"
-        :disabled="iApiLoading"
-      >
-        {{ text }}
-      </el-button>
-    </el-popconfirm>
-    <el-tooltip
-      v-else-if="tipContent"
-      :disabled="tipDisabled"
-      :effect="tipEffect"
-      :content="tipContent"
-      :placement="tipPlacement"
-    >
-      <el-button
-        v-loading="iApiLoading"
-        :size="size"
-        :type="type"
-        :plain="plain"
-        :round="round"
-        :circle="circle"
-        :icon="icon"
-        :disabled="iApiLoading"
-        @click="onClick"
-      >
-        {{ text }}
-      </el-button>
-    </el-tooltip>
-    <el-badge v-else-if="badgeText" :value="badgeText" :class="badgeClass">
-      <el-button
-        v-loading="iApiLoading"
-        :size="size"
-        :type="type"
-        :plain="plain"
-        :round="round"
-        :circle="circle"
-        :icon="icon"
-        :disabled="iApiLoading"
-        @click="onClick"
-      >
-        {{ text }}
-      </el-button>
-    </el-badge>
-    <el-button-group v-else-if="actions">
-      <template v-for="(item, index) in actions">
-        <mis-button
-          v-bind="item"
-          :key="index"
-          :index="index"
-          :action="onClick"
-        />
-      </template>
-    </el-button-group>
+  <el-popconfirm
+    v-if="confirmTitle"
+    :confirm-button-text="confirmBtnText"
+    :cancel-button-text="confirmCancelBtnText"
+    :confirm-button-type="confirmBtnType"
+    :cancel-button-type="confirmCancelBtnType"
+    :icon="confirmIcon"
+    :icon-color="confirmIconColor"
+    :hide-icon="confirmHideIcon"
+    :title="confirmTitle"
+    @confirm="onClick"
+  >
     <el-button
-      v-else
+      v-loading="iApiLoading"
+      slot="reference"
+      :class="classname"
+      :size="size"
+      :type="type"
+      :plain="plain"
+      :round="round"
+      :circle="circle"
+      :icon="icon"
+      :disabled="iApiLoading"
+    >
+      {{ renderText }}
+    </el-button>
+  </el-popconfirm>
+  <el-tooltip
+    v-else-if="tipContent"
+    :disabled="tipDisabled"
+    :effect="tipEffect"
+    :content="tipContent"
+    :placement="tipPlacement"
+  >
+    <el-button
       v-loading="iApiLoading"
       :size="size"
       :type="type"
@@ -95,7 +46,51 @@
     >
       {{ text }}
     </el-button>
-  </fragment>
+  </el-tooltip>
+  <el-badge v-else-if="badgeText" :value="badgeText" :class="badgeClass">
+    <el-button
+      v-loading="iApiLoading"
+      :class="classname"
+      :size="size"
+      :type="type"
+      :plain="plain"
+      :round="round"
+      :circle="circle"
+      :icon="icon"
+      :disabled="iApiLoading"
+      @click="onClick"
+    >
+      {{ text }}
+    </el-button>
+  </el-badge>
+  <el-button-group v-else-if="actions" v-loading="iApiLoading">
+    <template v-for="(item, index) in actions">
+      <el-button
+        v-bind="item"
+        :key="`${path}/${index}`"
+        :index="index"
+        :disabled="iApiLoading"
+        @click="onClick"
+      >
+        {{ item.text }}
+      </el-button>
+    </template>
+  </el-button-group>
+  <el-button
+    v-else
+    v-loading="iApiLoading"
+    :class="classname"
+    :size="size"
+    :type="type"
+    :plain="plain"
+    :round="round"
+    :circle="circle"
+    :icon="icon"
+    :disabled="disabled || iApiLoading"
+    @click.native="onClick"
+  >
+    {{ renderText }}
+  </el-button>
 </template>
 <script>
 import {
@@ -108,6 +103,7 @@ import {
 
 import derivedProp from './mixin/derived-prop';
 import initData from './mixin/init-data';
+import initApi from './mixin/init-api';
 
 export default {
   name: 'MisAction',
@@ -127,18 +123,30 @@ export default {
       type: String,
       required: true,
     },
+    body: {
+      type: Object,
+      required: false,
+    },
     action: {
       type: Function,
       required: false,
     },
-    actionType: {
-      type: String,
-      required: true,
+    afterAction: {
+      type: Function,
+      required: false,
+    },
+    actionApi: {
+      type: Object,
+      required: false,
     },
     actions: {
       type: Array,
       required: false,
       default: undefined,
+    },
+    disabled: {
+      type: Boolean,
+      required: false,
     },
     renderer: {
       type: String,
@@ -148,8 +156,8 @@ export default {
       type: String,
       required: false,
     },
-    body: {
-      type: [Array, Object],
+    showPopup: {
+      type: Boolean,
       required: false,
     },
     size: {
@@ -237,6 +245,10 @@ export default {
       type: String,
       required: false,
     },
+    remoteForm: {
+      type: String,
+      required: false,
+    },
     linkageTrigger: {
       type: Function,
       required: false,
@@ -244,39 +256,76 @@ export default {
   },
   data() {
     return {
-      iApiLoading: false,
-      visible: false,
-      clipboard: '',
+      iShowPopup: false,
       index: 0,
     };
   },
-  mixins: [derivedProp, initData],
-  computed: {},
-  methods: {
-    onDisVisiable() {
-      this.visible = false;
+  watch: {
+    showPopup: {
+      handler(val) {
+        this.iShowPopup = val;
+      },
+      immediate: true,
     },
-    onClick(index) {
-      let actionType = this.actionType;
-      if (this.actions && typeof index === 'number') {
+    iShowPopup(val) {
+      this.$emit('update:showPopup', val);
+    },
+  },
+  mixins: [derivedProp, initData, initApi],
+  computed: {
+    renderText() {
+      return this.$getRenderedTpl(this.text, this.data);
+    },
+  },
+  methods: {
+    onClick() {
+      let index;
+      let actionType;
+      if (this.actions) {
+        index = event.currentTarget.attributes.index.value;
         actionType = this.actions[index].actionType;
         this.index = index;
-      }
-      if (['mis-dialog', 'mis-drawer'].includes(actionType)) {
-        this.visible = true;
-      }
-      if (['mis-ajax'].includes(actionType)) {
-        this.iApiLoading = true;
-      }
-      if (typeof index === 'number') {
-        this.action(this.actions[index], this.handleLoading);
       } else {
-        this.action && this.action(this.handleLoading);
+        actionType = this.$attrs.actionType;
+      }
+      if (this.remoteForm) {
+        this.$eventHub.$emit(
+          'mis-component:form',
+          actionType,
+          this.remoteForm,
+          this.handleAfterAction
+        );
+      } else if (typeof index === 'string') {
+        this.action(
+          {
+            actions: true,
+            ...this.actions[index],
+          },
+          this.data,
+          this.handleAfterAction
+        );
+      } else {
+        const { renderer, actionApi } = this.$props;
+        const { header, footer, ...other } = this.$attrs;
+        this.action(
+          {
+            renderer,
+            actionType,
+            actionApi,
+            ...other,
+          },
+          this.data,
+          this.handleAfterAction
+        );
       }
     },
-    handleLoading() {
-      this.iApiLoading = false;
-      this.linkageTrigger(this.target);
+    handleAfterAction() {
+      if (this.afterAction && typeof this.afterAction === 'function') {
+        this.afterAction();
+      }
+      if (this.target) {
+        this.linkageTrigger(this.target, this.data);
+      }
     },
   },
 };

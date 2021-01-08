@@ -8,8 +8,8 @@
       :class="field.className"
       :rules="field.rules"
     >
-      <span v-if="field.label" slot="label" class="umis-form-field">
-        <span class="umis-form-field__label">{{ field.label }}</span>
+      <span v-if="field.label" slot="label" class="umis-form__field">
+        <span class="umis-form__field__label">{{ field.label }}</span>
         <el-tooltip v-if="field.tip">
           <i class="el-icon-info" />
           <div slot="content" v-html="field.tip" />
@@ -109,15 +109,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.umis-form-field {
-  display: inline-block;
-}
-.umis-form-field__label {
-  padding-right: 10px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: clip;
-}
-</style>

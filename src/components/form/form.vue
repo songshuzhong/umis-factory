@@ -1,8 +1,8 @@
 <template>
   <el-form
     v-loading="iApiLoading"
-    class="mis-form"
-    ref="mis-form"
+    ref="form"
+    class="umis-form__container"
     :label-width="labelWidth"
     :label-position="labelPosition"
     :model="data"
@@ -33,23 +33,25 @@
       />
     </template>
     <el-form-item>
-      <template v-for="(item, index) in activeControls">
-        <mis-component
-          :ref="item.actionType"
-          :key="`${path}/${index}/${item.renderer}`"
-          :path="`${path}/${index}/${item.renderer}`"
-          :mis-name="item.renderer"
-          :header="getHeader(item)"
-          :body="getBody(item)"
-          :footer="getFooter(item)"
-          :props="getFattingProps(item)"
-          :init-data="data"
-          :hidden-on="item.hiddenOn"
-          :visible-on="item.visibleOn"
-          :disabled-on="item.disabledOn"
-          :action="onBeforeSubmit"
-        />
-      </template>
+      <div class="umis-form__actions">
+        <template v-for="(item, index) in activeControls">
+          <mis-component
+            :ref="item.actionType"
+            :key="`${path}/${index}/${item.renderer}`"
+            :path="`${path}/${index}/${item.renderer}`"
+            :mis-name="item.renderer"
+            :header="getHeader(item)"
+            :body="getBody(item)"
+            :footer="getFooter(item)"
+            :props="getFattingProps(item)"
+            :init-data="data"
+            :hidden-on="item.hiddenOn"
+            :visible-on="item.visibleOn"
+            :disabled-on="item.disabledOn"
+            :action="onBeforeSubmit"
+          />
+        </template>
+      </div>
     </el-form-item>
   </el-form>
 </template>
@@ -97,7 +99,7 @@ export default {
     labelWidth: {
       type: Number,
       required: false,
-      default: '130px',
+      default: 'auto',
     },
     labelPosition: {
       type: String,
@@ -134,11 +136,7 @@ export default {
         const renderer = control.renderer;
         const name = control.name;
         const value = control.value;
-        if (
-          name &&
-          formItems.includes(renderer) &&
-          !['mis-button', 'mis-action'].includes(renderer)
-        ) {
+        if (name && formItems.includes(renderer) && 'mis-action' !== renderer) {
           total[name] = value;
         }
         return total;
@@ -147,17 +145,21 @@ export default {
   },
   computed: {
     activeControls() {
-      return this.controls.filter(item =>
-        ['mis-action', 'mis-button'].includes(item.renderer)
-      );
+      return this.controls.filter(item => {
+        if ('mis-action' === item.renderer) {
+          item.actionApi = this.api;
+          return item;
+        }
+      });
     },
     inactiveControls() {
-      return this.controls.filter(
-        item => !['mis-action', 'mis-button'].includes(item.renderer)
-      );
+      return this.controls.filter(item => 'mis-action' !== item.renderer);
     },
   },
   mixins: [initApi, initData, derivedProp],
+  mounted() {
+    this.$eventHub.$on('mis-component:form', this.handleRemoteSubmit);
+  },
   methods: {
     handleInvisible(visible, field) {
       if (visible) {
@@ -168,9 +170,23 @@ export default {
         this.invisibleField.push(field);
       }
     },
+    handleRemoteSubmit(actionType, target, feedback) {
+      if (this.name && this.name === target) {
+        const form = this.$refs['form'];
+        if (form && actionType === 'mis-reset') {
+          form.resetFields();
+        } else if (form && actionType === 'mis-submit') {
+          form.validate(valid => {
+            if (valid) {
+              this.sendFormData(feedback);
+            }
+          });
+        }
+      }
+    },
     onBeforeSubmit() {
       const attributes = event.currentTarget.attributes;
-      const form = this.$refs['mis-form'];
+      const form = this.$refs['form'];
       if (
         attributes.actionType &&
         attributes.actionType.value === 'mis-reset'
@@ -187,8 +203,9 @@ export default {
         });
       }
     },
-    sendFormData() {
+    sendFormData(feedback) {
       const formData = {};
+
       for (let name in this.data) {
         if (
           this.data.hasOwnProperty(name) &&
@@ -199,16 +216,17 @@ export default {
       if (this.target) {
         return this.linkageTrigger(this.target, formData);
       }
-      if (this.api) {
-        this.handleFetchApi(
-          {
-            url: this.api.url || this.api,
-            method: this.api.method || 'post',
-            params: formData,
-          },
-          this.onAfterSubmit
-        );
-      }
+      this.handleFetchApi(
+        {
+          url: this.api.url || this.api,
+          method: this.api.method || 'post',
+          params: formData,
+        },
+        () => {
+          feedback && feedback();
+          this.onAfterSubmit();
+        }
+      );
     },
     onAfterSubmit() {
       if (this.redirect) {

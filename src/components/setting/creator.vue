@@ -1,5 +1,5 @@
 <template>
-  <el-card class="umis-setting__card-margin">
+  <el-card class="umis-setting__card-margin" shadow="hover">
     <div slot="header" class="umis-setting__header">
       <span>新建项目|页面</span>
       <el-button plain size="mini" type="primary" @click="creatorDialog = true">

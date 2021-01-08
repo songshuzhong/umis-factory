@@ -1,10 +1,10 @@
 <template>
-  <div class="umis-form-combo">
+  <div class="umis-form__combo">
     <template v-if="multiple">
       <div
         v-for="(item, index) in iValue"
         :key="index"
-        class="umis-form-combo__item"
+        class="umis-form__combo__item"
       >
         <mis-field
           v-for="(value, name, key) in item"
@@ -16,12 +16,12 @@
           :path="`${path}/${index}/${name}`"
         />
         <el-link
-          class="umis-form-combo__delete"
+          class="umis-form__combo__delete"
           icon="el-icon-delete"
           @click="onDelete(index)"
         />
       </div>
-      <el-form-item :label="' '" class="umis-form-combo__plus">
+      <el-form-item :label="' '" class="umis-form__combo__plus">
         <el-button icon="el-icon-plus" @click="onAdd" />
       </el-form-item>
     </template>
@@ -29,7 +29,7 @@
       <div
         v-for="(item, index) in controls"
         :key="index"
-        class="umis-form-combo__item"
+        class="umis-form__combo__item"
       >
         <mis-field
           v-model="iValue[item.name]"
@@ -127,21 +127,3 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-.umis-form-combo {
-  border: 1px dashed #dee2e6;
-  &:hover {
-    border: 1px dashed #409eff;
-  }
-}
-.umis-form-combo__item {
-  display: flex;
-  padding: 11px 0;
-}
-.umis-form-combo__plus {
-  padding: 11px 0;
-}
-.umis-form-combo__delete {
-  margin: 0 10px;
-}
-</style>

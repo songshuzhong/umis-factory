@@ -1,25 +1,18 @@
 <template>
   <transition :name="transition">
-    <el-alert v-if="showErrorBoundary" title="错误: 渲染失败了" type="error">
-      <pre class="umis-component__not-find">{{
-        `{
-    "name": "${misName}"
-    "path": "${path}"
-    "error": "${error}"
-}`
-      }}</pre>
-    </el-alert>
     <component
       v-if="iVisible && forceRerender"
       v-show="iHidden && forceRerender"
       v-bind="getSlimmingProps(props)"
-      :is="misName"
+      :is="componentName"
       :path="path"
       :header="header"
       :body="body"
       :footer="footer"
       :init-data="data"
+      :error-info="errorInfo"
       :action="filterAction"
+      :after-action="afterAction"
       :linkage-trigger="onLinkageTrigger"
     />
   </transition>
@@ -27,19 +20,13 @@
 
 <script>
 import copy from 'copy-to-clipboard';
-import { ElAlert } from 'element-plus';
-
 import derivedProp from '../mixin/derived-prop';
 import linkage from '../mixin/linkage';
 import visible from '../mixin/visible';
 import initData from '../mixin/init-data';
-import initApi from '../mixin/init-api';
 
 export default {
-  name: 'mis-Component',
-  components: {
-    ElAlert,
-  },
+  name: 'MisComponent',
   props: {
     path: {
       type: String,
@@ -69,8 +56,16 @@ export default {
       type: Function,
       required: false,
     },
+    afterAction: {
+      type: Function,
+      required: false,
+    },
+    actions: {
+      type: Array,
+      required: false,
+    },
   },
-  mixins: [visible, initApi, initData, linkage, derivedProp],
+  mixins: [visible, initData, linkage, derivedProp],
   data() {
     return {
       error: '',
@@ -78,59 +73,72 @@ export default {
       forceRerender: true,
     };
   },
+  computed: {
+    errorInfo() {
+      if (this.error) {
+        return {
+          props: this.props,
+          error: this.error,
+        };
+      }
+      return {};
+    },
+    componentName() {
+      return this.error ? 'mis-error' : this.misName;
+    },
+  },
   errorCaptured(err, vm, info) {
-    this.error = `'${err.message}' is found in ${info} of component`;
+    this.error = `'${err.message}' is found in ${info} of ${this.misName} component`;
     console.error(err);
     return false;
   },
-  computed: {
-    showErrorBoundary() {
-      if (!this.$misComponents.includes(this.misName)) {
-        this.error = '找不到对应的渲染器';
-        return true;
-      } else if (this.error) {
-        return true;
-      }
-      return false;
-    },
+  created() {
+    if (!this.$misComponents.includes(this.misName)) {
+      this.error = '找不到对应的渲染器';
+    }
   },
   mounted() {
     this.$eventHub.$on('mis-component:reload', this.handleReload);
   },
   methods: {
-    filterAction(props, feedback) {
-      if (this.props.renderer === 'mis-action' && this.props.actions) {
-        if (['mis-submit', 'mis-reset'].includes(props.actionType)) {
+    filterAction(props, context, feedback) {
+      if (
+        (props.renderer === 'mis-action' && props.actions) ||
+        (props.renderer === 'mis-chart' && props.footer.actionType)
+      ) {
+        if (props && ['mis-submit', 'mis-reset'].includes(props.actionType)) {
           return this.action();
         }
-        return this.dispatchAction(props, feedback);
-      } else if (
-        ['mis-submit', 'mis-reset', 'mis-next', 'mis-previous'].includes(
-          this.props.actionType
-        )
-      ) {
+        return this.dispatchAction(props, context, feedback);
+      } else if (['mis-submit', 'mis-reset'].includes(props.actionType)) {
         return this.action();
       } else {
-        return this.dispatchAction(this.props, feedback);
+        return this.dispatchAction(props, context, feedback);
       }
     },
-    dispatchAction(props, feedback) {
+    dispatchAction(props, context, feedback) {
       switch (props.actionType) {
         case 'mis-ajax':
-          this.handleAjaxAction(props, feedback);
+          this.handleAjaxAction(props, context, feedback);
           break;
         case 'mis-redirect':
-          this.handleRedirectAction(props);
+          this.handleRedirectAction(props, context);
           break;
         case 'mis-url':
-          this.handleUrlAction(props);
+          this.handleUrlAction(props, context);
           break;
         case 'mis-copy':
-          this.handleCopyAction(props);
+          this.handleCopyAction(props, context);
+          break;
+        case 'mis-dialog':
+          this.handleShowPopup(props, context);
+          break;
+        case 'mis-drawer':
+          this.handleShowPopup(props, context);
           break;
       }
     },
-    afterAction(props) {
+    onReloadAction(props) {
       const { reload } = props;
       if (reload) {
         this.$eventHub.$emit('mis-component:reload', reload);
@@ -144,45 +152,46 @@ export default {
         this.$nextTick(() => (this.forceRerender = true));
       }
     },
-    handleAjaxAction(props, feedback) {
-      this.handleFetchApi(props.actionApi, feedback).then(() => {
-        this.afterAction(props);
-      });
+    handleAjaxAction(props, context, feedback) {
+      this.$children[0]
+        .handleFetchApi(props.actionApi, feedback)
+        .then(status => {
+          if (status === 'resolve') {
+            this.onReloadAction(props);
+          }
+        });
     },
-    handleUrlAction(props) {
-      const url = this.$getCompiledUrl(props.url, this.data);
+    handleUrlAction(props, context) {
+      const url = this.$getCompiledUrl(props.url, context);
       props.blank ? window.open(url) : (window.location.href = url);
     },
-    handleRedirectAction(props) {
-      const url = this.$getCompiledUrl(props.redirect, this.data);
+    handleRedirectAction(props, context) {
+      const url = this.$getCompiledUrl(props.redirect, context);
+      const params = this.$getCompiledParams(props.params, context);
       if (/^https?:\/\//.test(url)) {
         window.location.replace(url);
+      } else if (props.redirectType === 'routeName') {
+        this.$router.push({
+          name: url,
+          params,
+        });
       } else {
         this.$router.push(url);
       }
     },
-    handleCopyAction(props) {
-      const content = this.$getCompiledUrl(props.content, this.data);
+    handleCopyAction(props, context) {
+      const content = this.$getCompiledUrl(props.content, context);
       copy(content);
-      this.$message({
-        showClose: true,
-        message: `已复制：${content}.`,
-        type: 'success',
+      this.$message.success(`已复制：${content}.`);
+    },
+    handleShowPopup(props, context) {
+      this.$eventHub.$emit('mis-portal:create', this.path, {
+        body: props.body || this.body,
+        data: props.data || context,
+        actionType: props.actionType,
+        visible: true,
       });
     },
   },
 };
 </script>
-<style lang="scss">
-.el-alert__content {
-  width: 100%;
-}
-.umis-component__not-find {
-  width: 100%;
-  background-color: white;
-  font-size: 14px;
-  text-align: left;
-  color: #606266;
-  overflow-x: scroll;
-}
-</style>

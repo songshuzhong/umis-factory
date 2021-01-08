@@ -40,10 +40,9 @@ export default {
       type: [Array, Object],
       required: false,
     },
-  },
-  computed: {
-    path() {
-      return this.$route.path;
+    path: {
+      type: String,
+      required: true,
     },
   },
   mixins: [initApi, initData, derivedProp],

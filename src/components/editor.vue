@@ -1,9 +1,9 @@
 <template>
-  <div class="umis-editor-container">
+  <div class="umis-editor__container">
     <transition name="el-zoom-in-center">
       <el-alert
         v-if="showErrorBoundary"
-        class="monaco-editor__error-info"
+        class="umis-editor__container__error-info"
         :title="errorInfo"
         type="error"
         show-icon
@@ -12,11 +12,11 @@
     </transition>
     <div ref="editor" class="monaco-editor" />
     <transition name="el-zoom-in-bottom">
-      <div v-if="!showErrorBoundary" class="umis-editor-tools">
-        <el-button type="primary" plain @click="onSave">
+      <div v-if="!showErrorBoundary" class="umis-editor__container__tools">
+        <el-button type="primary" @click="onSave">
           保存到本地
         </el-button>
-        <el-button type="primary" plain @click="onSaveRemote">
+        <el-button type="primary" @click="onSaveRemote">
           保存到远程
         </el-button>
       </div>
@@ -26,8 +26,10 @@
 <script>
 import { ElButton, ElAlert } from 'element-plus';
 
+import monaco from './mixin/monaco';
+
 export default {
-  name: 'MisMonaco',
+  name: 'MisEditor',
   components: {
     ElButton,
     ElAlert,
@@ -36,30 +38,18 @@ export default {
     return {
       errorInfo: '',
       schema: {},
-      showErrorBoundary: false,
       pageInfo: {},
+      showErrorBoundary: false,
     };
   },
-  created() {
-    this.onFormatSchema();
-  },
+  mixins: [monaco],
   mounted() {
     const { pageSchema, pageInfo } = window.UMIS;
     this.pageInfo = pageInfo;
     this.editor = window.monaco.editor.create(this.$refs.editor, {
-      fontSize: '14px',
+      ...this.defaultConfig,
       language: 'json',
-      autoIndent: true,
-      formatOnType: true,
-      formatOnPaste: true,
-      selectOnLineNumbers: true,
-      scrollBeyondLastLine: false,
-      folding: true,
       theme: 'vs-dark',
-      automaticLayout: true,
-      minimap: {
-        enabled: false,
-      },
     });
     this.updateSchema(pageSchema);
   },
@@ -70,13 +60,7 @@ export default {
         ...pageSchema,
       };
       this.editor.setValue(JSON.stringify(this.schema));
-      this.onFormatSchema();
-    },
-    onFormatSchema() {
-      const timer = setTimeout(() => {
-        this.editor.getAction(['editor.action.formatDocument']).run();
-        clearTimeout(timer);
-      }, 100);
+      this.handleFormatSchema(this.editor);
     },
     onSaveRemote() {
       this.onSave().then(pageSchema => {
@@ -104,7 +88,7 @@ export default {
           const json = this.editor.getValue();
           const schema = JSON.parse(json);
           this.$eventHub.$emit('mis-schema:change', schema);
-          this.onFormatSchema();
+          this.handleFormatSchema(this.editor);
           this.$message({
             message: '保存成功',
             showClose: true,
@@ -128,30 +112,3 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-.monaco-editor {
-  width: 100%;
-  height: calc(100vh - 110px);
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  text-align: left;
-}
-
-.umis-editor-container {
-  width: 100%;
-  margin: 0 auto;
-  background-color: #282a36 !important;
-}
-.umis-editor-tools {
-  height: 50px;
-  padding: 0 20px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-.monaco-editor__error-info {
-  line-height: 12px;
-  text-align: left;
-}
-</style>
