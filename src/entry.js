@@ -17,21 +17,22 @@ import {
 
 import './assets/styles/index.scss';
 
-const requireComponent = require.context('./components', true, /[\w-]+\.app$/);
+const requireComponent = require.context('./components', true, /[\w-]+\.vue$/);
 
 export default {
   install(app, options) {
-    const misComponents = [];
+    const misNames = [];
 
     requireComponent.keys().forEach(filePath => {
       const componentConfig = requireComponent(filePath);
       let componentName = filePath.replace(/(.*\/)*([^.]+).*/gi, '$2');
-      misComponents.push(`mis-${componentName}`);
+      misNames.push(`mis-${componentName}`);
       componentName = componentName
         .split('-')
         .map(kebab => kebab.charAt(0).toUpperCase() + kebab.slice(1))
         .join('');
-
+      console.log(`Mis${componentName}`,
+          componentConfig.default || componentConfig);
       app.component(
         `Mis${componentName}`,
         componentConfig.default || componentConfig
@@ -39,7 +40,7 @@ export default {
     });
     app.use(ElLoading);
     app.config.globalProperties.$eventHub = new Eventhub();
-    app.config.globalProperties.$misComponents = misComponents;
+    app.config.globalProperties.$misComponents = misNames;
     app.config.globalProperties.$umisConfig = overwrite(options);
     app.config.globalProperties.$onExpressionEval = onExpressionEval;
     app.config.globalProperties.$getRenderedTpl = getRenderedTpl;

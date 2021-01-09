@@ -3,11 +3,10 @@
     <template v-if="title" slot="title">
       {{ title }}
     </template>
-    <template v-for="(item, index) in body">
+    <template v-for="(item, index) in body" :key="index">
       <mis-component
         :path="`${path}/${index}/${item.renderer}`"
         :mis-name="item.renderer"
-        :key="index"
         :name="item.name"
         :props="item"
         :header="getHeader(item)"

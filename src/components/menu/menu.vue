@@ -18,11 +18,10 @@
         :path="`${path}/${title.renderer}`"
       />
     </template>
-    <template v-for="(item, index) in body">
+    <template v-for="(item, index) in body" :key="index">
       <mis-component
         :path="`${path}/${index}/${item.renderer}`"
         :mis-name="item.renderer"
-        :key="index"
         :name="item.name"
         :body="item.body"
         :props="item"

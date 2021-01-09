@@ -5,10 +5,9 @@
       <template
         v-if="Object.prototype.toString.call(body) === '[object Array]'"
       >
-        <template v-for="(child, index) in body">
+        <template v-for="(child, index) in body" :key="`${path}/${index}/${child.renderer}`">
           <mis-component
             :mis-name="child.renderer"
-            :key="`${path}/${index}/${child.renderer}`"
             :path="`${path}/${index}/${child.renderer}`"
             :header="getHeader(child)"
             :body="getBody(child)"

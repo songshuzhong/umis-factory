@@ -1,10 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const { VueLoaderPlugin } = require('vue-loader')
-const StyleLintPlugin = require('stylelint-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const externalDependencies = require('./externals');
 
@@ -20,15 +17,6 @@ module.exports = {
   externals: externalDependencies,
   module: {
     rules: [
-      /*{
-        enforce: 'pre',
-        test: /\.(js|vue)$/,
-        loader: 'eslint-loader',
-        exclude: /node_modules/,
-        options: {
-          fix: true,
-        },
-      },*/
       {
         test: /\.(vue)$/,
         loader: 'vue-loader',
@@ -94,9 +82,6 @@ module.exports = {
     },
   },
   plugins: [
-    /*new StyleLintPlugin({
-      files: ['src/!**!/!*.{vue,htm,html,css,scss}'],
-    }),*/
     new MiniCssExtractPlugin({
       filename: 'css/index.css',
     }),
@@ -111,33 +96,4 @@ module.exports = {
       logLevel: 'info',
     }),
   ],
-  optimization: {
-    nodeEnv: false, //prevent webpack from injecting process var
-    flagIncludedChunks: true,
-    sideEffects: true,
-    usedExports: true,
-    concatenateModules: true,
-    splitChunks: {
-      hidePathInfo: true,
-      minSize: 30000,
-      maxAsyncRequests: 5,
-      maxInitialRequests: 3,
-    },
-    noEmitOnErrors: true,
-    checkWasmTypes: true,
-    minimizer: [
-      new UglifyJsPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: true, // set to true if you want JS source maps
-      }),
-      new OptimizeCSSAssetsPlugin({
-        cssProcessor: require('cssnano'),
-        cssProcessorPluginOptions: {
-          preset: ['default', { discardComments: { removeAll: true } }],
-        },
-        canPrint: true,
-      }),
-    ],
-  },
 };

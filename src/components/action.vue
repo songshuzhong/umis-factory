@@ -64,10 +64,9 @@
     </el-button>
   </el-badge>
   <el-button-group v-else-if="actions" v-loading="iApiLoading">
-    <template v-for="(item, index) in actions">
+    <template v-for="(item, index) in actions" :key="`${path}/${index}`">
       <el-button
         v-bind="item"
-        :key="`${path}/${index}`"
         :index="index"
         :disabled="iApiLoading"
         @click="onClick"

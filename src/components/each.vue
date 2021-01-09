@@ -1,9 +1,8 @@
 <template>
   <fragment>
-    <template v-for="(item, index) in data">
+    <template v-for="(item, index) in data" :key="`${path}/${index}/${body.renderer}`">
       <mis-component
         :mis-name="body.renderer"
-        :key="`${path}/${index}/${body.renderer}`"
         :path="`${path}/${index}/${body.renderer}`"
         :props="getFattingProps(body)"
         :header="getHeader(body)"

@@ -5,7 +5,6 @@
         <mis-component
           :mis-name="child.renderer"
           :path="`${path}/${index}/${child.renderer}`"
-          :path="`${path}/${index}/${child.renderer}`"
           :props="getFattingProps(child)"
           :header="getHeader(child)"
           :body="getBody(child)"

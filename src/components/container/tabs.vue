@@ -34,10 +34,9 @@
           />
         </template>
         <template v-else>
-          <template v-for="(child, index) in item.body">
+          <template v-for="(child, index) in item.body" :key="`${path}/${index}/${child.renderer}`">
             <mis-component
               :mis-name="child.renderer"
-              :key="`${path}/${index}/${child.renderer}`"
               :path="`${path}/${index}/${child.renderer}`"
               :props="getFattingProps(child)"
               :header="getHeader(child)"

@@ -20,10 +20,9 @@
       </template>
     </el-steps>
     <div>
-      <template v-for="(child, index) in body">
+      <template v-for="(child, index) in body" :key="`${path}/${index}/${child.renderer}`">
         <mis-component
           :mis-name="child.renderer"
-          :key="`${path}/${index}/${child.renderer}`"
           :path="`${path}/${index}/${child.renderer}`"
           :hidden-on="getHiddenOn(child, index)"
           :props="getFattingProps(child)"
@@ -32,9 +31,8 @@
       </template>
     </div>
     <div class="el-card__footer">
-      <template v-for="(item, index) in footer">
+      <template v-for="(item, index) in footer" :key="`${path}/${index}/${item.renderer}`">
         <mis-component
-          :key="`${path}/${index}/${item.renderer}`"
           :path="`${path}/${index}/${item.renderer}`"
           :mis-name="item.renderer"
           :name="item.name"

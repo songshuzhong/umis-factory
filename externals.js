@@ -1,5 +1,6 @@
 module.exports = {
   qs: 'qs',
+  vue: 'vue',
   xlsx: 'xlsx',
   axios: 'axios',
   echarts: 'echarts',
@@ -27,10 +28,4 @@ module.exports = {
   'vue-element-resize-detector': 'vue-element-resize-detector',
   'lodash.clonedeep': 'lodash.clonedeep',
   'lodash.template': 'lodash.template',
-  vue: {
-    root: 'Vue',
-    commonjs: 'vue',
-    commonjs2: 'vue',
-    amd: 'vue',
-  },
 };

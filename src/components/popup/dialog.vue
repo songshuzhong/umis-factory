@@ -26,10 +26,9 @@
         />
       </template>
       <template v-else>
-        <template v-for="(item, index) in body">
+        <template v-for="(item, index) in body" :key="`${path}/${index}/${item.renderer}`">
           <mis-component
             :mis-name="item.renderer"
-            :key="`${path}/${index}/${item.renderer}`"
             :path="`${path}/${index}/${item.renderer}`"
             :header="getHeader(item)"
             :body="getBody(item)"
@@ -44,11 +43,10 @@
       <template
         v-if="Object.prototype.toString.call(footer) === '[object Array]'"
       >
-        <template v-for="(item, index) in footer">
+        <template v-for="(item, index) in footer" :key="`${path}/${index}/${item.renderer}`">
           <mis-component
-            :mis-name="item.renderer"
-            :key="`${path}/${index}/${item.renderer}`"
             :path="`${path}/${index}/${item.renderer}`"
+            :mis-name="item.renderer"
             :header="getHeader(item)"
             :body="getBody(item)"
             :footer="getFooter(item)"

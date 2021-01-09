@@ -34,10 +34,9 @@
     </template>
     <el-form-item>
       <div class="umis-form__actions">
-        <template v-for="(item, index) in activeControls">
+        <template v-for="(item, index) in activeControls" :key="`${path}/${index}/${item.renderer}`">
           <mis-component
             :ref="item.actionType"
-            :key="`${path}/${index}/${item.renderer}`"
             :path="`${path}/${index}/${item.renderer}`"
             :mis-name="item.renderer"
             :header="getHeader(item)"

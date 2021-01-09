@@ -32,12 +32,10 @@
       <template
         v-if="Object.prototype.toString.call(body) === '[object Array]'"
       >
-        <template v-for="(item, index) in body">
+        <template v-for="(item, index) in body" :key="index">
           <mis-component
             :mis-name="item.renderer"
-            :key="index"
             :path="`${path}/${index}/${item.renderer}`"
-            :footer="item.footer"
             :action="onClose"
             :props="getFattingProps(item)"
             :header="getHeader(item)"
@@ -51,7 +49,6 @@
         v-else
         :mis-name="body.renderer"
         :path="`${path}/${body.renderer}`"
-        :footer="body.footer"
         :action="onClose"
         :props="getFattingProps(body)"
         :header="getHeader(body)"
@@ -61,10 +58,9 @@
       />
     </el-main>
     <div v-if="footer" class="umis-popup__container__footer">
-      <template v-for="(item, index) in footer">
+      <template v-for="(item, index) in footer" :key="`${path}/${index}/${item.renderer}`">
         <mis-component
           :mis-name="item.renderer"
-          :key="`${path}/${index}/${item.renderer}`"
           :path="`${path}/${index}/${item.renderer}`"
           :footer="item.footer"
           :props="getFattingProps(item)"
