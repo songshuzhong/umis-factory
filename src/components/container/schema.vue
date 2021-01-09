@@ -23,11 +23,10 @@
       />
     </template>
     <transition-group v-if="canSchemaUpdate" name="el-fade-in-linear" tag="div">
-      <template v-for="({ actionType, body, data, visible }, path) in popMap">
+      <template v-for="({ actionType, body, data, visible }, path) in popMap" :key="path">
         <component
           v-bind="body"
           :path="path"
-          :key="path"
           :is="actionType"
           :visible="visible"
           :init-data="data"

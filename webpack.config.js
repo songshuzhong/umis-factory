@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const { VueLoaderPlugin } = require('vue-loader')
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
@@ -17,22 +17,7 @@ module.exports = {
     libraryTarget: 'commonjs2',
     library: 'UmisFactory',
   },
-  externals: {
-    qs: 'qs',
-    axios: 'axios',
-    'element-ui': 'element-ui',
-    'element-plus': 'element-plus',
-    'deep-equal': 'deep-equal',
-    'copy-to-clipboard': 'copy-to-clipboard',
-    'lodash.clonedeep': 'lodash.clonedeep',
-    'lodash.template': 'lodash.template',
-    vue: {
-      root: 'Vue',
-      commonjs: 'vue',
-      commonjs2: 'vue',
-      amd: 'vue',
-    },
-  },
+  externals: externalDependencies,
   module: {
     rules: [
       /*{

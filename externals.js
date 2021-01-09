@@ -20,7 +20,7 @@ module.exports = {
   'echarts/lib/component/visualMap': 'echarts/lib/component/visualMap',
   'echarts/lib/component/dataset': 'echarts/lib/component/dataset',
   'echarts/lib/component/markArea': 'echarts/lib/component/markArea',
-  'element-ui': 'element-ui',
+  'element-plus': 'element-plus',
   'vue-echarts': 'vue-echarts',
   'deep-equal': 'deep-equal',
   'copy-to-clipboard': 'copy-to-clipboard',

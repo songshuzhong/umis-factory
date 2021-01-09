@@ -18,30 +18,30 @@
     </div>
     <el-radio-group v-model="checked" class="umis-setting__api-editor">
       <div
-        v-for="(value, key) in domains"
+        v-for="(value, name) in domains"
         class="umis-setting__api-editor__item"
       >
         <el-link
           :underline="false"
           class="umis-setting__api-editor__delete"
           icon="el-icon-delete"
-          @click="onDelete(key)"
+          @click="onDelete(name)"
         />
         <el-input
           class="umis-setting__api-editor__label"
-          :key="key"
-          v-model="key"
+          :key="name"
+          v-model="domains[name]"
         />
         <el-input
           class="umis-setting__api-editor__value"
-          :key="key"
+          :key="name"
           placeholder="请输入域名"
-          v-model="domains[key]"
+          v-model="domains[name]"
         />
         <el-radio
           class="umis-setting__api-editor__radio"
-          :label="key"
-          :key="key"
+          :label="name"
+          :key="name"
         >
           {{ '' }}
         </el-radio>
@@ -72,7 +72,7 @@ export default {
     ElButton,
     ElLink,
     ElInput,
-    ElTooltip
+    ElTooltip,
   },
   props: {
     value: {

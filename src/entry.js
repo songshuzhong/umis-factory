@@ -1,6 +1,5 @@
 import { ElLoading, ElMessage, ElNotification } from 'element-plus';
-import mitt from 'mitt';
-
+import Eventhub from './utils/eventhub';
 import MisSchema from './components/container/schema';
 import MisSetting from './components/setting/index';
 import { overwrite } from './utils/config';
@@ -39,7 +38,7 @@ export default {
       );
     });
     app.use(ElLoading);
-    app.config.globalProperties.$eventHub = mitt();
+    app.config.globalProperties.$eventHub = new Eventhub();
     app.config.globalProperties.$misComponents = misComponents;
     app.config.globalProperties.$umisConfig = overwrite(options);
     app.config.globalProperties.$onExpressionEval = onExpressionEval;

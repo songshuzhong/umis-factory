@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { PageHeader as ElPageHeader } from 'element-ui';
+import { ElPageHeader } from 'element-plus';
 import initData from './mixin/init-data';
 
 export default {

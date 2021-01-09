@@ -188,7 +188,7 @@ import {
   ElDropdownItem,
   ElCheckboxGroup,
   ElCheckbox,
-  ElDivider
+  ElDivider,
 } from 'element-plus';
 
 import initApi from './mixin/init-api';

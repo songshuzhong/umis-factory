@@ -17,11 +17,11 @@
 
 <script>
 import {
-  Card as ElCard,
-  ButtonGroup as ElButtonGroup,
-  Button as ElButton,
-  Tooltip as ElTooltip,
-} from 'element-ui';
+  ElCard,
+  ElButtonGroup,
+  ElButton,
+  ElTooltip,
+} from 'element-plus';
 import beautify from 'beautify';
 import monaco from '../mixin/monaco';
 

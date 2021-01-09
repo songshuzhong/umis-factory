@@ -26,6 +26,7 @@ import SettingApi from './api';
 import SettingStyle from './style';
 import SettingAdaptor from './adaptor';
 import SettingCreator from './creator';
+import SettingFormdata from './formdata';
 
 export default {
   name: 'UmisSettings',

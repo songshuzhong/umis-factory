@@ -1,7 +1,26 @@
 module.exports = {
   env: {
-    test: {
-      presets: ['es2015', '@babel/preset-env'],
+    utils: {
+      presets: [
+        [
+          '@babel/env',
+          {
+            loose: true,
+            modules: false,
+          },
+        ],
+      ],
+      plugins: [
+        [
+          'babel-plugin-module-resolver',
+          {
+            root: ['element-plus'],
+            alias: {
+              '@element-plus': 'element-plus/lib',
+            },
+          },
+        ],
+      ],
     },
   },
   presets: ['@babel/preset-env'],

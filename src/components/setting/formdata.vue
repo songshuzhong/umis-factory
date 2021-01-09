@@ -15,10 +15,10 @@
 </template>
 <script>
 import {
-  Card as ElCard,
-  Switch as ElSwitch,
-  Tooltip as ElTooltip,
-} from 'element-ui';
+  ElCard,
+  ElSwitch,
+  ElTooltip,
+} from 'element-plus';
 export default {
   name: 'SettingFormdata',
   components: {
