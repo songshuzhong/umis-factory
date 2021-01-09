@@ -31,8 +31,6 @@ export default {
         .split('-')
         .map(kebab => kebab.charAt(0).toUpperCase() + kebab.slice(1))
         .join('');
-      console.log(`Mis${componentName}`,
-          componentConfig.default || componentConfig);
       app.component(
         `Mis${componentName}`,
         componentConfig.default || componentConfig
