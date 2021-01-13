@@ -3,9 +3,9 @@
     <el-button size="small" type="primary">
       点击上传
     </el-button>
-    <div slot="tip">
+    <template #tip>
       {{ tip }}
-    </div>
+    </template>
   </el-upload>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <el-menu-item-group>
-    <template v-if="title" slot="title">
+    <template v-if="title" #title>
       {{ title }}
     </template>
     <template v-for="(item, index) in body" :key="index">

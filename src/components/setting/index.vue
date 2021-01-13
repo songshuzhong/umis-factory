@@ -12,7 +12,7 @@
       :style="{ width: `${elasticWidth}px` }"
     >
       <el-popconfirm title="确定保存到数据库吗？" @confirm="handleSaveRemote">
-        <el-button slot="reference" plain size="mini" type="primary">
+        <el-button #reference plain size="mini" type="primary">
           保存
         </el-button>
       </el-popconfirm>

@@ -17,7 +17,7 @@
     :show-word-limit="showWordLimit"
     @change="onChange"
   >
-    <template v-if="append" slot="append">
+    <template v-if="append" #append>
       <mis-component
         :mis-name="append.renderer"
         :path="`${path}/${append.renderer}`"

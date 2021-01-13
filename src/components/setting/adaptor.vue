@@ -1,16 +1,18 @@
 <template>
   <el-card class="umis-setting__card-margin" shadow="hover">
-    <div slot="header" class="umis-setting__header">
-      <el-tooltip
-        content="可在代码块中根据【api】、【method】和【params】适配指定的Reponse数据"
-        placement="top-start"
-      >
-        <span>接口适配器 <i class="el-icon-info" /> </span>
-      </el-tooltip>
-      <el-button plain size="mini" type="primary" @click="onSave">
-        应用
-      </el-button>
-    </div>
+    <template #header>
+      <div class="umis-setting__header">
+        <el-tooltip
+            content="可在代码块中根据【api】、【method】和【params】适配指定的Reponse数据"
+            placement="top-start"
+        >
+          <span>接口适配器 <i class="el-icon-info" /> </span>
+        </el-tooltip>
+        <el-button plain size="mini" type="primary" @click="onSave">
+          应用
+        </el-button>
+      </div>
+    </template>
     <div ref="umisAdaptorEditor" class="umis-setting__style-editor" />
   </el-card>
 </template>

@@ -10,24 +10,26 @@
       {{ text }}
       <i class="el-icon-arrow-down el-icon--right" />
     </el-button>
-    <el-dropdown-menu slot="dropdown">
-      <el-dropdown-item
-        v-for="(item, index) in body"
-        :key="index"
-        :command="index"
-        :disabled="item.disabled"
-        :divided="item.divided"
-        :icon="item.icon"
-      >
-        <mis-component
-          v-if="actionItems.includes(item.actionType)"
-          :path="`/${path}/${index}/${item.renderer}`"
-          :mis-name="item.renderer"
-          :props="getFattingProps(item)"
-          :init-data="getInitData(data, item)"
-        />
-      </el-dropdown-item>
-    </el-dropdown-menu>
+    <template #dropdown>
+      <el-dropdown-menu>
+        <el-dropdown-item
+          v-for="(item, index) in body"
+          :key="index"
+          :command="index"
+          :disabled="item.disabled"
+          :divided="item.divided"
+          :icon="item.icon"
+        >
+          <mis-component
+            v-if="actionItems.includes(item.actionType)"
+            :path="`/${path}/${index}/${item.renderer}`"
+            :mis-name="item.renderer"
+            :props="getFattingProps(item)"
+            :init-data="getInitData(data, item)"
+          />
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </template>
   </el-dropdown>
 </template>
 

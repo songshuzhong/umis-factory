@@ -17,17 +17,19 @@
           placement="bottom-start"
         >
           <i class="el-icon-s-grid" />
-          <el-dropdown-menu slot="dropdown">
-            <el-checkbox-group v-model="dynamicColumn">
-              <template v-for="(column, index) in columns">
-                <el-dropdown-item v-if="column.name" :key="index">
-                  <el-checkbox :label="column.name">
-                    {{ column.label }}
-                  </el-checkbox>
-                </el-dropdown-item>
-              </template>
-            </el-checkbox-group>
-          </el-dropdown-menu>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-checkbox-group v-model="dynamicColumn">
+                <template v-for="(column, index) in columns">
+                  <el-dropdown-item v-if="column.name" :key="index">
+                    <el-checkbox :label="column.name">
+                      {{ column.label }}
+                    </el-checkbox>
+                  </el-dropdown-item>
+                </template>
+              </el-checkbox-group>
+            </el-dropdown-menu>
+          </template>
         </el-dropdown>
         <el-dropdown
           v-if="actions"
@@ -38,21 +40,23 @@
           placement="bottom-start"
         >
           <i class="el-icon-shopping-cart-full" />
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item
-              v-for="(item, index) in actions"
-              :key="`${path}/${index}`"
-            >
-              <mis-component
-                :path="`${path}/${index}/${item.renderer}`"
-                :mis-name="item.renderer"
-                :props="getFattingProps(item)"
-                :init-data="multipleSelection"
-                :disabled-on="`${multipleSelection.length} === 0`"
-                :action="action"
-              />
-            </el-dropdown-item>
-          </el-dropdown-menu>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item
+                v-for="(item, index) in actions"
+                :key="`${path}/${index}`"
+              >
+                <mis-component
+                  :path="`${path}/${index}/${item.renderer}`"
+                  :mis-name="item.renderer"
+                  :props="getFattingProps(item)"
+                  :init-data="multipleSelection"
+                  :disabled-on="`${multipleSelection.length} === 0`"
+                  :action="action"
+                />
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
         </el-dropdown>
         <el-button
           v-if="showExport"
@@ -77,6 +81,7 @@
       :max-height="maxHeight"
       :show-header="showHeader"
       :highlight-current-row="highlightCurrentRow"
+      style="width: 100%"
       @selection-change="handleSelectionChange"
     >
       <template v-for="(column, index) in columns">
@@ -88,11 +93,11 @@
             :prop="column.name || ''"
             :label="column.label"
             :fixed="column.fixed"
-            :width="column.width"
             :align="column.align"
           >
-            <template slot="header" slot-scope="scope">
+            <template #default="scope">
               <mis-component
+                #header
                 :path="`${path}/${index}/${column.headSlot.renderer}`"
                 :mis-name="column.headSlot.renderer"
                 :header="getHeader(column.headSlot)"
@@ -102,7 +107,7 @@
                 :props="getFattingProps(column.headSlot, scope.row)"
               />
             </template>
-            <template v-if="column.body" slot-scope="scope">
+            <template v-if="column.body" #default="scope">
               <mis-component
                 :path="`${path}/${index}/${column.body.renderer}`"
                 :mis-name="column.body.renderer"
@@ -119,9 +124,8 @@
             :path="`${path}/${index}/${column.name}`"
             :prop="column.name || ''"
             :label="column.label"
-            :width="column.width"
           >
-            <template slot-scope="scope">
+            <template #default="scope">
               <template
                 v-if="
                   Object.prototype.toString.call(column.body) ===
@@ -158,7 +162,6 @@
             :prop="column.name || ''"
             :label="column.label"
             :fixed="column.fixed"
-            :width="column.width"
             :type="column.type"
           />
         </template>

@@ -8,13 +8,17 @@
       :class="field.className"
       :rules="field.rules"
     >
-      <span v-if="field.label" slot="label" class="umis-form__field">
-        <span class="umis-form__field__label">{{ field.label }}</span>
-        <el-tooltip v-if="field.tip">
-          <i class="el-icon-info" />
-          <div slot="content" v-html="field.tip" />
-        </el-tooltip>
-      </span>
+      <template v-if="field.label" #label>
+        <span class="umis-form__field">
+          <span class="umis-form__field__label">{{ field.label }}</span>
+          <el-tooltip v-if="field.tip">
+            <i class="el-icon-info" />
+            <template #content>
+             <div v-html="field.tip" />
+            </template>
+          </el-tooltip>
+        </span>
+      </template>
       <component
         v-bind="field"
         :is="field.renderer"

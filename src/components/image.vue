@@ -8,20 +8,20 @@
         :lazy="lazy"
         :fit="fit"
       >
-        <template v-if="error" slot="error">
+        <template v-if="error" #error>
           {{ $getRenderedTpl(error) }}
         </template>
-        <template v-if="placeholder" slot="placeholder">
+        <template v-if="placeholder" #placeholder>
           {{ $getRenderedTpl(placeholder) }}
         </template>
       </el-image>
     </template>
     <template v-else>
       <el-image :src="src" :lazy="lazy" :fit="fit" :preview-src-list="previews">
-        <template v-if="error" slot="error">
+        <template v-if="error" #error>
           {{ $getRenderedTpl(error) }}
         </template>
-        <template v-if="placeholder" slot="placeholder">
+        <template v-if="placeholder" #placeholder>
           {{ $getRenderedTpl(placeholder) }}
         </template>
       </el-image>

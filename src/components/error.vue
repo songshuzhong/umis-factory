@@ -1,6 +1,6 @@
 <template>
   <el-alert type="error" class="umis-component__not-find">
-    <template slot="title">
+    <template #title>
       错误：{{ errorInfo.error }}<br />路径：{{ path }}
     </template>
     <pre>{{ errorInfo.props }}</pre>

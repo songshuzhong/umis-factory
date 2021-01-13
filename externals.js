@@ -22,7 +22,7 @@ module.exports = {
   'echarts/lib/component/dataset': 'echarts/lib/component/dataset',
   'echarts/lib/component/markArea': 'echarts/lib/component/markArea',
   'element-plus': 'element-plus',
-  'vue-echarts': 'vue-echarts',
+  'vue3-echarts': 'vue3-echarts',
   'deep-equal': 'deep-equal',
   'copy-to-clipboard': 'copy-to-clipboard',
   'vue-element-resize-detector': 'vue-element-resize-detector',

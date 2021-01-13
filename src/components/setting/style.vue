@@ -1,16 +1,18 @@
 <template>
   <el-card class="umis-setting__card-margin" shadow="hover">
-    <div slot="header" class="umis-setting__header">
-      <el-tooltip
-        content="应用后的样式将全局作用于当前工作区"
-        placement="top-start"
-      >
-        <span>全局样式 <i class="el-icon-info" /> </span>
-      </el-tooltip>
-      <el-button plain size="mini" type="primary" @click="onSave">
-        应用
-      </el-button>
-    </div>
+    <template #header>
+      <div class="umis-setting__header">
+        <el-tooltip
+            content="应用后的样式将全局作用于当前工作区"
+            placement="top-start"
+        >
+          <span>全局样式 <i class="el-icon-info" /> </span>
+        </el-tooltip>
+        <el-button plain size="mini" type="primary" @click="onSave">
+          应用
+        </el-button>
+      </div>
+    </template>
     <div ref="umisStyleEditor" class="umis-setting__style-editor" />
   </el-card>
 </template>

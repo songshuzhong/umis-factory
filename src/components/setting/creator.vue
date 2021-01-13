@@ -1,11 +1,13 @@
 <template>
   <el-card class="umis-setting__card-margin" shadow="hover">
-    <div slot="header" class="umis-setting__header">
-      <span>新建项目|页面</span>
-      <el-button plain size="mini" type="primary" @click="creatorDialog = true">
-        新建
-      </el-button>
-    </div>
+    <template #header>
+      <div class="umis-setting__header">
+        <span>新建项目|页面</span>
+        <el-button plain size="mini" type="primary" @click="creatorDialog = true">
+          新建
+        </el-button>
+      </div>
+    </template>
     <el-table :data="projectList">
       <el-table-column prop="projectName" label=" 项目名" width="140">
       </el-table-column>
@@ -41,10 +43,12 @@
           <el-input v-model="data.desc" type="textarea" />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="creatorDialog = false">取 消</el-button>
-        <el-button type="primary" @click="handleCreate">确 定</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="creatorDialog = false">取 消</el-button>
+          <el-button type="primary" @click="handleCreate">确 定</el-button>
+        </div>
+      </template>
     </el-dialog>
   </el-card>
 </template>

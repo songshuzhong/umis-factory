@@ -1,18 +1,16 @@
 <template>
-  <fragment>
-    <template v-for="(item, index) in data" :key="`${path}/${index}/${body.renderer}`">
-      <mis-component
-        :mis-name="body.renderer"
-        :path="`${path}/${index}/${body.renderer}`"
-        :props="getFattingProps(body)"
-        :header="getHeader(body)"
-        :body="getBody(body)"
-        :footer="getFooter(body)"
-        v-bind="getFattingProps(body)"
-        :init-data="item"
-      />
-    </template>
-  </fragment>
+  <template v-for="(item, index) in data" :key="`${path}/${index}/${body.renderer}`">
+    <mis-component
+      :mis-name="body.renderer"
+      :path="`${path}/${index}/${body.renderer}`"
+      :props="getFattingProps(body)"
+      :header="getHeader(body)"
+      :body="getBody(body)"
+      :footer="getFooter(body)"
+      v-bind="getFattingProps(body)"
+      :init-data="item"
+    />
+  </template>
 </template>
 
 <script>

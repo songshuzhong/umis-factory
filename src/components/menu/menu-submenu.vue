@@ -8,9 +8,9 @@
     :disabled="disabled"
     :popper-append-to-body="appendToBody"
   >
-    <template v-if="title" slot="title">
+    <template v-if="title" #title>
       <i :class="icon" />
-      <span slot="title">{{ title }}</span>
+      <span>{{ title }}</span>
     </template>
     <template v-for="(item, index) in body" :key="index">
       <mis-component

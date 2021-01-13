@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="iSchemaLoading">
+  <div v-loading="iSchemaLoading" class="umis-schema__container">
     <template
       v-if="Object.prototype.toString.call(iSchema) === '[object Array]'"
     >
@@ -22,18 +22,20 @@
         :path="`${path}/${iSchema.renderer}`"
       />
     </template>
-    <transition-group v-if="canSchemaUpdate" name="el-fade-in-linear" tag="div">
-      <template v-for="({ actionType, body, data, visible }, path) in popMap" :key="path">
-        <component
-          v-bind="body"
-          :path="path"
-          :is="actionType"
-          :visible="visible"
-          :init-data="data"
-          :on-popup-invisible="destroyProtal"
-        />
-      </template>
-    </transition-group>
+    <div>
+      <transition-group v-if="canSchemaUpdate" name="el-fade-in-linear" tag="div">
+        <template v-for="({ actionType, body, data, visible }, path) in popMap" :key="path">
+          <component
+              v-bind="body"
+              :path="path"
+              :is="actionType"
+              :visible="visible"
+              :init-data="data"
+              :on-popup-invisible="destroyProtal"
+          />
+        </template>
+      </transition-group>
+    </div>
   </div>
 </template>
 <script>
@@ -50,7 +52,7 @@ export default {
     canSchemaUpdate: {
       type: Boolean,
       required: false,
-      default: true,
+      default: false,
     },
     initSchema: {
       type: Object,
@@ -102,7 +104,8 @@ export default {
     },
     destroyProtal(path) {
       const popMap = this.popMap;
-      delete popMap[path];
+       // delete popMap[path];
+      // popMap[path].visible = false
       this.popMap = clonedeep(popMap);
     },
     getPageSchema() {

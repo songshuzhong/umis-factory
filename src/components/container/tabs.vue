@@ -15,10 +15,10 @@
       :lazy="true"
       v-bind="getFattingProps(item)"
     >
-      <span slot="label">
+      <template #label>
         <i v-if="item.icon" :class="item.icon" />
         {{ item.label }}
-      </span>
+      </template>
       <template v-if="isPanelAlive(item)">
         <template
           v-if="Object.prototype.toString.call(item.body) === '[object Object]'"

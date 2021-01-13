@@ -1,6 +1,6 @@
 <template>
   <el-drawer
-    class="umis-popup__container"
+    v-model="iVisible"
     :appendToBody="appendToBody"
     :closeOnPressEscape="closeOnPressEscape"
     :custom-class="classname"
@@ -9,13 +9,14 @@
     :direction="direction"
     :showClose="showClose"
     :size="size"
-    :visible.sync="iVisible"
     :wrapperClosable="wrapperClosable"
     :withHeader="withHeader"
     destroy-on-close
+    custom-class="umis-popup__container"
+    class="umis-popup__container"
     @close="onClose"
   >
-    <template v-if="header" slot="title">
+    <template v-if="header" #title>
       <mis-component
         :mis-name="header.renderer"
         :path="`${path}/${header.renderer}`"
@@ -183,7 +184,7 @@ export default {
   methods: {
     onClose() {
       this.iVisible = false;
-      this.onPopupInvisible && this.onPopupInvisible(this.path);
+      // this.onPopupInvisible && this.onPopupInvisible(this.path);
     },
   },
 };

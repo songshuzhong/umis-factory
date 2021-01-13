@@ -5,7 +5,7 @@
     :class="classname"
     @click.native="handleClick"
   >
-    <template v-if="header" slot="header">
+    <template v-if="header" #header>
       <template
         v-if="Object.prototype.toString.call(header) === '[object Array]'"
       >

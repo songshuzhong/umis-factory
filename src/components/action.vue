@@ -11,20 +11,21 @@
     :title="confirmTitle"
     @confirm="onClick"
   >
-    <el-button
-      v-loading="iApiLoading"
-      slot="reference"
-      :class="classname"
-      :size="size"
-      :type="type"
-      :plain="plain"
-      :round="round"
-      :circle="circle"
-      :icon="icon"
-      :disabled="iApiLoading"
-    >
-      {{ renderText }}
-    </el-button>
+    <template #reference>
+      <el-button
+        v-loading="iApiLoading"
+        :class="classname"
+        :size="size"
+        :type="type"
+        :plain="plain"
+        :round="round"
+        :circle="circle"
+        :icon="icon"
+        :disabled="iApiLoading"
+      >
+        {{ renderText }}
+      </el-button>
+    </template>
   </el-popconfirm>
   <el-tooltip
     v-else-if="tipContent"

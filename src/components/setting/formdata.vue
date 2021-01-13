@@ -1,10 +1,12 @@
 <template>
   <el-card class="umis-setting__card-margin" shadow="hover">
-    <div slot="header">
-      <el-tooltip content="全局数据提交类型" placement="top-start">
-        <span>表单类型 <i class="el-icon-info" /> </span>
-      </el-tooltip>
-    </div>
+    <template #header>
+      <div>
+        <el-tooltip content="全局数据提交类型" placement="top-start">
+          <span>表单类型 <i class="el-icon-info" /> </span>
+        </el-tooltip>
+      </div>
+    </template>
     <el-switch
       v-model="isFormData"
       active-text="formdata"

@@ -1,8 +1,8 @@
 <template>
-  <v-chart v-loading="iApiLoading" :options="data" @click="handleClick" />
+  <v-chart v-loading="iApiLoading" :id="path" :option="data" :style="{height: `${defaultHeight}px`}" @click="handleClick" />
 </template>
 <script>
-import VChart from 'vue-echarts';
+import { VEcharts as VChart} from 'vue3-echarts';
 import 'echarts/lib/chart/bar';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/chart/pie';
@@ -46,7 +46,15 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      defaultHeight: 0
+    };
+  },
   mixins: [derivedProp, initData, initApi],
+  mounted() {
+    this.defaultHeight = document.getElementById(this.path).parentNode.offsetWidth * 0.618;
+  },
   methods: {
     handleClick(data) {
       const { $vars, encode, event, dimensionNames, ...other } = data;

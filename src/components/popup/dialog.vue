@@ -1,8 +1,7 @@
 <template>
   <el-dialog
+    v-model="iVisible"
     v-bind="$props"
-    class="umis-popup__container"
-    :visible.sync="iVisible"
     :title="renderTitle"
     :width="width"
     :fullscreen="fullscreen"
@@ -12,6 +11,7 @@
     :show-close="showClose"
     :appendToBody="appendToBody"
     :destroy-on-close="destroyOnClose"
+    custom-class="umis-popup__container"
     @close="onClose"
   >
     <el-main class="umis-popup__container__body">
@@ -185,7 +185,7 @@ export default {
   methods: {
     onClose() {
       this.iVisible = false;
-      this.onPopupInvisible && this.onPopupInvisible(this.path);
+      // this.onPopupInvisible && this.onPopupInvisible(this.path);
     },
   },
 };

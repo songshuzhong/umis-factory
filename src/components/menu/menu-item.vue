@@ -1,10 +1,7 @@
 <template>
   <el-menu-item :name="name" :index="name">
-    <template v-if="icon">
-      <i :class="icon" />
-      <span slot="title">{{ title }}</span>
-    </template>
-    <template v-else>
+    <i v-if="icon" :class="icon" />
+    <template #title>
       {{ title }}
     </template>
   </el-menu-item>

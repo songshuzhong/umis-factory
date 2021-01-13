@@ -1,21 +1,23 @@
 <template>
   <el-card class="umis-setting__card-margin" shadow="hover">
-    <div slot="header" class="umis-setting__header">
-      <el-tooltip
-        content="选中的域名将作为接口请求的路径前缀"
-        placement="top-start"
-      >
-        <span>域名选择器 <i class="el-icon-info" /> </span>
-      </el-tooltip>
-      <el-button-group>
-        <el-button plain size="mini" type="primary" @click="onAdd">
-          添加
-        </el-button>
-        <el-button plain size="mini" type="primary" @click="onSave">
-          应用
-        </el-button>
-      </el-button-group>
-    </div>
+    <template #header>
+      <div class="umis-setting__header">
+        <el-tooltip
+            content="选中的域名将作为接口请求的路径前缀"
+            placement="top-start"
+        >
+          <span>域名选择器 <i class="el-icon-info" /> </span>
+        </el-tooltip>
+        <el-button-group>
+          <el-button plain size="mini" type="primary" @click="onAdd">
+            添加
+          </el-button>
+          <el-button plain size="mini" type="primary" @click="onSave">
+            应用
+          </el-button>
+        </el-button-group>
+      </div>
+    </template>
     <el-radio-group v-model="checked" class="umis-setting__api-editor">
       <div
         v-for="(value, name) in domains"
