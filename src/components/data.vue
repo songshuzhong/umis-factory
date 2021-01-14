@@ -1,7 +1,5 @@
 <template>
-  <pre class="umis-data__debug">
-    {{ data }}
-  </pre>
+  <pre class="umis-data__debug">{{ data }}</pre>
 </template>
 
 <script>
@@ -12,10 +10,6 @@ export default {
   props: {
     path: {
       type: String,
-      required: true,
-    },
-    data: {
-      type: Object,
       required: true,
     },
   },

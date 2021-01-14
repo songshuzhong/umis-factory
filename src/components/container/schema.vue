@@ -22,19 +22,17 @@
         :path="`${path}/${iSchema.renderer}`"
       />
     </template>
-    <div>
-      <transition-group v-if="canSchemaUpdate" name="el-fade-in-linear" tag="div">
-        <template v-for="({ actionType, body, data, visible }, path) in popMap" :key="path">
-          <component
-              v-bind="body"
-              :path="path"
-              :is="actionType"
-              :visible="visible"
-              :init-data="data"
-              :on-popup-invisible="destroyProtal"
-          />
-        </template>
-      </transition-group>
+    <div v-if="canSchemaUpdate" name="el-fade-in-linear" tag="div">
+      <template v-for="({ actionType, body, data, visible }, path) in popMap" :key="path">
+        <component
+          v-bind="body"
+          :path="path"
+          :is="actionType"
+          :visible="visible"
+          :init-data="data"
+          :on-popup-invisible="destroyProtal"
+        />
+      </template>
     </div>
   </div>
 </template>
@@ -104,7 +102,7 @@ export default {
     },
     destroyProtal(path) {
       const popMap = this.popMap;
-       // delete popMap[path];
+      delete popMap[path];
       // popMap[path].visible = false
       this.popMap = clonedeep(popMap);
     },

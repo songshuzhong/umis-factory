@@ -184,7 +184,7 @@ export default {
   methods: {
     onClose() {
       this.iVisible = false;
-      // this.onPopupInvisible && this.onPopupInvisible(this.path);
+      this.onPopupInvisible && this.onPopupInvisible(this.path);
     },
   },
 };

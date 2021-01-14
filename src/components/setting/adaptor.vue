@@ -3,8 +3,8 @@
     <template #header>
       <div class="umis-setting__header">
         <el-tooltip
-            content="可在代码块中根据【api】、【method】和【params】适配指定的Reponse数据"
-            placement="top-start"
+          content="可在代码块中根据【api】、【method】和【params】适配指定的Reponse数据"
+          placement="top-start"
         >
           <span>接口适配器 <i class="el-icon-info" /> </span>
         </el-tooltip>

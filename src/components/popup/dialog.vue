@@ -134,7 +134,7 @@ export default {
     destroyOnClose: {
       type: Boolean,
       required: false,
-      default: true,
+      default: false,
     },
     header: {
       type: [Array, Object],
@@ -185,7 +185,7 @@ export default {
   methods: {
     onClose() {
       this.iVisible = false;
-      // this.onPopupInvisible && this.onPopupInvisible(this.path);
+      this.onPopupInvisible && this.onPopupInvisible(this.path);
     },
   },
 };

@@ -20,12 +20,11 @@
   </div>
 </template>
 <script>
-import { ElButton, ElCard, ElSwitch, ElPopconfirm } from 'element-plus';
+import { ElButton, ElPopconfirm } from 'element-plus';
 
 import SettingApi from './api';
 import SettingStyle from './style';
 import SettingAdaptor from './adaptor';
-import SettingCreator from './creator';
 import SettingFormdata from './formdata';
 
 export default {
@@ -37,7 +36,6 @@ export default {
     SettingApi,
     SettingStyle,
     SettingAdaptor,
-    SettingCreator,
   },
   data() {
     const {
@@ -47,7 +45,7 @@ export default {
       script,
       domains,
       adaptor,
-    } = this.$umisConfig;
+    } = this.$umisConfig || window.umisConfig;
 
     return {
       isApiChanged,
@@ -60,10 +58,8 @@ export default {
       fixed: true,
     };
   },
-  created() {
-    this.$eventHub.$on('mis-config:update', this.updateUmisConfig);
-  },
   mounted() {
+    this.$eventHub.$on('mis-config:update', this.updateUmisConfig);
     this.body = document.querySelector('.umis-setting__container__body');
     this.container = document.querySelector('.umis-layout__container__main');
     this.container.addEventListener('scroll', this.handleScrolling);

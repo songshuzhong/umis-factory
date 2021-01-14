@@ -3,8 +3,8 @@
     <template #header>
       <div class="umis-setting__header">
         <el-tooltip
-            content="应用后的样式将全局作用于当前工作区"
-            placement="top-start"
+          content="应用后的样式将全局作用于当前工作区"
+          placement="top-start"
         >
           <span>全局样式 <i class="el-icon-info" /> </span>
         </el-tooltip>

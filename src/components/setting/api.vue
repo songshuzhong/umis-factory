@@ -3,8 +3,8 @@
     <template #header>
       <div class="umis-setting__header">
         <el-tooltip
-            content="选中的域名将作为接口请求的路径前缀"
-            placement="top-start"
+          content="选中的域名将作为接口请求的路径前缀"
+          placement="top-start"
         >
           <span>域名选择器 <i class="el-icon-info" /> </span>
         </el-tooltip>
