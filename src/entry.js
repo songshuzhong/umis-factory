@@ -1,4 +1,6 @@
 import { ElLoading, ElMessage, ElNotification } from 'element-plus';
+import resize from 'vue-element-resize-detector';
+
 import Eventhub from './utils/eventhub';
 import MisSchema from './components/container/schema';
 import MisSetting from './components/setting/index';
@@ -36,6 +38,7 @@ export default {
         componentConfig.default || componentConfig
       );
     });
+    app.use(resize);
     app.use(ElLoading);
     app.config.globalProperties.$eventHub = new Eventhub();
     app.config.globalProperties.$misComponents = misNames;

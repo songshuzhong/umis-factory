@@ -99,6 +99,7 @@
     "stylelint-webpack-plugin": "^2.1.1",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "vue": "^3.0.0",
+    "vue-element-resize-detector": "^1.0.6",
     "vue-loader": "^16.1.2",
     "vue-template-compiler": "^2.6.12",
     "vue-template-es2015-compiler": "^1.9.1",
