@@ -22,7 +22,7 @@
         :path="`${path}/${iSchema.renderer}`"
       />
     </template>
-    <div v-if="canSchemaUpdate" name="el-fade-in-linear" tag="div">
+    <div v-if="canSchemaUpdate">
       <template v-for="({ actionType, body, data, visible }, path) in popMap" :key="path">
         <component
           v-bind="body"

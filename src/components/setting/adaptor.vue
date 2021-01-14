@@ -56,13 +56,16 @@ export default {
       },
     },
   },
-  data() {
+  setup(props) {
     return {
-      schema: '',
+      data: {
+        schema: props.schema,
+      }
     };
   },
   mixins: [monaco],
   mounted() {
+    console.log('innter', this.schema);
     window.requestIdleCallback(this.createMonacoEditor);
   },
   methods: {

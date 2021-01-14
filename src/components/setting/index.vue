@@ -12,14 +12,17 @@
       :style="{ width: `${elasticWidth}px` }"
     >
       <el-popconfirm title="确定保存到数据库吗？" @confirm="handleSaveRemote">
-        <el-button #reference plain size="mini" type="primary">
-          保存
-        </el-button>
+        <template #reference>
+          <el-button plain size="mini" type="primary">
+            保存
+          </el-button>
+        </template>
       </el-popconfirm>
     </div>
   </div>
 </template>
 <script>
+import { reactive } from 'vue';
 import { ElButton, ElPopconfirm } from 'element-plus';
 
 import SettingApi from './api';
@@ -37,7 +40,7 @@ export default {
     SettingStyle,
     SettingAdaptor,
   },
-  data() {
+  setup() {
     const {
       isApiChanged,
       isFormData,
@@ -45,9 +48,8 @@ export default {
       script,
       domains,
       adaptor,
-    } = this.$umisConfig || window.umisConfig;
-
-    return {
+    } = window.umisConfig;
+    const data = reactive({
       isApiChanged,
       isFormData,
       style,
@@ -56,6 +58,9 @@ export default {
       adaptor,
       elasticWidth: 0,
       fixed: true,
+    });
+    return {
+      data
     };
   },
   mounted() {
