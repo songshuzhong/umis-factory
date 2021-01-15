@@ -59,13 +59,13 @@ export default {
   setup(props) {
     return {
       data: {
-        schema: props.schema,
+        schema: props.value,
       }
     };
   },
   mixins: [monaco],
   mounted() {
-    console.log('innter', this.schema);
+    console.log('innter', this.data);
     window.requestIdleCallback(this.createMonacoEditor);
   },
   methods: {

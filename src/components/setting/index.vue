@@ -22,7 +22,6 @@
   </div>
 </template>
 <script>
-import { reactive } from 'vue';
 import { ElButton, ElPopconfirm } from 'element-plus';
 
 import SettingApi from './api';
@@ -49,7 +48,7 @@ export default {
       domains,
       adaptor,
     } = window.umisConfig;
-    const data = reactive({
+    return {
       isApiChanged,
       isFormData,
       style,
@@ -58,9 +57,6 @@ export default {
       adaptor,
       elasticWidth: 0,
       fixed: true,
-    });
-    return {
-      data
     };
   },
   mounted() {
