@@ -67,7 +67,7 @@ export default {
       type: Object,
       required: true,
     },
-    value: {
+    modelValue: {
       type: Object,
       required: true,
     },
@@ -91,7 +91,7 @@ export default {
   },
   mixins: [visible, initData],
   watch: {
-    value: {
+    modelValue: {
       handler(val) {
         this.iValue = val;
       },

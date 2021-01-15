@@ -31,13 +31,13 @@ export default {
     ElTooltip,
   },
   props: {
-    value: {
+    modelValue: {
       type: String,
       required: false,
     },
   },
   watch: {
-    value: {
+    modelValue: {
       handler(val) {
         this.schema = val;
       },
@@ -49,14 +49,8 @@ export default {
       },
     },
   },
-  setup(props) {
-    return {
-      schema: props.schema,
-    };
-  },
   mixins: [monaco],
   mounted() {
-    console.log('style', this.data);
     window.requestIdleCallback(this.createMonacoEditor);
   },
   methods: {

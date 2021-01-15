@@ -41,10 +41,6 @@ export default {
       type: String,
       required: false,
     },
-    data: {
-      type: Object,
-      required: true,
-    },
     header: {
       type: [Array, Object],
       required: false,

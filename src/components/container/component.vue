@@ -6,8 +6,6 @@
       v-bind="getSlimmingProps(props)"
       :is="componentName"
       :path="path"
-      :index="index"
-      :name="name"
       :header="header"
       :body="body"
       :footer="footer"

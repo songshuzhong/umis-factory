@@ -36,13 +36,13 @@ export default {
     ElTooltip,
   },
   props: {
-    value: {
+    modelValue: {
       type: String,
       required: false,
     },
   },
   watch: {
-    value: {
+    modelValue: {
       handler(val) {
         if (val) {
           this.schema = val;
@@ -56,16 +56,8 @@ export default {
       },
     },
   },
-  setup(props) {
-    return {
-      data: {
-        schema: props.value,
-      }
-    };
-  },
   mixins: [monaco],
   mounted() {
-    console.log('innter', this.data);
     window.requestIdleCallback(this.createMonacoEditor);
   },
   methods: {

@@ -15,6 +15,7 @@ import {
   saveInitStyle,
   saveInitFormType,
   saveAdaptor,
+  initSetting
 } from './utils/tools';
 
 import './assets/styles/index.scss';
@@ -38,6 +39,7 @@ export default {
         componentConfig.default || componentConfig
       );
     });
+
     app.use(resize);
     app.use(ElLoading);
     app.config.globalProperties.$eventHub = new Eventhub();
@@ -51,6 +53,7 @@ export default {
     app.config.globalProperties.$saveInitStyle = saveInitStyle;
     app.config.globalProperties.$saveInitFormType = saveInitFormType;
     app.config.globalProperties.$saveAdaptor = saveAdaptor;
+    app.config.globalProperties.$initSetting = initSetting;
     app.config.globalProperties.$notice = ElNotification;
     app.config.globalProperties.$message = ElMessage;
     app.config.globalProperties.$api = api(options);

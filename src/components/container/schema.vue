@@ -93,6 +93,9 @@ export default {
     if (this.initSchema) {
       this.getPageSchema();
     }
+    if (this.canSchemaUpdate) {
+      this.$initSetting(this, this.$umisConfig);
+    }
   },
   methods: {
     createProtal(path, pop) {

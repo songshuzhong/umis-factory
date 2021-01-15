@@ -86,6 +86,28 @@ const saveInitStyle = (ctx, style) => {
   });
 };
 
+const initSetting = (ctx, umisConfig) => {
+  const {
+    isFormData,
+    style,
+    adaptor,
+  } = umisConfig;
+  return Promise.all([saveAdaptor(ctx, adaptor), saveInitStyle(ctx, style), saveInitFormType(ctx, isFormData)])
+    .then(() => {
+      ctx.$message({
+        showClose: true,
+        message: '初始化成功',
+        type: 'success',
+      });
+    }).catch(error => {
+      ctx.$message({
+        showClose: true,
+        message: error,
+        type: 'error',
+      });
+    })
+}
+
 export {
   getRenderedTpl,
   getCompiledUrl,
@@ -95,4 +117,5 @@ export {
   saveInitStyle,
   saveInitFormType,
   saveAdaptor,
+  initSetting
 };

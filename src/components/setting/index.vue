@@ -39,12 +39,11 @@ export default {
     SettingStyle,
     SettingAdaptor,
   },
-  setup() {
+  data() {
     const {
       isApiChanged,
       isFormData,
       style,
-      script,
       domains,
       adaptor,
     } = window.umisConfig;
@@ -52,7 +51,6 @@ export default {
       isApiChanged,
       isFormData,
       style,
-      script,
       domains,
       adaptor,
       elasticWidth: 0,
@@ -64,7 +62,6 @@ export default {
     this.body = document.querySelector('.umis-setting__container__body');
     this.container = document.querySelector('.umis-layout__container__main');
     this.container.addEventListener('scroll', this.handleScrolling);
-    window.requestIdleCallback(this.handleInitAll);
   },
   methods: {
     updateUmisConfig(config) {
@@ -84,18 +81,6 @@ export default {
     },
     handleApiChanged() {
       this.isApiChanged = true;
-    },
-    handleInitAll() {
-      const saveStyle = this.$refs['style'].onSave;
-      const saveAdaptor = this.$refs['adaptor'].onSave;
-
-      Promise.all([saveStyle(true), saveAdaptor(true)]).then(() => {
-        this.$message({
-          showClose: true,
-          message: '初始化成功',
-          type: 'success',
-        });
-      });
     },
     handleSaveRemote() {
       const umisConfig = {

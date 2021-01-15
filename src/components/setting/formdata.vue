@@ -29,7 +29,7 @@ export default {
     ElTooltip,
   },
   props: {
-    value: {
+    modelValue: {
       type: Boolean,
       required: false,
     },
@@ -40,7 +40,7 @@ export default {
     };
   },
   watch: {
-    value: {
+    modelValue: {
       handler(val) {
         this.isFormData = val;
       },

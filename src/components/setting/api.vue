@@ -77,7 +77,7 @@ export default {
     ElTooltip,
   },
   props: {
-    value: {
+    modelValue: {
       type: Array,
       required: false,
     },
@@ -93,7 +93,7 @@ export default {
     };
   },
   watch: {
-    value: {
+    modelValue: {
       handler(val) {
         this.domains = val;
       },
