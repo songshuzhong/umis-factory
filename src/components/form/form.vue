@@ -128,18 +128,20 @@ export default {
     },
   },
   data() {
+    const formdata = this.controls.reduce((total, control) => {
+      const renderer = control.renderer;
+      const name = control.name;
+      const value = control.value;
+      if (name && formItems.includes(renderer) && 'mis-action' !== renderer) {
+        total[name] = value;
+      }
+      return total;
+    }, {});
+
     return {
       formItems: formItems,
       invisibleField: [],
-      data: this.controls.reduce((total, control) => {
-        const renderer = control.renderer;
-        const name = control.name;
-        const value = control.value;
-        if (name && formItems.includes(renderer) && 'mis-action' !== renderer) {
-          total[name] = value;
-        }
-        return total;
-      }, {}),
+      data: formdata,
     };
   },
   computed: {

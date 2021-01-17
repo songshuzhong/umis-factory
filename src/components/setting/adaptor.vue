@@ -52,7 +52,7 @@ export default {
     },
     schema: {
       handler(val) {
-        this.$emit('input', val);
+        this.$emit('update:modelValue', val);
       },
     },
   },

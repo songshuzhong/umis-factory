@@ -63,10 +63,6 @@ export default {
       type: Object,
       required: true,
     },
-    data: {
-      type: Object,
-      required: true,
-    },
     modelValue: {
       type: Object,
       required: true,
@@ -98,7 +94,7 @@ export default {
       immediate: true,
     },
     iValue(val) {
-      this.$emit('input', val);
+      this.$emit('update:modelValue', val);
     },
     iVisible: {
       handler(val) {

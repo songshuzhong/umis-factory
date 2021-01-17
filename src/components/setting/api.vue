@@ -102,7 +102,7 @@ export default {
     },
     domains: {
       handler(val) {
-        this.$emit('input', val);
+        this.$emit('update:modelValue', val);
       },
     },
     checked: {

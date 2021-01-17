@@ -49,7 +49,7 @@ export default {
     },
     isFormData: {
       handler(val) {
-        this.$emit('input', val);
+        this.$emit('update:modelValue', val);
       },
     },
   },

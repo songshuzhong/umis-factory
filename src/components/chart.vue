@@ -3,7 +3,7 @@
 </template>
 <script>
 import { VEcharts as VChart} from 'vue3-echarts';
-import 'echarts/lib/chart/bar';
+/*import 'echarts/lib/chart/bar';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/chart/pie';
 import 'echarts/lib/chart/map';
@@ -17,7 +17,7 @@ import 'echarts/lib/component/legend';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/visualMap';
 import 'echarts/lib/component/dataset';
-import 'echarts/lib/component/markArea';
+import 'echarts/lib/component/markArea';*/
 
 import initData from './mixin/init-data';
 import initApi from './mixin/init-api';

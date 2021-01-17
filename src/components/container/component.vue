@@ -14,6 +14,7 @@
       :action="filterAction"
       :after-action="afterAction"
       :linkage-trigger="onLinkageTrigger"
+      ref="component"
     />
   </transition>
 </template>
@@ -161,7 +162,7 @@ export default {
       }
     },
     handleAjaxAction(props, context, feedback) {
-      this.$children[0]
+      this.$refs.component
         .handleFetchApi(props.actionApi, feedback)
         .then(status => {
           if (status === 'resolve') {
