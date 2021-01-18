@@ -50,7 +50,7 @@ export default {
     canSchemaUpdate: {
       type: Boolean,
       required: false,
-      default: false,
+      default: true,
     },
     initSchema: {
       type: Object,
@@ -93,7 +93,7 @@ export default {
     if (this.initSchema) {
       this.getPageSchema();
     }
-    if (this.canSchemaUpdate) {
+    if (!this.canSchemaUpdate) {
       this.$initSetting(this, this.$umisConfig);
     }
   },

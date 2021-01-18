@@ -22,6 +22,7 @@
   "peerDependencies": {
     "axios": "^0.18.0",
     "beautify": "0.0.8",
+    "element-resize-detector": "^1.2.1",
     "vue": "^3.0.0",
     "vue-echarts": "^5.0.0-beta.0",
     "copy-to-clipboard": "^3.3.1",

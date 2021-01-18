@@ -112,6 +112,7 @@ export default {
   watch: {
     collapse: {
       handler(val) {
+        console.log(this.path)
         this.data.collapse = val;
       },
       immediate: true,

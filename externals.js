@@ -25,7 +25,7 @@ module.exports = {
   'vue3-echarts': 'vue3-echarts',
   'deep-equal': 'deep-equal',
   'copy-to-clipboard': 'copy-to-clipboard',
-  'vue-element-resize-detector': 'vue-element-resize-detector',
+  'element-resize-detector': 'element-resize-detector',
   'lodash.clonedeep': 'lodash.clonedeep',
   'lodash.template': 'lodash.template',
 };
