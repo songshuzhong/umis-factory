@@ -123,7 +123,7 @@ export default {
   },
   methods: {
     onChange(val) {
-      this.updateValue(val);
+      this.updateValue && this.updateValue(val);
     },
   },
 };

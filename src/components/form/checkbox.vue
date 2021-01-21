@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     onSelect() {
-      this.updateValue(this.iValue);
+      this.updateValue && this.updateValue(this.iValue);
     },
   },
 };

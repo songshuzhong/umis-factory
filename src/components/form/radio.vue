@@ -68,7 +68,7 @@ export default {
     iValue: {
       handler(val) {
         if (val) {
-          this.updateValue(val);
+          this.updateValue && this.updateValue(val);
         }
       }
     }

@@ -100,8 +100,8 @@ export default {
       this.iValue = val;
       linkage[this.name] = this.iValue;
 
-      this.updateValue(val);
-      this.linkageTrigger(this.target, linkage);
+      this.updateValue && this.updateValue(val);
+      this.linkageTrigger && this.linkageTrigger(this.target, linkage);
     },
   },
 };

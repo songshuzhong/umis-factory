@@ -93,8 +93,11 @@ export default {
       },
       immediate: true,
     },
-    iValue(val) {
-      this.$emit('update:modelValue', val);
+    iValue: {
+      handler(val) {
+        this.$emit('update:modelValue', val);
+      },
+      deep: true
     },
     iVisible: {
       handler(val) {

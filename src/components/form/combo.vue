@@ -15,11 +15,12 @@
           :field="getFieldByKey(key, index)"
           :path="`${path}/${index}/${name}`"
         />
-        <el-link
+        <span
           class="umis-form__combo__delete"
-          icon="el-icon-delete"
           @click="onDelete(index)"
-        />
+        >
+          <i class="el-icon-delete" />
+        </span>
       </div>
       <el-form-item :label="' '" class="umis-form__combo__plus">
         <el-button icon="el-icon-plus" @click="onAdd" />
@@ -101,7 +102,7 @@ export default {
     },
     iValue: {
       handler(val) {
-        this.updateValue(val);
+        this.updateValue && this.updateValue(val);
       },
       deep: true,
     },

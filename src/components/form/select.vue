@@ -79,6 +79,10 @@ export default {
       type: Function,
       required: false,
     },
+    updateValue: {
+      type: Function,
+      required: true,
+    }
   },
   data() {
     return {
@@ -95,7 +99,7 @@ export default {
     },
     iValue: {
       handler(val) {
-        this.$emit('input', val);
+        this.updateValue && this.updateValue(val);
       },
     },
     options: {

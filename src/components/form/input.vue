@@ -143,7 +143,7 @@ export default {
   mixins: [derivedProp],
   methods: {
     onChange(val) {
-      this.updateValue(val);
+      this.updateValue && this.updateValue(val);
     },
   },
 };
