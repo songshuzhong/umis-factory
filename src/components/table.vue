@@ -193,6 +193,8 @@ import {
   ElCheckbox,
   ElDivider,
 } from 'element-plus';
+import FileSaver from 'file-saver';
+import XLSX from 'xlsx';
 
 import initApi from './mixin/init-api';
 import derivedProp from './mixin/derived-prop';
