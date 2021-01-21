@@ -76,6 +76,10 @@ export default {
       type: Function,
       required: true,
     },
+    updateValue: {
+      type: Function,
+      required: true,
+    }
   },
   data() {
     return {
@@ -96,7 +100,7 @@ export default {
       this.iValue = val;
       linkage[this.name] = this.iValue;
 
-      this.$emit('input', this.iValue);
+      this.updateValue(val);
       this.linkageTrigger(this.target, linkage);
     },
   },

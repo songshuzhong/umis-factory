@@ -54,10 +54,6 @@ export default {
       type: String,
       required: false,
     },
-    data: {
-      type: Object,
-      required: true,
-    },
     classname: {
       type: String,
       required: false,

@@ -1,6 +1,6 @@
 <template>
   <el-main :class="classname">
-    <router-view v-if="routerView" />
+    <router-view v-if="routerView"></router-view>
     <template v-else>
       <template
         v-if="Object.prototype.toString.call(body) === '[object Array]'"

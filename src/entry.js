@@ -18,7 +18,7 @@ import {
   initSetting
 } from './utils/tools';
 
-import './assets/styles/index.scss';
+// import './assets/styles/index.scss';
 
 const requireComponent = require.context('./components', true, /[\w-]+\.vue$/);
 

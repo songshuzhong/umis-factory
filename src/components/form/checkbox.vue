@@ -51,6 +51,10 @@ export default {
       type: [Array, String, Number],
       required: false,
     },
+    updateValue: {
+      type: Function,
+      required: true,
+    },
   },
   data() {
     return {
@@ -67,7 +71,7 @@ export default {
   },
   methods: {
     onSelect() {
-      this.$emit('input', this.iValue);
+      this.updateValue(this.iValue);
     },
   },
 };

@@ -1,6 +1,6 @@
 <template>
   <el-submenu
-    :index="path"
+    :index="index + ''"
     :popper-class="popperClass"
     :class="classname"
     :show-timeout="showTimeout"
@@ -12,13 +12,14 @@
       <i :class="icon" />
       <span>{{ title }}</span>
     </template>
-    <template v-for="(item, index) in body" :key="index">
+    <template v-for="(item, jndex) in body" :key="index">
       <mis-component
-        :path="`${path}/${index}/${item.renderer}`"
+        :path="`${path}/${jndex}/${item.renderer}`"
         :mis-name="item.renderer"
         :name="item.name"
         :body="item.body"
         :props="item"
+        :index="jndex"
       />
     </template>
   </el-submenu>
@@ -47,7 +48,7 @@ export default {
       required: false,
     },
     index: {
-      type: String,
+      type: [String, Number],
       required: true,
     },
     classname: {

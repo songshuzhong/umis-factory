@@ -6,6 +6,7 @@
       v-bind="getSlimmingProps(props)"
       :is="componentName"
       :path="path"
+      :index="index"
       :header="header"
       :body="body"
       :footer="footer"
@@ -34,8 +35,8 @@ export default {
       required: true,
     },
     index: {
-      type: String,
-      required: true,
+      type: [String, Number],
+      required: false,
     },
     misName: {
       type: String,
@@ -43,7 +44,7 @@ export default {
     },
     name: {
       type: String,
-      required: true,
+      required: false,
     },
     props: {
       type: Object,

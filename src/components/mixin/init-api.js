@@ -92,7 +92,7 @@ export default {
       }
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.clearAutoRefresh();
   },
   methods: {

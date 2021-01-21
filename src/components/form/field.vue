@@ -29,7 +29,7 @@
         :disabled="iDisabled"
         :action="action"
         :linkage-trigger="linkageTrigger"
-        @input="onInput($event)"
+        :update-value="updateValue"
       />
     </el-form-item>
   </transition>
@@ -64,20 +64,20 @@ export default {
       required: true,
     },
     modelValue: {
-      type: Object,
+      type: [Object, String, Number, Boolean],
       required: true,
     },
     handleInvisible: {
       type: Function,
-      required: true,
+      required: false,
     },
     action: {
       type: Function,
-      required: true,
+      required: false,
     },
     linkageTrigger: {
       type: Function,
-      required: true,
+      required: false,
     },
   },
   data() {
@@ -103,7 +103,7 @@ export default {
     },
   },
   methods: {
-    onInput(value) {
+    updateValue(value) {
       this.iValue = value;
     },
   },

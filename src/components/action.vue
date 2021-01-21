@@ -121,7 +121,7 @@ export default {
     },
     text: {
       type: String,
-      required: true,
+      required: false,
     },
     body: {
       type: Object,
@@ -136,7 +136,7 @@ export default {
       required: false,
     },
     actionApi: {
-      type: Object,
+      type: [Object, String],
       required: false,
     },
     actions: {

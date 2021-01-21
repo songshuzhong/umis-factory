@@ -3,7 +3,6 @@
     v-model="iValue"
     :name="name"
     :type="type"
-    :label="label"
     :readonly="readonly"
     :disabled="disabled"
     :editable="editable"
@@ -43,15 +42,11 @@ export default {
     },
     type: {
       type: String,
-      required: true,
+      required: false,
     },
     readonly: {
       type: Boolean,
       required: false,
-    },
-    label: {
-      type: String,
-      required: true,
     },
     disabled: {
       type: Boolean,
@@ -69,19 +64,19 @@ export default {
     },
     size: {
       type: String,
-      required: true,
+      required: false,
     },
     placeholder: {
       type: String,
-      required: true,
+      required: false,
     },
     startPlaceholder: {
       type: String,
-      required: true,
+      required: false,
     },
     endPlaceholder: {
       type: String,
-      required: true,
+      required: false,
     },
     defaultValue: {
       type: Date,
@@ -89,15 +84,16 @@ export default {
     },
     format: {
       type: String,
-      required: true,
+      required: false,
+      default: 'YYYY年MM月DD日'
     },
     align: {
       type: String,
-      required: true,
+      required: false,
     },
     prefixIcon: {
       type: String,
-      required: true,
+      required: false,
     },
     unlinkPanels: {
       type: Boolean,
@@ -105,6 +101,10 @@ export default {
     },
     clearIcon: {
       type: String,
+      required: false,
+    },
+    updateValue: {
+      type: Function,
       required: true,
     },
   },
@@ -123,7 +123,7 @@ export default {
   },
   methods: {
     onChange(val) {
-      this.$emit('input', val);
+      this.updateValue(val);
     },
   },
 };

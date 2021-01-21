@@ -25,6 +25,7 @@
         :name="item.name"
         :body="item.body"
         :props="item"
+        :index="index"
       />
     </template>
   </el-menu>
@@ -112,7 +113,6 @@ export default {
   watch: {
     collapse: {
       handler(val) {
-        console.log(this.path)
         this.data.collapse = val;
       },
       immediate: true,

@@ -56,11 +56,11 @@ export default {
     },
     label: {
       type: String,
-      required: true,
+      required: false,
     },
     type: {
       type: String,
-      required: true,
+      required: false,
     },
     disabled: {
       type: Boolean,
@@ -88,7 +88,7 @@ export default {
     },
     placeholder: {
       type: String,
-      required: true,
+      required: false,
     },
     clearable: {
       type: Boolean,
@@ -97,15 +97,15 @@ export default {
     },
     size: {
       type: String,
-      required: true,
+      required: false,
     },
     prefixIcon: {
       type: String,
-      required: true,
+      required: false,
     },
     suffixIcon: {
       type: String,
-      required: true,
+      required: false,
     },
     rows: {
       type: Number,
@@ -115,6 +115,10 @@ export default {
       type: Object,
       required: false,
     },
+    updateValue: {
+      type: Function,
+      required: true,
+    }
   },
   data() {
     return {
@@ -139,7 +143,7 @@ export default {
   mixins: [derivedProp],
   methods: {
     onChange(val) {
-      this.$emit('input', val);
+      this.updateValue(val);
     },
   },
 };

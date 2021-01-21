@@ -28,6 +28,10 @@ export default {
       type: String,
       required: false,
     },
+    index: {
+      type: [String, Number],
+      required: true,
+    },
     path: {
       type: String,
       required: false,

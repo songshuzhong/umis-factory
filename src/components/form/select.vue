@@ -69,11 +69,11 @@ export default {
     },
     placeholder: {
       type: String,
-      required: true,
+      required: false,
     },
     target: {
       type: String,
-      required: true,
+      required: false,
     },
     linkageTrigger: {
       type: Function,
@@ -92,6 +92,11 @@ export default {
         this.iValue = val;
       },
       immediate: true,
+    },
+    iValue: {
+      handler(val) {
+        this.$emit('input', val);
+      },
     },
     options: {
       handler(val) {
@@ -114,13 +119,13 @@ export default {
   },
   mixins: [initApi],
   methods: {
-    onChange() {
+    onChange(val) {
+      this.iValue = val
       if (this.target) {
         const linkage = {};
-        linkage[this.name] = this.iValue;
+        linkage[this.name] = val;
         this.linkageTrigger(this.target, linkage);
       }
-      this.$emit('input', this.iValue);
     },
     getJoinValue(option) {
       if (this.joinValue) {

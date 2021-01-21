@@ -82,6 +82,10 @@ export default {
       required: false,
       default: false,
     },
+    updateValue: {
+      type: Function,
+      required: true,
+    }
   },
   data() {
     return {
@@ -97,7 +101,7 @@ export default {
     },
     iValue: {
       handler(val) {
-        this.$emit('input', val);
+        this.updateValue(val);
       },
       deep: true,
     },

@@ -8,7 +8,7 @@ const config = {
   script: '',
 };
 
-const overwrite = options => {
+const overwrite = (options = {}) => {
   config.isFormData = options.isFormData || false;
   config.isApiChanged = options.isApiChanged || false;
   config.isInterceptChanged = options.isInterceptChanged || false;

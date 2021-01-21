@@ -95,7 +95,7 @@ export default {
   watch: {
     modelValue: {
       handler(val) {
-        this.domains = val;
+        this.domains = val || {};
       },
       immediate: true,
       deep: true,

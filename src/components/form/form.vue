@@ -98,7 +98,7 @@ export default {
     labelWidth: {
       type: Number,
       required: false,
-      default: 'auto',
+      default: 'auto'
     },
     labelPosition: {
       type: String,
@@ -131,7 +131,7 @@ export default {
     const formdata = this.controls.reduce((total, control) => {
       const renderer = control.renderer;
       const name = control.name;
-      const value = control.value;
+      const value = control.value || '';
       if (name && formItems.includes(renderer) && 'mis-action' !== renderer) {
         total[name] = value;
       }
