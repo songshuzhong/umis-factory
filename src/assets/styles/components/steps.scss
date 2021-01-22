@@ -1,0 +1,12 @@
+.umis-steps__container {
+  border: 1px solid #ebebeb;
+  border-radius: 3px;
+
+  .el-steps__main {
+    padding: 20px;
+  }
+  .el-steps__footer {
+    border-top: 1px solid #ebebeb;
+    padding: 8px 20px;
+  }
+}

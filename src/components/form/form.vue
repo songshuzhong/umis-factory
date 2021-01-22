@@ -8,29 +8,69 @@
     :model="data"
     :inline="inline"
   >
-    <template v-for="(item, index) in inactiveControls">
-      <mis-field
-        v-if="formItems.includes(item.renderer)"
-        v-model="data[item.name]"
-        :key="`${path}/${index}/${item.renderer}`"
-        :path="`${path}/${index}/${item.renderer}`"
-        :name="item.name"
-        :field="item"
-        :init-data="data"
-        :hidden-on="item.hiddenOn"
-        :visible-on="item.visibleOn"
-        :disabled-on="item.disabledOn"
-        :handle-invisible="handleInvisible"
-        :linkage-trigger="linkageTrigger"
-      />
-      <mis-component
-        v-else
-        :key="`${path}/${index}/${item.renderer}`"
-        :path="`${path}/${index}/${item.renderer}`"
-        :mis-name="item.renderer"
-        :props="getFattingProps(item)"
-        :init-data="data"
-      />
+    <template v-if="!fieldset">
+      <template v-for="(item, index) in inactiveControls">
+        <mis-field
+          v-if="formItems.includes(item.renderer)"
+          v-model="data[item.name]"
+          :key="`${path}/${index}/${item.renderer}`"
+          :path="`${path}/${index}/${item.renderer}`"
+          :name="item.name"
+          :field="item"
+          :init-data="data"
+          :hidden-on="item.hiddenOn"
+          :visible-on="item.visibleOn"
+          :disabled-on="item.disabledOn"
+          :handle-invisible="handleInvisible"
+          :linkage-trigger="linkageTrigger"
+        />
+        <mis-component
+          v-else
+          :key="`${path}/${index}/${item.renderer}`"
+          :path="`${path}/${index}/${item.renderer}`"
+          :mis-name="item.renderer"
+          :props="getFattingProps(item)"
+          :init-data="data"
+        />
+      </template>
+    </template>
+    <template v-else>
+      <el-collapse>
+        <template
+          v-for="(control, index) in controls"
+          :key="`${path}/${index}`"
+        >
+          <el-collapse-item>
+            <template #title>
+              <legend>
+                <span class="umis-form__container__legend">
+                  {{ control.title }}
+                </span>
+              </legend>
+            </template>
+            <fieldset class="umis-form__container__fieldset">
+              <template
+                v-for="(item, jndex) in control.controls"
+                :key="`${path}/${jndex}/${item.renderer}`"
+              >
+                <mis-field
+                  v-if="formItems.includes(item.renderer)"
+                  v-model="data[item.name]"
+                  :path="`${path}/${jndex}/${item.renderer}`"
+                  :name="item.name"
+                  :field="item"
+                  :init-data="data"
+                  :hidden-on="item.hiddenOn"
+                  :visible-on="item.visibleOn"
+                  :disabled-on="item.disabledOn"
+                  :handle-invisible="handleInvisible"
+                  :linkage-trigger="linkageTrigger"
+                />
+              </template>
+            </fieldset>
+          </el-collapse-item>
+        </template>
+      </el-collapse>
     </template>
     <el-form-item>
       <div class="umis-form__actions">
@@ -55,7 +95,7 @@
   </el-form>
 </template>
 <script>
-import { ElForm } from 'element-plus';
+import { ElForm, ElSpace } from 'element-plus';
 
 import derivedProp from '../mixin/derived-prop';
 import initApi from '../mixin/init-api';
@@ -77,6 +117,7 @@ export default {
   name: 'MisForm',
   components: {
     ElForm,
+    ElSpace
   },
   props: {
     path: {
@@ -84,7 +125,7 @@ export default {
       required: true,
     },
     api: {
-      type: String,
+      type: [Object, String],
       required: false,
     },
     name: {
@@ -94,6 +135,11 @@ export default {
     controls: {
       type: Array,
       required: false,
+    },
+    fieldset: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
     labelWidth: {
       type: Number,
@@ -128,15 +174,31 @@ export default {
     },
   },
   data() {
-    const formdata = this.controls.reduce((total, control) => {
-      const renderer = control.renderer;
-      const name = control.name;
-      const value = control.value || '';
-      if (name && formItems.includes(renderer) && 'mis-action' !== renderer) {
-        total[name] = value;
+    let formdata = {};
+    if (!this.fieldset) {
+      formdata = this.controls.reduce((total, control) => {
+        const renderer = control.renderer;
+        const name = control.name;
+        const value = control.value || '';
+        if (name && formItems.includes(renderer) && 'mis-action' !== renderer) {
+          total[name] = value;
+        }
+        return total;
+      }, {});
+    } else {
+      for (const key in this.controls) {
+        if (this.controls.hasOwnProperty(key)) {
+          this.controls[key].controls.forEach(control => {
+            const renderer = control.renderer;
+            const name = control.name;
+            const value = control.value || '';
+            if (name && formItems.includes(renderer) && 'mis-action' !== renderer) {
+              formdata[name] = value;
+            }
+          })
+        }
       }
-      return total;
-    }, {});
+    }
 
     return {
       formItems: formItems,
@@ -146,15 +208,33 @@ export default {
   },
   computed: {
     activeControls() {
-      return this.controls.filter(item => {
-        if ('mis-action' === item.renderer) {
-          item.actionApi = this.api;
-          return item;
+      if (!this.fieldset) {
+        return this.controls.filter(item => {
+          if ('mis-action' === item.renderer) {
+            item.actionApi = this.api;
+            return item;
+          }
+        });
+      }
+      let activeControls = [];
+      for (const key in this.controls) {
+        if (this.controls.hasOwnProperty(key)) {
+          const active = this.controls[key].controls.filter(item => {
+            if ('mis-action' === item.renderer) {
+              item.actionApi = this.api;
+              return item;
+            }
+          })
+          activeControls = activeControls.concat(active);
         }
-      });
+      }
+      return activeControls;
     },
     inactiveControls() {
-      return this.controls.filter(item => 'mis-action' !== item.renderer);
+      if (!this.fieldset) {
+        return this.controls.filter(item => 'mis-action' !== item.renderer);
+      }
+      return [];
     },
   },
   mixins: [initApi, initData, derivedProp],
@@ -231,7 +311,7 @@ export default {
     },
     onAfterSubmit() {
       if (this.redirect) {
-        this.$refs['mis-redirect'][0].$children[0].onClick();
+        this.$refs['mis-redirect'].$refs['component'].onClick();
       } else if (this.reload) {
         this.$eventHub.$emit('mis-component:reload', this.reload);
       }

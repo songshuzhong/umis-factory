@@ -1,16 +1,15 @@
 <template>
-  <el-card>
-    <el-row :gutter="20">
-      <el-col v-for="(icon, index) in icons" :span="1">
-        <el-button
-          class="umis-icon-picker"
-          :path="`${path}/${index}`"
-          :icon="icon"
-          @click="handleClick(icon)"
-        />
-      </el-col>
-    </el-row>
-  </el-card>
+  <el-row :gutter="20">
+    <el-col v-for="(icon, index) in icons" :span="1">
+      <el-button
+        class="umis-icon-picker"
+        :path="`${path}/${index}`"
+        :icon="icon"
+        circle
+        @click="handleClick(icon)"
+      />
+    </el-col>
+  </el-row>
 </template>
 
 <script>

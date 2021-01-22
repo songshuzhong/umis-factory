@@ -32,6 +32,22 @@
       color: #F56C6C;
     }
   }
+  .umis-form__container__legend {
+    border-left: solid 4px;
+    line-height: 26px;
+    padding-left: 10px;
+  }
+  .umis-form__container__fieldset {
+    border: 0;
+  }
+  .el-collapse,
+  .el-collapse-item__header,
+  .el-collapse-item__wrap {
+    border: 0 !important;
+  }
+  .el-collapse-item__arrow {
+    margin: 0 8px !important;
+  }
 }
 .umis-data__debug {
   display: block;

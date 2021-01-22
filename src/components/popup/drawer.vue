@@ -13,7 +13,6 @@
     :withHeader="withHeader"
     destroy-on-close
     custom-class="umis-popup__container"
-    class="umis-popup__container"
     @close="onClose"
   >
     <template v-if="header" #title>

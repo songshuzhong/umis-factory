@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="iSchemaLoading" class="umis-schema__container">
+  <div v-if="!iSchemaLoading" class="umis-schema__container">
     <template
       v-if="Object.prototype.toString.call(iSchema) === '[object Array]'"
     >
@@ -35,13 +35,18 @@
       </template>
     </div>
   </div>
+  <el-skeleton v-else animated />
 </template>
 <script>
+import { ElSkeleton } from 'element-plus';
 import clonedeep from 'lodash.clonedeep';
 import derivedProp from '../mixin/derived-prop';
 
 export default {
   name: 'MisSchema',
+  components: {
+    ElSkeleton
+  },
   props: {
     schema: {
       type: [Array, Object],

@@ -12,7 +12,7 @@
       <i :class="icon" />
       <span>{{ title }}</span>
     </template>
-    <template v-for="(item, jndex) in body" :key="index">
+    <template v-for="(item, jndex) in body" :key="jndex">
       <mis-component
         :path="`${path}/${jndex}/${item.renderer}`"
         :mis-name="item.renderer"
