@@ -221,14 +221,16 @@ export default {
       }).catch();
     },
     done() {
-      this.mergeFormData();
-      this.handleFetchApi({
-        url: this.api.url || this.api,
-        method: this.api.method || 'post',
-        params: this.data,
-      }, () => {
-        this.onAfterSubmit();
-      });
+      this.beforeUpdateActive().then(() => {
+        this.mergeFormData();
+        this.handleFetchApi({
+          url: this.api.url || this.api,
+          method: this.api.method || 'post',
+          params: this.data,
+        }, () => {
+          this.onAfterSubmit();
+        });
+      }).catch();
     },
     mergeFormData() {
       const data = this.$refs.form.$refs.component.data;

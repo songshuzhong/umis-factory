@@ -36,9 +36,11 @@
     </template>
     <template v-else>
       <el-collapse>
-        <template
+        <fieldset
           v-for="(control, index) in controls"
           :key="`${path}/${index}`"
+          :class="control.classname"
+          class="umis-form__container__fieldset"
         >
           <el-collapse-item>
             <template #title>
@@ -48,7 +50,7 @@
                 </span>
               </legend>
             </template>
-            <fieldset class="umis-form__container__fieldset">
+            <div class="umis-form__container__fieldset__items">
               <template
                 v-for="(item, jndex) in control.controls"
                 :key="`${path}/${jndex}/${item.renderer}`"
@@ -66,10 +68,35 @@
                   :handle-invisible="handleInvisible"
                   :linkage-trigger="linkageTrigger"
                 />
+                <mis-component
+                  v-else-if="'mis-action' !==item.renderer && !formItems.includes(item.renderer)"
+                  :key="`${path}/${index}/${item.renderer}`"
+                  :path="`${path}/${index}/${item.renderer}`"
+                  :mis-name="item.renderer"
+                  :header="getHeader(item)"
+                  :body="getBody(item)"
+                  :footer="getFooter(item)"
+                  :props="getFattingProps(item)"
+                  :init-data="data"
+                />
               </template>
-            </fieldset>
+            </div>
+            <div
+              v-if="control.viewer"
+              class="umis-form__container__viewer"
+            >
+              <mis-component
+                :path="`${path}/${control.viewer.renderer}`"
+                :mis-name="control.viewer.renderer"
+                :header="getHeader(control.viewer)"
+                :body="getBody(control.viewer)"
+                :footer="getFooter(control.viewer)"
+                :props="getFattingProps(control.viewer)"
+                :init-data="data"
+              />
+            </div>
           </el-collapse-item>
-        </template>
+        </fieldset>
       </el-collapse>
     </template>
     <el-form-item>

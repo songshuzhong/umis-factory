@@ -1,29 +1,27 @@
 <template>
   <div
-    class="umis-page__container"
+    class="umis-wrapper__container"
     :class="classname"
   >
     <template v-if="Object.prototype.toString.call(body) === '[object Array]'">
       <template v-for="(child, index) in body" :key="`${path}/${index}/${child.renderer}`">
         <mis-component
-          v-bind="getFattingProps(child)"
           :mis-name="child.renderer"
           :path="`${path}/${index}/${child.renderer}`"
-          :props="getFattingProps(child)"
           :header="getHeader(child)"
           :body="getBody(child)"
           :footer="getFooter(child)"
+          :props="getFattingProps(child, data)"
           :init-data="getInitData(data, child)"
         />
       </template>
     </template>
     <mis-component
       v-else
-      v-bind="getFattingProps(body)"
       :mis-name="body.renderer"
       :path="`${path}/${body.renderer}`"
-      :header="getHeader(body)"
       :body="getBody(body)"
+      :header="getHeader(body)"
       :footer="getFooter(body)"
       :props="getFattingProps(body)"
       :init-data="getInitData(data, body)"
@@ -31,19 +29,18 @@
   </div>
 </template>
 <script>
-import initApi from '../mixin/init-api';
-import initData from '../mixin/init-data';
 import derivedProp from '../mixin/derived-prop';
+import initData from '../mixin/init-data';
 
 export default {
-  name: 'MisPage',
+  name: 'MisWrapper',
   props: {
-    body: {
-      type: [Array, Object],
-      required: false,
-    },
     path: {
       type: String,
+      required: true,
+    },
+    body: {
+      type: Array,
       required: true,
     },
     classname: {
@@ -51,6 +48,6 @@ export default {
       required: false,
     },
   },
-  mixins: [initApi, initData, derivedProp],
+  mixins: [derivedProp, initData],
 };
 </script>
