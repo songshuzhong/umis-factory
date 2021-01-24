@@ -73,10 +73,17 @@ export default {
     startPlaceholder: {
       type: String,
       required: false,
+      default: '开始日期'
     },
     endPlaceholder: {
       type: String,
       required: false,
+      default: '结束日期'
+    },
+    rangeSeparator: {
+      type: String,
+      required: false,
+      default: '至'
     },
     defaultValue: {
       type: Date,

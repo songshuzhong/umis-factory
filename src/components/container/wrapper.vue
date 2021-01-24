@@ -40,7 +40,7 @@ export default {
       required: true,
     },
     body: {
-      type: Array,
+      type: [Object, Array],
       required: true,
     },
     classname: {

@@ -1,5 +1,7 @@
 <template>
-  <pre class="umis-data__debug">{{ data }}</pre>
+  <div class="umis-data__debug">
+    <pre>{{ data }}</pre>
+  </div>
 </template>
 
 <script>

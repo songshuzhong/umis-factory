@@ -85,6 +85,7 @@ export default {
     this.intervalFetcher = null;
     this.compiledCacheUrl = null;
     this.compiledCacheParams = null;
+    this.cacheData = null;
     if (this.initApi) {
       this.handleFetchApi();
       if (this.interval) {
@@ -126,6 +127,9 @@ export default {
       compiledParams = this.useCompiledParams(params, mergedData);
       compiledUrl = this.useCompiledUrl(url, mergedData);
 
+      if (params === '&') {
+        compiledParams = mergedData
+      }
       if (this.usePageInfo) {
         compiledParams = this.usePageInfo(compiledParams);
       }
@@ -150,7 +154,11 @@ export default {
               this.iHasMore = hasMore;
               this.rows = rows;
             } else {
-              this.data = data;
+              if (this.data) {
+                Object.assign(this.data, data);
+              } else {
+                this.data = data;
+              }
             }
           }
           !this.silentMessage &&
@@ -185,11 +193,12 @@ export default {
       const compiledParams = this.$getCompiledParams(params, mergedData);
 
       if (
+        (params === '&' && !deepEqual(this.cacheData, val)) ||
         (/\$\{.+?\}/g.test(url) && !this.compiledCacheUrl && compiledUrl) ||
         (this.compiledCacheUrl && this.compiledCacheUrl !== compiledUrl) ||
-        (this.compiledCacheParams &&
-          !deepEqual(compiledParams, this.compiledCacheParams))
+        (this.compiledCacheParams && !deepEqual(compiledParams, this.compiledCacheParams))
       ) {
+        this.cacheData = val;
         this.handleFetchApi();
       }
     },

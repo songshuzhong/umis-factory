@@ -1,5 +1,8 @@
 <template>
-  <div class="umis-service__body">
+  <div
+    v-loading="iApiLoading"
+    class="umis-service__body"
+  >
     <template v-if="Object.prototype.toString.call(body) === '[object Array]'">
       <template v-for="(child, index) in body" :key="`${path}/${index}/${child.renderer}`">
         <mis-component
@@ -28,6 +31,7 @@
 
 <script>
 import derivedProp from '../mixin/derived-prop';
+import initData from '../mixin/init-data';
 import initApi from '../mixin/init-api';
 
 export default {
@@ -54,6 +58,6 @@ export default {
       required: false,
     },
   },
-  mixins: [initApi, derivedProp],
+  mixins: [initData, initApi, derivedProp],
 };
 </script>
