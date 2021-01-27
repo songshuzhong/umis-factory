@@ -35,14 +35,14 @@
       </template>
     </template>
     <template v-else>
-      <el-collapse>
+      <el-collapse v-model="activeCollapse">
         <fieldset
           v-for="(control, index) in controls"
           :key="`${path}/${index}`"
           :class="control.classname"
           class="umis-form__container__fieldset"
         >
-          <el-collapse-item>
+          <el-collapse-item :name="index">
             <template #title>
               <legend>
                 <span class="umis-form__container__legend">
@@ -201,34 +201,24 @@ export default {
     },
   },
   data() {
+    let activeCollapse = [];
     let formdata = {};
-    if (!this.fieldset) {
-      formdata = this.controls.reduce((total, control) => {
+    for (let i = 0; i < this.controls.length; i++) {
+      const controls = this.controls[i].controls || [this.controls[i]];
+      activeCollapse.push(i);
+      controls.forEach(control => {
         const renderer = control.renderer;
         const name = control.name;
         const value = control.value || '';
         if (name && formItems.includes(renderer) && 'mis-action' !== renderer) {
-          total[name] = value;
+          formdata[name] = value;
         }
-        return total;
-      }, {});
-    } else {
-      for (const key in this.controls) {
-        if (this.controls.hasOwnProperty(key)) {
-          this.controls[key].controls.forEach(control => {
-            const renderer = control.renderer;
-            const name = control.name;
-            const value = control.value || '';
-            if (name && formItems.includes(renderer) && 'mis-action' !== renderer) {
-              formdata[name] = value;
-            }
-          })
-        }
-      }
+      })
     }
 
     return {
-      formItems: formItems,
+      activeCollapse,
+      formItems,
       invisibleField: [],
       data: formdata,
     };

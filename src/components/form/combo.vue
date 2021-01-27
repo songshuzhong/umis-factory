@@ -96,7 +96,13 @@ export default {
   watch: {
     value: {
       handler(val) {
-        this.iValue = val;
+        if (this.multiple && !Array.isArray(val)) {
+          this.iValue = [];
+        } else if (!this.multiple && !val) {
+          this.iValue = {};
+        } else {
+          this.iValue = val;
+        }
       },
       immediate: true,
     },

@@ -39,7 +39,7 @@ export default {
     },
     map: {
       type: String,
-      required: true,
+      required: false,
     },
     body: {
       type: Object,
@@ -67,8 +67,11 @@ export default {
   mixins: [initData, derivedProp],
   computed: {
     getMapItem() {
-      const key = this.$getRenderedTpl(this.primaryKey, this.data);
-      return this.map[key];
+      if (this.map) {
+        const key = this.$getRenderedTpl(this.primaryKey, this.data);
+        return this.map[key];
+      }
+      return '';
     },
   },
 };
