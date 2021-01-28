@@ -40,6 +40,41 @@
   .umis-form__container__fieldset {
     border: 0;
   }
+  .umis-form__list {
+    margin: 10px 0;
+    .el-checkbox-group {
+      font-size: inherit;
+    }
+    .el-checkbox {
+      position: absolute;
+      bottom: 3px;
+      right: 3px;
+      line-height: 14px;
+    }
+    .el-checkbox__label {
+      display: none;
+    }
+    .umis-list__item {
+      position: relative;
+      min-width: 82px;
+      min-height: 35px;
+      margin-right: 10px;
+      display: inline-block;
+      border: 1px solid #dcdfe6;
+      cursor: pointer;
+      &:hover,
+      &.checked {
+        border: 1px solid #409eff;
+      }
+    }
+    .umis-list__item__text {
+      width: 82px;
+      height: 35px;
+      font-size: 14px;
+      text-align: center;
+      line-height: 35px;
+    }
+  }
   .el-collapse,
   .el-collapse-item__header,
   .el-collapse-item__wrap {

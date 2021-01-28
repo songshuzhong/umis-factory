@@ -4,6 +4,7 @@
       <el-image
         v-for="(item, index) in src"
         :key="index"
+        :class="classname"
         :src="item"
         :lazy="lazy"
         :fit="fit"
@@ -17,7 +18,7 @@
       </el-image>
     </template>
     <template v-else>
-      <el-image :src="src" :lazy="lazy" :fit="fit" :preview-src-list="previews">
+      <el-image :class="classname" :src="src" :lazy="lazy" :fit="fit" :preview-src-list="previews">
         <template v-if="error" #error>
           {{ $getRenderedTpl(error) }}
         </template>
@@ -71,6 +72,10 @@ export default {
       type: String,
       required: false,
       default: '加载中...',
+    },
+    classname: {
+      type: String,
+      required: false,
     },
   },
 };

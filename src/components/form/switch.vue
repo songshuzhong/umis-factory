@@ -27,7 +27,7 @@ export default {
       required: true,
     },
     value: {
-      type: [Boolean, String, Number],
+      type: Boolean,
       required: false,
     },
     disabled: {

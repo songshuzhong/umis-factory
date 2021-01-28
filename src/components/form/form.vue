@@ -138,6 +138,7 @@ const formItems = [
   'mis-input',
   'mis-combo',
   'mis-upload',
+  'mis-list'
 ];
 
 export default {
@@ -202,16 +203,16 @@ export default {
   },
   data() {
     let activeCollapse = [];
-    let formdata = {};
+    let data = {};
     for (let i = 0; i < this.controls.length; i++) {
       const controls = this.controls[i].controls || [this.controls[i]];
       activeCollapse.push(i);
       controls.forEach(control => {
         const renderer = control.renderer;
         const name = control.name;
-        const value = control.value || '';
+        const value = control.value;
         if (name && formItems.includes(renderer) && 'mis-action' !== renderer) {
-          formdata[name] = value;
+          data[name] = value;
         }
       })
     }
@@ -219,8 +220,8 @@ export default {
     return {
       activeCollapse,
       formItems,
+      data,
       invisibleField: [],
-      data: formdata,
     };
   },
   computed: {
@@ -266,6 +267,17 @@ export default {
         );
       } else {
         this.invisibleField.push(field);
+        this.handleResetField(field);
+      }
+    },
+    handleResetField(field) {
+      const type = Object.prototype.toString.call(this.data[field]);
+      switch (type) {
+        case '[object String]': this.data[field] = ''; break;
+        case '[object Number]': this.data[field] = 0; break;
+        case '[object Boolean]': this.data[field] = false; break;
+        case '[object Array]': this.data[field] = []; break;
+        case '[object Object]': this.data[field] = {}; break;
       }
     },
     handleRemoteSubmit(actionType, target, feedback) {

@@ -2,7 +2,7 @@
   <div v-if="title" class="umis-avatar__container">
     <div class="umis-avatar__logo">
       <el-avatar
-        :classname="classname"
+        :class="classname"
         :icon="icon"
         :shape="shape"
         :size="size"
@@ -31,7 +31,7 @@
   </div>
   <el-avatar
     v-else
-    :classname="classname"
+    :class="classname"
     :shape="shape"
     :size="size"
     :fit="fit"
