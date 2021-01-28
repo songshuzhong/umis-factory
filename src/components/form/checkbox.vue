@@ -64,7 +64,7 @@ export default {
   watch: {
     value: {
       handler(val) {
-        this.iValue = val;
+        this.iValue = val || [];
       },
       immediate: true,
     },

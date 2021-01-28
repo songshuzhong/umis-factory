@@ -103,6 +103,7 @@ export default {
       handler(val) {
         this.handleInvisible(val, this.name);
       },
+      immediate: true
     },
   },
   methods: {

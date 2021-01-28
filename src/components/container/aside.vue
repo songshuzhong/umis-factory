@@ -1,5 +1,5 @@
 <template>
-  <el-aside :class="classname">
+  <el-aside :class="classname" :width="`${iWidth}px`">
     <template v-if="Object.prototype.toString.call(body) === '[object Array]'">
       <template v-for="(child, index) in body">
         <mis-component
@@ -49,7 +49,25 @@ export default {
       type: String,
       required: false,
     },
+    width: {
+      type: Number,
+      required: false,
+      default: 300
+    }
   },
   mixins: [derivedProp, initData],
+  data() {
+    return {
+      iWidth: 0
+    }
+  },
+  watch: {
+    width: {
+      handler(val) {
+        this.iWidth = val;
+      },
+      immediate: true
+    }
+  }
 };
 </script>

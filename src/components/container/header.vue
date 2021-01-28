@@ -1,5 +1,5 @@
 <template>
-  <el-header :class="classname">
+  <el-header :class="classname" :height="`${iHeight}px`">
     <template v-if="Object.prototype.toString.call(body) === '[object Array]'">
       <template v-for="(child, index) in body" :key="`${path}/${index}/${child.renderer}`">
         <mis-component
@@ -51,7 +51,25 @@ export default {
       type: String,
       required: false,
     },
+    height: {
+      type: Number,
+      required: false,
+      default: 60
+    }
   },
   mixins: [derivedProp, initData],
+  data() {
+    return {
+      iHeight: 0
+    }
+  },
+  watch: {
+    height: {
+      handler(val) {
+        this.iHeight = val;
+      },
+      immediate: true
+    }
+  }
 };
 </script>
