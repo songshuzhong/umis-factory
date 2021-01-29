@@ -59,9 +59,7 @@ export default {
   },
   mounted() {
     this.$eventHub.$on('mis-config:update', this.updateUmisConfig);
-    this.body = document.querySelector('.umis-setting__container__body');
-    this.container = document.querySelector('.umis-layout__container__main');
-    this.container.addEventListener('scroll', this.handleScrolling);
+    document.addEventListener('scroll', this.handleScrolling);
   },
   methods: {
     updateUmisConfig(config) {
@@ -70,10 +68,10 @@ export default {
       this.adaptor = config.groupAdaptor;
     },
     handleScrolling() {
-      const clientHeight = document.body.clientHeight;
-      const offsetHeight = this.body.offsetHeight;
-      // 60 + 44 + 20
-      if (clientHeight + this.container.scrollTop > offsetHeight + 124) {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+      const offsetHeight = document.body.offsetHeight;
+      if (clientHeight + scrollTop >= offsetHeight) {
         this.fixed = false;
       } else {
         this.fixed = true;

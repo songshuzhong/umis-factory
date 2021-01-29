@@ -22,7 +22,7 @@ export default {
       if (linkage) {
         const [target, url] = linkage.split('?');
         let newData = {};
-        if (this.props.name && target === this.props.name) {
+        if (this.props.name && target.includes(this.props.name)) {
           if (url) {
             const fields = this.getURLParameters(url);
             for (const field in fields) {

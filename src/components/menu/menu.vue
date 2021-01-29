@@ -1,5 +1,6 @@
 <template>
   <el-menu
+    v-resize
     :mode="mode"
     :default-active="defaultActive"
     :collapse="data.collapse"
@@ -10,6 +11,7 @@
     :active-text-color="activeTextColor"
     :collapse-transition="true"
     :unique-opened="uniqueOpened"
+    @resize="handleResize"
   >
     <template v-if="title">
       <mis-component
@@ -33,6 +35,7 @@
 
 <script>
 import { ElMenu } from 'element-plus';
+import debounce from 'lodash.debounce';
 import initData from '../mixin/init-data';
 
 export default {
@@ -99,7 +102,7 @@ export default {
     uniqueOpened: {
       type: Boolean,
       required: false,
-      default: false,
+      default: true,
     },
     target: {
       type: String,
@@ -119,5 +122,16 @@ export default {
     },
   },
   mixins: [initData],
+  mounted() {
+    this.isMounted = true;
+  },
+  methods: {
+    handleResize: debounce(function(e) {
+      if (this.isMounted && this.target) {
+        this.data.width = e.detail.width;
+        this.linkageTrigger(this.target, { width: e.detail.width });
+      }
+    }, 200),
+  }
 };
 </script>

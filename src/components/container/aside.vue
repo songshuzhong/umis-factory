@@ -1,5 +1,5 @@
 <template>
-  <el-aside :class="classname" :width="`${iWidth}px`">
+  <el-aside :class="classname" :width="`${data.width}px`">
     <template v-if="Object.prototype.toString.call(body) === '[object Array]'">
       <template v-for="(child, index) in body">
         <mis-component
@@ -14,7 +14,7 @@
       </template>
     </template>
     <mis-component
-      v-else
+      v-else-if="Object.prototype.toString.call(body) === '[object Object]'"
       :mis-name="body.renderer"
       :path="`${path}/${body.renderer}`"
       :props="getFattingProps(body)"
@@ -48,26 +48,8 @@ export default {
     classname: {
       type: String,
       required: false,
-    },
-    width: {
-      type: Number,
-      required: false,
-      default: 300
     }
   },
-  mixins: [derivedProp, initData],
-  data() {
-    return {
-      iWidth: 0
-    }
-  },
-  watch: {
-    width: {
-      handler(val) {
-        this.iWidth = val;
-      },
-      immediate: true
-    }
-  }
+  mixins: [derivedProp, initData]
 };
 </script>

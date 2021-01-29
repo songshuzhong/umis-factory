@@ -28,4 +28,5 @@ module.exports = {
   'element-resize-detector': 'element-resize-detector',
   'lodash.clonedeep': 'lodash.clonedeep',
   'lodash.template': 'lodash.template',
+  'lodash.debounce': 'lodash.debounce'
 };
