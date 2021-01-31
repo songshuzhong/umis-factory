@@ -1,17 +1,15 @@
 <template>
   <el-menu
-    v-resize
+    ref="menu"
     :mode="mode"
     :default-active="defaultActive"
     :collapse="data.collapse"
-    :class="classname"
+    :class="data.collapse ? `${classname} umis-menu--collapse` : classname"
     :router="router"
     :background-color="backgroundColor"
     :text-color="textColor"
     :active-text-color="activeTextColor"
-    :collapse-transition="true"
     :unique-opened="uniqueOpened"
-    @resize="handleResize"
   >
     <template v-if="title">
       <mis-component
@@ -35,7 +33,6 @@
 
 <script>
 import { ElMenu } from 'element-plus';
-import debounce from 'lodash.debounce';
 import initData from '../mixin/init-data';
 
 export default {
@@ -74,11 +71,6 @@ export default {
       required: false,
       default: false,
     },
-    collapse: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
     body: {
       type: Array,
       required: true,
@@ -113,9 +105,22 @@ export default {
       required: false,
     },
   },
+  data() {
+    return {
+      data: {
+        collapse: false,
+      },
+      width: 0
+    };
+  },
   watch: {
-    collapse: {
+    'data.collapse': {
       handler(val) {
+        if (val) {
+          this.linkageTrigger(this.target, { width: 64 });
+        } else {
+          this.linkageTrigger(this.target, { width: this.width });
+        }
         this.data.collapse = val;
       },
       immediate: true,
@@ -123,15 +128,9 @@ export default {
   },
   mixins: [initData],
   mounted() {
-    this.isMounted = true;
+    this.$nextTick(() => {
+      this.width = this.$refs.menu.$el.clientWidth;
+    });
   },
-  methods: {
-    handleResize: debounce(function(e) {
-      if (this.isMounted && this.target) {
-        this.data.width = e.detail.width;
-        this.linkageTrigger(this.target, { width: e.detail.width });
-      }
-    }, 200),
-  }
 };
 </script>

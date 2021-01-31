@@ -76,6 +76,7 @@ export default {
     appendToBody: {
       type: Boolean,
       required: false,
+      default: true
     },
     body: {
       type: Array,
