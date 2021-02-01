@@ -5,6 +5,7 @@ module.exports = {
   axios: 'axios',
   echarts: 'echarts',
   beautify: 'beautify',
+  qrcodejs2: 'qrcodejs2',
   'file-saver': 'file-saver',
   'echarts/lib/chart/bar': 'echarts/lib/chart/bar',
   'echarts/lib/chart/line': 'echarts/lib/chart/line',

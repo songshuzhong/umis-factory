@@ -29,6 +29,7 @@ export default {
     value: {
       type: Boolean,
       required: false,
+      default: false
     },
     disabled: {
       type: Boolean,
