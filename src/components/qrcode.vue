@@ -19,7 +19,7 @@ export default {
     size: {
       type: Number,
       required: false,
-      default: 128
+      default: 150
     },
     colorDark: {
       type: String,

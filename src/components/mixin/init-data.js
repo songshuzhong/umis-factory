@@ -7,13 +7,26 @@ export default {
       required: false,
       default: {},
     },
+    initRows: {
+      type: Array,
+      required: false,
+      default: []
+    }
   },
   data() {
     return {
       data: {},
+      rows: []
     };
   },
   watch: {
+    initRows: {
+      handler(val) {
+        this.rows = val;
+      },
+      immediate: true,
+      deep: true,
+    },
     initData: {
       handler(val) {
         const mergeData = Object.assign({}, this.data, val);

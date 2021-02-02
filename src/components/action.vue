@@ -1,6 +1,41 @@
 <template>
+  <el-popover
+    v-if="popupType === 'over'"
+    :title="popoverTitle"
+    :content="popoverContent"
+    :trigger="popoverTrigger"
+    :width="popoverWidth"
+    :placement="popoverPlacement"
+  >
+    <mis-component
+      v-if="body"
+      :mis-name="body.renderer"
+      :path="`${path}/${body.renderer}`"
+      :body="getBody(body)"
+      :header="getHeader(body)"
+      :footer="getFooter(body)"
+      :props="getFattingProps(body)"
+      :init-data="getInitData(data, body)"
+      :init-rows="rows"
+    />
+    <template #reference>
+      <el-button
+        v-loading="iApiLoading"
+        :class="classname"
+        :size="size"
+        :type="type"
+        :plain="plain"
+        :round="round"
+        :circle="circle"
+        :icon="icon"
+        :disabled="iApiLoading"
+      >
+        {{ renderText }}
+      </el-button>
+    </template>
+  </el-popover>
   <el-popconfirm
-    v-if="confirmTitle"
+    v-else-if="popupType === 'confirm'"
     :confirm-button-text="confirmBtnText"
     :cancel-button-text="confirmCancelBtnText"
     :confirm-button-type="confirmBtnType"
@@ -28,11 +63,12 @@
     </template>
   </el-popconfirm>
   <el-tooltip
-    v-else-if="tipContent"
+    v-else-if="popupType === 'tip'"
     :disabled="tipDisabled"
     :effect="tipEffect"
     :content="tipContent"
     :placement="tipPlacement"
+    :append-to-body="true"
   >
     <el-button
       v-loading="iApiLoading"
@@ -48,7 +84,7 @@
       {{ text }}
     </el-button>
   </el-tooltip>
-  <el-badge v-else-if="badgeText" :value="badgeText" :class="badgeClass">
+  <el-badge v-else-if="popupType === 'badge'" :value="badgeText" :class="badgeClass">
     <el-button
       v-loading="iApiLoading"
       :class="classname"
@@ -64,7 +100,7 @@
       {{ text }}
     </el-button>
   </el-badge>
-  <el-button-group v-else-if="actions" v-loading="iApiLoading">
+  <el-button-group v-else-if="popupType === '' && actions" v-loading="iApiLoading">
     <template v-for="(item, index) in actions" :key="`${path}/${index}`">
       <el-button
         v-bind="item"
@@ -94,6 +130,7 @@
 </template>
 <script>
 import {
+  ElPopover,
   ElPopconfirm,
   ElTooltip,
   ElBadge,
@@ -108,6 +145,7 @@ import initApi from './mixin/init-api';
 export default {
   name: 'MisAction',
   components: {
+    ElPopover,
     ElPopconfirm,
     ElTooltip,
     ElBadge,
@@ -160,6 +198,11 @@ export default {
       type: Boolean,
       required: false,
     },
+    popupType: {
+      type: String,
+      required: false,
+      default: ''
+    },
     size: {
       type: String,
       required: false,
@@ -183,7 +226,7 @@ export default {
     tipDisabled: {
       type: Boolean,
       required: false,
-      default: true,
+      default: false,
     },
     tipEffect: {
       type: String,
@@ -240,6 +283,31 @@ export default {
     badgeClass: {
       type: String,
       required: false,
+    },
+    popoverTitle: {
+      type: String,
+      required: false,
+      default: ''
+    },
+    popoverContent: {
+      type: String,
+      required: false,
+      default: ''
+    },
+    popoverTrigger: {
+      type: String,
+      required: false,
+      default: 'click'
+    },
+    popoverWidth: {
+      type: Number,
+      required: false,
+      default: 150
+    },
+    popoverPlacement: {
+      type: String,
+      required: false,
+      default: 'bottom'
     },
     target: {
       type: String,

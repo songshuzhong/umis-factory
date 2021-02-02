@@ -6,6 +6,8 @@
           :mis-name="child.renderer"
           :path="`${path}/${index}/${child.renderer}`"
           :index="index"
+          :hidden-on="child.hiddenOn"
+          :visible-on="child.visibleOn"
           :header="getHeader(child)"
           :body="getBody(child)"
           :footer="getFooter(child)"
@@ -18,6 +20,8 @@
       v-if="Object.prototype.toString.call(body) === '[object Object]'"
       :mis-name="body.renderer"
       :path="`${path}/${body.renderer}`"
+      :hidden-on="body.hiddenOn"
+      :visible-on="body.visibleOn"
       :body="getBody(body)"
       :header="getHeader(body)"
       :footer="getFooter(body)"
@@ -40,6 +44,7 @@ export default {
     index: {
       type: String,
       required: false,
+      default: '0'
     },
     body: {
       type: [Object, Array],

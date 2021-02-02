@@ -1,6 +1,7 @@
 <template>
   <div
     v-loading="iApiLoading"
+    :class="classname"
     class="umis-service__body"
   >
     <template v-if="Object.prototype.toString.call(body) === '[object Array]'">
@@ -13,6 +14,7 @@
           :footer="getFooter(child)"
           :props="getFattingProps(child)"
           :init-data="getInitData(data, child)"
+          :init-rows="rows"
         />
       </template>
     </template>
@@ -25,6 +27,7 @@
       :footer="getFooter(body)"
       :props="getFattingProps(body, data, { rows })"
       :init-data="getInitData(data, body)"
+      :init-rows="rows"
     />
   </div>
 </template>
@@ -56,6 +59,11 @@ export default {
     footer: {
       type: [Array, Object],
       required: false,
+    },
+    classname: {
+      type: String,
+      required: false,
+      default: ''
     },
   },
   mixins: [initData, initApi, derivedProp],

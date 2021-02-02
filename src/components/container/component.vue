@@ -11,6 +11,7 @@
       :body="body"
       :footer="footer"
       :init-data="data"
+      :init-rows="rows"
       :error-info="errorInfo"
       :action="filterAction"
       :after-action="afterAction"

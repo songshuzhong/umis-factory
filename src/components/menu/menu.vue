@@ -10,6 +10,7 @@
     :text-color="textColor"
     :active-text-color="activeTextColor"
     :unique-opened="uniqueOpened"
+    @select="handleSelect"
   >
     <template v-if="title">
       <mis-component
@@ -110,7 +111,8 @@ export default {
       data: {
         collapse: false,
       },
-      width: 0
+      width: 0,
+      activeIndex: '',
     };
   },
   watch: {
@@ -125,6 +127,11 @@ export default {
       },
       immediate: true,
     },
+    activeIndex: {
+      handler(val) {
+        this.linkageTrigger(this.target, { activeIndex: val });
+      }
+    }
   },
   mixins: [initData],
   mounted() {
@@ -132,5 +139,10 @@ export default {
       this.width = this.$refs.menu.$el.clientWidth;
     });
   },
+  methods: {
+    handleSelect(index) {
+      this.activeIndex = index;
+    }
+  }
 };
 </script>

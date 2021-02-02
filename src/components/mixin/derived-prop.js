@@ -9,6 +9,9 @@ export default {
       return { ...other };
     },
     getInitData(data, extend = {}) {
+      if (Object.prototype.toString.call(data) === '[object Array]') {
+        return { rows: data, ...extend.initData };
+      }
       return { ...data, ...extend.initData };
     },
     getHeader(props) {

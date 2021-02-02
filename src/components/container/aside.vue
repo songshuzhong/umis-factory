@@ -42,7 +42,7 @@ export default {
       required: true,
     },
     body: {
-      type: Array,
+      type: [Array, Object],
       required: true,
     },
     classname: {

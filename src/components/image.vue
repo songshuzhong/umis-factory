@@ -1,10 +1,12 @@
 <template>
-  <div class="umis-image__container">
+  <div
+    class="umis-image__container"
+    :class="classname"
+  >
     <template v-if="Object.prototype.toString.call(src) === '[object Array]'">
       <el-image
         v-for="(item, index) in src"
         :key="index"
-        :class="classname"
         :src="item"
         :lazy="lazy"
         :fit="fit"
@@ -18,7 +20,7 @@
       </el-image>
     </template>
     <template v-else>
-      <el-image :class="classname" :src="src" :lazy="lazy" :fit="fit" :preview-src-list="previews">
+      <el-image :src="src" :lazy="lazy" :fit="fit" :preview-src-list="previews">
         <template v-if="error" #error>
           {{ $getRenderedTpl(error) }}
         </template>

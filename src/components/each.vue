@@ -1,5 +1,5 @@
 <template>
-  <template v-for="(item, index) in data" :key="`${path}/${index}/${body.renderer}`">
+  <template v-for="(item, index) in rows || data" :key="`${path}/${index}/${body.renderer}`">
     <mis-component
       :mis-name="body.renderer"
       :path="`${path}/${index}/${body.renderer}`"
