@@ -1,7 +1,10 @@
 <template>
   <el-aside :class="classname" :width="`${data.width}px`">
     <template v-if="Object.prototype.toString.call(body) === '[object Array]'">
-      <template v-for="(child, index) in body">
+      <template
+        v-for="(child, index) in body"
+        :key="index"
+      >
         <mis-component
           :mis-name="child.renderer"
           :path="`${path}/${index}/${child.renderer}`"

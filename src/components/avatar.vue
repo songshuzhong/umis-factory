@@ -183,10 +183,10 @@ export default {
   },
   methods: {
     onClick() {
-      const { renderer, content } = this.$attrs;
+      const { renderer, content, url, redirect, blank } = this.$attrs;
       if (this.action && typeof this.action === 'function') {
         this.action(
-          { renderer, content, actionType: this.actionType },
+          { renderer, content, url, redirect, blank, actionType: this.actionType },
           this.data
         );
       }

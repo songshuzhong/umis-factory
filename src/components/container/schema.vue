@@ -1,13 +1,16 @@
 <template>
-  <div v-if="!iSchemaLoading" class="umis-schema__container">
+  <div
+    v-if="!iSchemaLoading"
+    class="umis-schema__container"
+  >
     <template
       v-if="Object.prototype.toString.call(iSchema) === '[object Array]'"
+      :key="`${path}/${index}/${item.renderer}`"
     >
       <component
+        :is="item.renderer"
         v-for="(item, index) in iSchema"
         v-bind="item"
-        :is="item.renderer"
-        :key="`${path}/${index}/${item.renderer}`"
         :path="`${path}/${index}/${item.renderer}`"
       />
     </template>
@@ -15,19 +18,22 @@
       v-if="Object.prototype.toString.call(iSchema) === '[object Object]'"
     >
       <component
+        :is="iSchema.renderer"
         v-if="!iSchemaLoading"
         v-bind="iSchema"
-        :is="iSchema.renderer"
         :key="`${path}/${iSchema.renderer}`"
         :path="`${path}/${iSchema.renderer}`"
       />
     </template>
     <div v-if="!canSchemaUpdate">
-      <template v-for="({ actionType, body, data, visible }, path) in popMap" :key="path">
+      <template
+        v-for="({ actionType, body, data, visible }, path) in popMap"
+        :key="path"
+      >
         <component
+          :is="actionType"
           v-bind="body"
           :path="path"
-          :is="actionType"
           :visible="visible"
           :init-data="data"
           :on-popup-invisible="destroyProtal"
@@ -126,15 +132,16 @@ export default {
 
       this.iSchemaLoading = true;
       this.$api
-        .slientApi(this.$umisConfig)
-        [method](url, fetchBody)
+        .slientApi(this.$umisConfig)[method](url, fetchBody)
         .then(res => {
           const { pageSchema, ...pageInfo } = res.data;
           const schema = JSON.parse(pageSchema);
           this.iSchema = schema;
           this.iSchemaLoading = false;
           window.UMIS = { pageInfo, pageSchema: schema };
-        });
+        }).catch(err => {
+          console.log(err);
+      });
     },
     updatePageSchema(schema) {
       if (this.canSchemaUpdate) {

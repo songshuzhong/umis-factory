@@ -4,8 +4,9 @@
     :title="popoverTitle"
     :content="popoverContent"
     :trigger="popoverTrigger"
-    :width="popoverWidth"
     :placement="popoverPlacement"
+    :popper-class="popperClass"
+    :width="popperWidth"
   >
     <mis-component
       v-if="body"
@@ -68,6 +69,7 @@
     :effect="tipEffect"
     :content="tipContent"
     :placement="tipPlacement"
+    :popper-class="popperClass"
     :append-to-body="true"
   >
     <el-button
@@ -84,7 +86,11 @@
       {{ text }}
     </el-button>
   </el-tooltip>
-  <el-badge v-else-if="popupType === 'badge'" :value="badgeText" :class="badgeClass">
+  <el-badge
+    v-else-if="popupType === 'badge'"
+    :value="badgeText"
+    :class="badgeClass"
+  >
     <el-button
       v-loading="iApiLoading"
       :class="classname"
@@ -100,8 +106,14 @@
       {{ text }}
     </el-button>
   </el-badge>
-  <el-button-group v-else-if="popupType === '' && actions" v-loading="iApiLoading">
-    <template v-for="(item, index) in actions" :key="`${path}/${index}`">
+  <el-button-group
+    v-else-if="popupType === '' && actions"
+    v-loading="iApiLoading"
+  >
+    <template
+      v-for="(item, index) in actions"
+      :key="`${path}/${index}`"
+    >
       <el-button
         v-bind="item"
         :index="index"
@@ -192,6 +204,14 @@ export default {
     },
     classname: {
       type: String,
+      required: false,
+    },
+    popperClass: {
+      type: String,
+      required: false,
+    },
+    popperWidth: {
+      type: [String, Number],
       required: false,
     },
     showPopup: {
@@ -298,11 +318,6 @@ export default {
       type: String,
       required: false,
       default: 'click'
-    },
-    popoverWidth: {
-      type: Number,
-      required: false,
-      default: 150
     },
     popoverPlacement: {
       type: String,

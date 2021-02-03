@@ -23,16 +23,16 @@
         v-for="(value, name) in domains"
         class="umis-setting__api-editor__item"
       >
-        <el-link
-          :underline="false"
+        <span
           class="umis-setting__api-editor__delete"
-          icon="el-icon-delete"
           @click="onDelete(name)"
-        />
+        >
+          <i class="el-icon-delete" />
+        </span>
         <el-input
           class="umis-setting__api-editor__label"
           :key="name"
-          v-model="domains[name]"
+          :model-value="name"
         />
         <el-input
           class="umis-setting__api-editor__value"
@@ -87,15 +87,26 @@ export default {
     },
   },
   data() {
+    const { activeApi, domains } = this.$umisConfig;
+    let checked;
+    for (let key in domains) {
+      if (domains.hasOwnProperty(key)) {
+        if (domains[key] === activeApi) {
+          checked = key;
+        }
+      }
+    }
     return {
-      domains: this.$umisConfig.domains,
-      checked: 'VUE_APP_API_ACTIVE',
+      domains,
+      checked,
     };
   },
   watch: {
     modelValue: {
       handler(val) {
-        this.domains = val || {};
+        if (val) {
+          this.domains = val;
+        }
       },
       immediate: true,
       deep: true,
@@ -104,6 +115,7 @@ export default {
       handler(val) {
         this.$emit('update:modelValue', val);
       },
+      deep: true
     },
     checked: {
       handler() {
@@ -137,7 +149,7 @@ export default {
         title: '通知',
         message: '保存成功！',
       });
-      this.$umisConfig.VUE_APP_API_ACTIVE = this.domains[this.checked];
+      this.$umisConfig.activeApi = this.domains[this.checked];
       this.$umisConfig.isApiChanged = true;
     },
   },

@@ -1,10 +1,11 @@
 <template>
   <transition :name="transition">
     <component
+      ref="component"
+      :is="componentName"
       v-if="iVisible && forceRerender"
       v-show="iHidden && forceRerender"
       v-bind="getSlimmingProps(props)"
-      :is="componentName"
       :path="path"
       :index="index"
       :header="header"
@@ -16,7 +17,6 @@
       :action="filterAction"
       :after-action="afterAction"
       :linkage-trigger="onLinkageTrigger"
-      ref="component"
     />
   </transition>
 </template>

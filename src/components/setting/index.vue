@@ -46,7 +46,7 @@ export default {
       style,
       domains,
       adaptor,
-    } = window.umisConfig;
+    } = this.$umisConfig || window.umisConfig;
     return {
       isApiChanged,
       isFormData,
@@ -56,6 +56,20 @@ export default {
       elasticWidth: 0,
       fixed: true,
     };
+  },
+  watch: {
+    isFormData(val) {
+      this.$umisConfig.isFormData = val;
+    },
+    style(val) {
+      this.$umisConfig.style = val;
+    },
+    domains(val) {
+      this.$umisConfig.domains = val;
+    },
+    adaptor(val) {
+      this.$umisConfig.adaptor = val;
+    }
   },
   mounted() {
     this.$eventHub.$on('mis-config:update', this.updateUmisConfig);
@@ -85,7 +99,7 @@ export default {
         isFormData: this.isFormData,
         groupStyle: this.style,
         groupAdaptor: this.adaptor,
-        groupDomain: this.$umisConfig.VUE_APP_API_ACTIVE,
+        groupDomain: this.$umisConfig.activeApi,
         groupId: '0767bea4-c7e7-4aa7-a1b5-2fd5e1ec4a7f',
       };
       this.$api
