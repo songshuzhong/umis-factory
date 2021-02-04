@@ -79,7 +79,7 @@ export default {
     },
     updateValue: {
       type: Function,
-      required: true,
+      required: false,
     }
   },
   data() {

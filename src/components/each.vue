@@ -1,5 +1,5 @@
 <template>
-  <template v-for="(item, index) in rows || data" :key="`${path}/${index}/${body.renderer}`">
+  <template v-for="(item, index) in eachData" :key="`${path}/${index}/${body.renderer}`">
     <mis-component
       :mis-name="body.renderer"
       :path="`${path}/${index}/${body.renderer}`"
@@ -28,10 +28,23 @@ export default {
       type: String,
       required: false,
     },
+    type: {
+      type: String,
+      required: false,
+      default: 'map'
+    },
     body: {
       type: Object,
       required: true,
     },
+  },
+  computed: {
+    eachData() {
+      if (this.type === 'list') {
+        return this.rows;
+      }
+      return this.data;
+    }
   },
   mixins: [initData, derivedProp],
 };

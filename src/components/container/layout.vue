@@ -14,7 +14,7 @@
       </template>
     </template>
     <mis-component
-      v-else
+      v-else-if="Object.prototype.toString.call(body) === '[object Object]'"
       :mis-name="body.renderer"
       :path="`${path}/${body.renderer}`"
       :body="getBody(body)"
@@ -47,7 +47,7 @@ export default {
       required: true,
     },
     body: {
-      type: Array,
+      type: [Object, Array],
       required: true,
     },
     direction: {

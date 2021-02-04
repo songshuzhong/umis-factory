@@ -5,12 +5,12 @@
   >
     <template
       v-if="Object.prototype.toString.call(iSchema) === '[object Array]'"
-      :key="`${path}/${index}/${item.renderer}`"
     >
       <component
         :is="item.renderer"
         v-for="(item, index) in iSchema"
         v-bind="item"
+        :key="`${path}/${index}/${item.renderer}`"
         :path="`${path}/${index}/${item.renderer}`"
       />
     </template>

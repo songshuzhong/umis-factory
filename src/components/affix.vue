@@ -33,7 +33,7 @@ export default {
     },
     target: {
       type: String,
-      required: true
+      required: false
     },
     offset: {
       type: String,
@@ -44,7 +44,7 @@ export default {
       required: false
     },
     zIndex: {
-      type: String,
+      type: [Number, String],
       required: false
     },
     body: {

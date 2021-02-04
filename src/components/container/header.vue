@@ -14,7 +14,7 @@
       </template>
     </template>
     <mis-component
-      v-else
+      v-if="Object.prototype.toString.call(body) === '[object Object]'"
       :mis-name="body.renderer"
       :key="`${path}/${body.renderer}`"
       :path="`${path}/${body.renderer}`"

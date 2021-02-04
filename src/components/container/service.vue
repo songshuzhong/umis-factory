@@ -19,7 +19,7 @@
       </template>
     </template>
     <mis-component
-      v-else
+      v-else-if="Object.prototype.toString.call(body) === '[object Object]'"
       :path="`${path}/${body.renderer}`"
       :mis-name="body.renderer"
       :header="getHeader(body)"

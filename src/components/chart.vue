@@ -1,5 +1,12 @@
 <template>
-  <v-chart v-loading="iApiLoading" :id="path" :option="data" :style="{height: `${defaultHeight}px`}" @click="handleClick" />
+  <v-chart
+    v-loading="iApiLoading"
+    :id="path"
+    :option="options"
+    :style="{height: `${defaultHeight}px`}"
+    :show-loading="false"
+    @click="handleClick"
+  />
 </template>
 <script>
 import { VEcharts as VChart} from 'vue3-echarts';
@@ -26,7 +33,7 @@ import derivedProp from './mixin/derived-prop';
 export default {
   name: 'MisChart',
   components: {
-    'v-chart': VChart,
+    VChart,
   },
   props: {
     name: {
@@ -39,17 +46,26 @@ export default {
     },
     action: {
       type: Function,
-      required: true,
+      required: false,
     },
     actions: {
       type: Object,
-      required: true,
+      required: false,
     },
   },
   data() {
     return {
-      defaultHeight: 0
+      options: {},
+      defaultHeight: 200
     };
+  },
+  watch: {
+    data: {
+      handler(val) {
+        this.options = val;
+      },
+      deep: true
+    }
   },
   mixins: [derivedProp, initData, initApi],
   mounted() {

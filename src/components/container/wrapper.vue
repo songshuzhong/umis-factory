@@ -17,7 +17,7 @@
       </template>
     </template>
     <mis-component
-      v-if="Object.prototype.toString.call(body) === '[object Object]'"
+      v-else-if="Object.prototype.toString.call(body) === '[object Object]'"
       :mis-name="body.renderer"
       :path="`${path}/${body.renderer}`"
       :hidden-on="body.hiddenOn"

@@ -18,7 +18,7 @@
       </template>
     </template>
     <mis-component
-      v-else
+      v-else-if="Object.prototype.toString.call(body) === '[object Object]'"
       v-bind="getFattingProps(body)"
       :mis-name="body.renderer"
       :path="`${path}/${body.renderer}`"
