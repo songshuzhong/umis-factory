@@ -137,6 +137,9 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.width = this.$refs.menu.$el.clientWidth;
+      if (this.target) {
+        this.linkageTrigger(this.target, { width: this.width });
+      }
     });
   },
   methods: {

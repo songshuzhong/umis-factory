@@ -55,6 +55,6 @@ export default {
       required: false,
     }
   },
-  mixins: [derivedProp, initData]
+  mixins: [derivedProp, initData],
 };
 </script>

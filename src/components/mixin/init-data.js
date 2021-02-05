@@ -11,6 +11,11 @@ export default {
       type: Array,
       required: false,
       default: []
+    },
+    inherit: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   data() {
@@ -22,15 +27,19 @@ export default {
   watch: {
     initRows: {
       handler(val) {
-        this.rows = val;
+        if (this.inherit) {
+          this.rows = val;
+        }
       },
       immediate: true,
       deep: true,
     },
     initData: {
       handler(val) {
-        const mergeData = Object.assign({}, this.data, val);
-        this.data = clonedeep(mergeData);
+        if (this.inherit) {
+          const mergeData = Object.assign({}, this.data, val);
+          this.data = clonedeep(mergeData);
+        }
       },
       immediate: true,
       deep: true,
