@@ -28,7 +28,7 @@
         :init-data="getInitData(data, header)"
       />
     </template>
-    <el-main class="umis-popup__container__body">
+    <el-main v-if="body" class="umis-popup__container__body">
       <template
         v-if="Object.prototype.toString.call(body) === '[object Array]'"
       >

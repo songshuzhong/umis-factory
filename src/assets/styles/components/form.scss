@@ -42,15 +42,20 @@
   }
   .umis-form__list {
     margin: 10px 0;
+    .el-radio-group,
     .el-checkbox-group {
       font-size: inherit;
+      line-height: inherit;
     }
+    .el-radio,
     .el-checkbox {
       position: absolute;
       bottom: 3px;
       right: 3px;
+      margin-right: 0;
       line-height: 14px;
     }
+    .el-radio__label,
     .el-checkbox__label {
       display: none;
     }
@@ -59,6 +64,7 @@
       min-width: 82px;
       min-height: 35px;
       margin-right: 10px;
+      padding-bottom: 20px;
       display: inline-block;
       border: 1px solid #dcdfe6;
       cursor: pointer;

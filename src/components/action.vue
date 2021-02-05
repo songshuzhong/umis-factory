@@ -328,7 +328,7 @@ export default {
       type: String,
       required: false,
     },
-    remoteForm: {
+    remoteComponent: {
       type: String,
       required: false,
     },
@@ -362,20 +362,24 @@ export default {
   },
   methods: {
     onClick() {
+      const attributes = event.currentTarget.attributes;
       let index;
       let actionType;
+      let remoteComponent;
       if (this.actions) {
-        index = event.currentTarget.attributes.index.value;
+        index = attributes.index && attributes.index.value;
+        remoteComponent = attributes.remotecomponent && attributes.remotecomponent.value;
         actionType = this.actions[index].actionType;
         this.index = index;
       } else {
         actionType = this.$attrs.actionType;
       }
-      if (this.remoteForm) {
+
+      if (remoteComponent || this.remoteComponent) {
         this.$eventHub.$emit(
-          'mis-component:form',
+          'mis-component:remoteComponent',
           actionType,
-          this.remoteForm,
+          remoteComponent ||this.remoteComponent,
           this.handleAfterAction
         );
       } else if (typeof index === 'string') {

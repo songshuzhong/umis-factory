@@ -1,7 +1,7 @@
 export default {
   methods: {
     getSlimmingProps(props = {}, extend = {}) {
-      const { hiddenOn, visibleOn, transition, ...other } = props;
+      const { hiddenOn, transition, ...other } = props;
       return { ...other, ...extend, disabled: this.iDisabled };
     },
     getFattingProps(props, extend = {}) {

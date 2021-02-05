@@ -6,23 +6,34 @@
     <template
       v-if="Object.prototype.toString.call(iSchema) === '[object Array]'"
     >
-      <component
-        :is="item.renderer"
-        v-for="(item, index) in iSchema"
-        v-bind="item"
-        :key="`${path}/${index}/${item.renderer}`"
-        :path="`${path}/${index}/${item.renderer}`"
-      />
+      <template v-for="(child, index) in iSchema" :key="index">
+        <mis-component
+          v-bind="getFattingProps(child)"
+          :mis-name="child.renderer"
+          :path="`${path}/${index}/${child.renderer}`"
+          :header="getHeader(child)"
+          :body="getBody(child)"
+          :footer="getFooter(child)"
+          :props="getFattingProps(child, data)"
+          :init-data="getInitData(data, child)"
+          :visible-on="child.visibleOn"
+        />
+      </template>
     </template>
     <template
       v-if="Object.prototype.toString.call(iSchema) === '[object Object]'"
     >
-      <component
-        :is="iSchema.renderer"
+      <mis-component
+        v-bind="getFattingProps(iSchema)"
         v-if="!iSchemaLoading"
-        v-bind="iSchema"
-        :key="`${path}/${iSchema.renderer}`"
+        :mis-name="iSchema.renderer"
         :path="`${path}/${iSchema.renderer}`"
+        :header="getHeader(iSchema)"
+        :body="getBody(iSchema)"
+        :footer="getFooter(iSchema)"
+        :props="getFattingProps(iSchema, data)"
+        :init-data="getInitData(data, iSchema)"
+        :visible-on="iSchema.visibleOn"
       />
     </template>
     <div v-if="!canSchemaUpdate">
@@ -47,6 +58,7 @@
 import { ElSkeleton } from 'element-plus';
 import clonedeep from 'lodash.clonedeep';
 import derivedProp from '../mixin/derived-prop';
+import linkage from '../mixin/linkage';
 
 export default {
   name: 'MisSchema',
@@ -63,9 +75,13 @@ export default {
       required: false,
       default: true,
     },
-    initSchema: {
-      type: Object,
-      required: false,
+    target: {
+      type: String,
+      required: false
+    },
+    url: {
+      type: String,
+      required: false
     },
   },
   data() {
@@ -83,7 +99,7 @@ export default {
       },
       immediate: true,
     },
-    'initSchema.url': {
+    url: {
       handler() {
         this.getPageSchema();
       },
@@ -95,13 +111,13 @@ export default {
       return this.canSchemaUpdate ? this.$route.path : '/website';
     },
   },
-  mixins: [derivedProp],
+  mixins: [derivedProp, linkage],
   mounted() {
     this.isMounted = true;
     this.$eventHub.$on('mis-schema:change', this.updatePageSchema);
     this.$eventHub.$on('mis-portal:create', this.createProtal);
     this.$eventHub.$on('mis-portal:destroy', this.destroyProtal);
-    if (this.initSchema) {
+    if (this.url) {
       this.getPageSchema();
     }
     if (!this.canSchemaUpdate) {
@@ -117,27 +133,18 @@ export default {
     destroyProtal(path) {
       const popMap = this.popMap;
       delete popMap[path];
-      // popMap[path].visible = false
       this.popMap = clonedeep(popMap);
     },
     getPageSchema() {
-      const { method, url, params = {} } = this.initSchema;
-      let fetchBody = params;
-
-      if (method === 'get') {
-        fetchBody = {
-          params,
-        };
-      }
-
       this.iSchemaLoading = true;
       this.$api
-        .slientApi(this.$umisConfig)[method](url, fetchBody)
+        .slientApi(this.$umisConfig).get(this.url)
         .then(res => {
           const { pageSchema, ...pageInfo } = res.data;
           const schema = JSON.parse(pageSchema);
           this.iSchema = schema;
           this.iSchemaLoading = false;
+          this.onLinkageTrigger(this.target, {url: this.url});
           window.UMIS = { pageInfo, pageSchema: schema };
         }).catch(err => {
           console.log(err);

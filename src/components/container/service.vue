@@ -7,6 +7,7 @@
     <template v-if="Object.prototype.toString.call(body) === '[object Array]'">
       <template v-for="(child, index) in body" :key="`${path}/${index}/${child.renderer}`">
         <mis-component
+          v-bind="getFattingProps(child)"
           :mis-name="child.renderer"
           :path="`${path}/${index}/${child.renderer}`"
           :header="getHeader(child)"
@@ -20,6 +21,7 @@
     </template>
     <mis-component
       v-else-if="Object.prototype.toString.call(body) === '[object Object]'"
+      v-bind="getFattingProps(body)"
       :path="`${path}/${body.renderer}`"
       :mis-name="body.renderer"
       :header="getHeader(body)"

@@ -257,7 +257,7 @@ export default {
   },
   mixins: [initApi, initData, derivedProp],
   mounted() {
-    this.$eventHub.$on('mis-component:form', this.handleRemoteSubmit);
+    this.$eventHub.$on('mis-component:remoteComponent', this.handleRemoteSubmit);
   },
   methods: {
     handleInvisible(visible, field) {

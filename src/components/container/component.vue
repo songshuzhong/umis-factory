@@ -178,13 +178,13 @@ export default {
     },
     handleRedirectAction(props, context) {
       const url = this.$getCompiledUrl(props.redirect, context);
-      const params = this.$getCompiledParams(props.params, context);
+      let params = this.$getCompiledParams(props.params, context);
       if (/^https?:\/\//.test(url)) {
         window.location.replace(url);
       } else if (props.redirectType === 'routeName') {
         this.$router.push({
           name: url,
-          params,
+          params
         });
       } else {
         this.$router.push(url);

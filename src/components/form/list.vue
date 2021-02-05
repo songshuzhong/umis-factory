@@ -1,6 +1,11 @@
 <template>
   <div class="umis-form__list">
-    <el-checkbox-group v-model="iValue" :min="min" :max="max">
+    <el-checkbox-group
+      v-if="multiple"
+      v-model="iValue"
+      :min="min"
+      :max="max"
+    >
       <template v-for="(item, index) in rows" :key="index">
         <div
           class="umis-list__item"
@@ -21,10 +26,34 @@
         </div>
       </template>
     </el-checkbox-group>
+    <el-radio-group
+      v-else
+      v-model="iValue"
+    >
+      <template v-for="(item, index) in rows" :key="index">
+        <div
+          class="umis-list__item"
+          :class="{ checked: iValue.includes(item.value) }"
+          @click="handleClick(index)"
+        >
+          <el-radio :ref="`list__${index}`" :label="item.value" />
+          <mis-component
+            :mis-name="body.renderer"
+            :path="`${path}/${body.renderer}`"
+            :index="index"
+            :props="getFattingProps(body)"
+            :header="getHeader(body)"
+            :body="getBody(body)"
+            :footer="getFooter(body)"
+            :init-data="getInitData(item)"
+          />
+        </div>
+      </template>
+    </el-radio-group>
   </div>
 </template>
 <script>
-import { ElCheckboxGroup, ElCheckbox } from 'element-plus';
+import { ElCheckboxGroup, ElCheckbox, ElRadioGroup, ElRadio } from 'element-plus';
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
 
@@ -32,7 +61,9 @@ export default {
   name: 'MisList',
   components: {
     ElCheckboxGroup,
-    ElCheckbox
+    ElCheckbox,
+    ElRadioGroup,
+    ElRadio
   },
   props: {
     path: {
@@ -54,6 +85,11 @@ export default {
     max: {
       type: Number,
       required: false
+    },
+    multiple: {
+      type: Boolean,
+      required: false,
+      default: true
     },
     body: {
       type: Object,

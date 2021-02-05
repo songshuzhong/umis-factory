@@ -6,6 +6,7 @@
         :key="index"
       >
         <mis-component
+          v-bind="getFattingProps(child)"
           :mis-name="child.renderer"
           :path="`${path}/${index}/${child.renderer}`"
           :props="getFattingProps(child)"
@@ -18,6 +19,7 @@
     </template>
     <mis-component
       v-else-if="Object.prototype.toString.call(body) === '[object Object]'"
+      v-bind="getFattingProps(body)"
       :mis-name="body.renderer"
       :path="`${path}/${body.renderer}`"
       :props="getFattingProps(body)"

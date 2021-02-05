@@ -95,15 +95,29 @@ export default {
       immediate: true,
     },
   },
+  mounted() {
+    this.$eventHub.$on('mis-component:remoteComponent', this.handleRemoteClick);
+  },
   methods: {
     onChange(val) {
-      const linkage = {};
       this.iValue = val;
-      linkage[this.name] = this.iValue;
-
       this.updateValue && this.updateValue(val);
-      this.linkageTrigger && this.linkageTrigger(this.target, linkage);
+
+      if (this.target) {
+        const linkage = {};
+        linkage[this.name] = this.iValue;
+        this.linkageTrigger && this.linkageTrigger(this.target, linkage);
+      }
     },
+    handleRemoteClick(actionType, target, feedback) {
+      if (target && target === this.name) {
+        const linkage = {};
+        this.iValue = !this.iValue;
+        this.updateValue && this.updateValue(this.iValue);
+        linkage[this.name] = this.iValue;
+        this.linkageTrigger && this.linkageTrigger(this.target, linkage);
+      }
+    }
   },
 };
 </script>

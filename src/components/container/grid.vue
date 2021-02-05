@@ -13,6 +13,7 @@
       :span="child.span"
     >
       <mis-component
+        v-bind="getFattingProps(child)"
         :mis-name="child.renderer"
         :key="index"
         :path="`${path}/${index}/${child.renderer}`"
