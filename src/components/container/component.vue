@@ -129,6 +129,9 @@ export default {
     },
     dispatchAction(props, context, feedback) {
       switch (props.actionType) {
+        case 'mis-linkage':
+          this.handleLinkageAction(props, context, feedback);
+          break;
         case 'mis-ajax':
           this.handleAjaxAction(props, context, feedback);
           break;
@@ -162,6 +165,9 @@ export default {
         this.forceRerender = false;
         this.$nextTick(() => (this.forceRerender = true));
       }
+    },
+    handleLinkageAction(props, context, feedback) {
+      feedback();
     },
     handleAjaxAction(props, context, feedback) {
       this.$refs.component

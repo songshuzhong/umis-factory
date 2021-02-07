@@ -116,6 +116,7 @@ export default {
         this.updateValue && this.updateValue(this.iValue);
         linkage[this.name] = this.iValue;
         this.linkageTrigger && this.linkageTrigger(this.target, linkage);
+        feedback();
       }
     }
   },

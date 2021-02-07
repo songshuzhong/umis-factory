@@ -1,34 +1,34 @@
 <template>
-  <transition :name="field.transition">
+  <transition :name="props.transition">
     <el-form-item
       v-show="iHidden"
       v-if="iVisible"
-      :label="field.label"
-      :prop="field.prop || field.name"
-      :class="field.className"
-      :rules="field.rules"
+      :label="props.label"
+      :prop="props.prop || props.name"
+      :class="props.className"
+      :rules="props.rules"
     >
-      <template v-if="field.label" #label>
+      <template v-if="props.label" #label>
         <span class="umis-form__field">
-          <span class="umis-form__field__label">{{ field.label }}</span>
-          <el-tooltip v-if="field.tip">
+          <span class="umis-form__field__label">{{ props.label }}</span>
+          <el-tooltip v-if="props.tip">
             <i class="el-icon-info" />
             <template #content>
-             <div v-html="field.tip" />
+             <div v-html="props.tip" />
             </template>
           </el-tooltip>
         </span>
       </template>
       <component
-        v-bind="field"
-        :is="field.renderer"
-        :path="`${path}/${field.renderer}`"
-        :name="field.name"
+        v-bind="props"
+        :is="props.renderer"
+        :path="`${path}/${props.renderer}`"
+        :name="props.name"
         :init-data="data"
         :value="iValue"
         :disabled="iDisabled"
         :action="action"
-        :linkage-trigger="linkageTrigger"
+        :linkage-trigger="onLinkageTrigger"
         :update-value="updateValue"
       />
     </el-form-item>
@@ -39,6 +39,7 @@
 import { ElTooltip, ElFormItem } from 'element-plus';
 import visible from '../mixin/visible';
 import initData from '../mixin/init-data';
+import linkage from '../mixin/linkage';
 
 export default {
   name: 'MisField',
@@ -59,7 +60,7 @@ export default {
       type: String,
       required: false,
     },
-    field: {
+    props: {
       type: Object,
       required: true,
     },
@@ -75,17 +76,13 @@ export default {
       type: Function,
       required: false,
     },
-    linkageTrigger: {
-      type: Function,
-      required: false,
-    },
   },
   data() {
     return {
       iValue: '',
     };
   },
-  mixins: [visible, initData],
+  mixins: [linkage, visible, initData],
   watch: {
     modelValue: {
       handler(val) {

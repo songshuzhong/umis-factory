@@ -13,9 +13,14 @@ export default {
       default: []
     },
     inherit: {
-      type: Boolean,
+      type: Object,
       required: false,
-      default: true
+      default: function() {
+        return {
+          type: 'all',
+          value: []
+        };
+      }
     }
   },
   data() {
@@ -36,10 +41,26 @@ export default {
     },
     initData: {
       handler(val) {
-        if (this.inherit) {
-          const mergeData = Object.assign({}, this.data, val);
-          this.data = clonedeep(mergeData);
+        let mergeData = {};
+        if (this.inherit.type !== 'none') {
+          if (this.inherit.type === 'all') {
+            mergeData = Object.assign({}, this.data, val);
+          } else if (this.inherit.type === 'include') {
+            this.inherit.value.forEach(key => {
+              if (val.hasOwnProperty(key)) {
+                mergeData[key] = clonedeep(val[key]);
+              }
+            });
+            mergeData = Object.assign({}, this.data, mergeData);
+          } else if (this.inherit.type === 'exclude') {
+            for (let key in val) {
+              if (val.hasOwnProperty(key) && !this.inherit.value.includes(key)) {
+                mergeData[key] = clonedeep(val[key]);
+              }
+            }
+          }
         }
+        this.data = mergeData;
       },
       immediate: true,
       deep: true,

@@ -1,16 +1,18 @@
 <template>
-  <template v-for="(item, index) in eachData" :key="`${path}/${index}/${body.renderer}`">
-    <mis-component
-      :mis-name="body.renderer"
-      :path="`${path}/${index}/${body.renderer}`"
-      :props="getFattingProps(body)"
-      :header="getHeader(body)"
-      :body="getBody(body)"
-      :footer="getFooter(body)"
-      v-bind="getFattingProps(body)"
-      :init-data="item"
-    />
-  </template>
+  <div class="umis-each__container">
+    <template v-for="(item, index) in eachData" :key="`${path}/${index}/${body.renderer}`">
+      <mis-component
+        v-bind="getFattingProps(body)"
+        :mis-name="body.renderer"
+        :path="`${path}/${index}/${body.renderer}`"
+        :props="getFattingProps(body)"
+        :header="getHeader(body)"
+        :body="getBody(body)"
+        :footer="getFooter(body)"
+        :init-data="item"
+      />
+    </template>
+  </div>
 </template>
 
 <script>

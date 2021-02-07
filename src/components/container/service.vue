@@ -67,7 +67,30 @@ export default {
       required: false,
       default: ''
     },
+    target: {
+      type: String,
+      required: false,
+    },
+    linkageTrigger: {
+      type: Function,
+      required: false,
+    },
+  },
+  watch: {
+    data: {
+      handler() {
+        this.handleLinkage();
+      },
+      deep: true
+    },
   },
   mixins: [initData, initApi, derivedProp],
+  methods: {
+    handleLinkage() {
+      if (this.target) {
+        this.linkageTrigger(this.target, this.data);
+      }
+    }
+  }
 };
 </script>

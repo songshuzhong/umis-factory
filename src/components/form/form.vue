@@ -16,7 +16,7 @@
           :key="`${path}/${index}/${item.renderer}`"
           :path="`${path}/${index}/${item.renderer}`"
           :name="item.name"
-          :field="item"
+          :props="item"
           :init-data="data"
           :hidden-on="item.hiddenOn"
           :visible-on="item.visibleOn"
@@ -26,6 +26,7 @@
         />
         <mis-component
           v-else
+          v-bind="getFattingProps(item)"
           :key="`${path}/${index}/${item.renderer}`"
           :path="`${path}/${index}/${item.renderer}`"
           :mis-name="item.renderer"
@@ -60,7 +61,7 @@
                   v-model="data[item.name]"
                   :path="`${path}/${jndex}/${item.renderer}`"
                   :name="item.name"
-                  :field="item"
+                  :props="item"
                   :init-data="data"
                   :hidden-on="item.hiddenOn"
                   :visible-on="item.visibleOn"
@@ -70,6 +71,7 @@
                 />
                 <mis-component
                   v-else-if="'mis-action' !==item.renderer && !formItems.includes(item.renderer)"
+                  v-bind="getFattingProps(item)"
                   :key="`${path}/${index}/${item.renderer}`"
                   :path="`${path}/${index}/${item.renderer}`"
                   :mis-name="item.renderer"
@@ -210,8 +212,11 @@ export default {
       controls.forEach(control => {
         const renderer = control.renderer;
         const name = control.name;
-        const value = control.value;
+        let value = control.value;
         if (name && formItems.includes(renderer) && 'mis-action' !== renderer) {
+          if (typeof value === 'undefined') {
+            value = '';
+          }
           data[name] = value;
         }
       })
