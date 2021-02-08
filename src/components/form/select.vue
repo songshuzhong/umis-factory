@@ -17,14 +17,14 @@
       :label="option.text"
       :value="getJoinValue(option)"
       :disabled="option.disabled"
-    >
-    </el-option>
+    />
   </el-select>
 </template>
 <script>
 import { ElSelect, ElOption } from 'element-plus';
 import initApi from '../mixin/init-api';
 import initData from '../mixin/init-data';
+import cache from '../mixin/cache';
 
 export default {
   name: 'MisSelect',
@@ -82,10 +82,6 @@ export default {
       type: String,
       required: false,
     },
-    remoteComponent: {
-      type: String,
-      required: false,
-    },
     linkageTrigger: {
       type: Function,
       required: false,
@@ -99,6 +95,7 @@ export default {
     return {
       iValue: [],
       iOptions: [],
+      iClear: false
     };
   },
   watch: {
@@ -110,7 +107,10 @@ export default {
     },
     iValue: {
       handler(value, oldValue) {
-        this.handleCache(value, oldValue);
+        if (event && event.target.nodeName === 'I') {
+          this.iClear = true;
+        }
+        this.handleCache({field: {value, oldValue, iClear: this.iClear}, form: this.data});
         this.updateValue && this.updateValue(value);
       },
     },
@@ -133,14 +133,15 @@ export default {
       deep: true,
     },
   },
-  mixins: [initApi, initData],
+  mixins: [initApi, initData, cache],
   methods: {
     onChange(val) {
       this.iValue = val;
+      this.iClear = false;
       this.handleLinkage();
     },
     onClear() {
-      this.$eventHub.$emit('mis-component:remoteComponent', '', this.remoteComponent, this.handleLinkage);
+      this.iClear = true;
     },
     getJoinValue(option) {
       if (this.joinValue) {
@@ -155,27 +156,6 @@ export default {
         this.linkageTrigger(this.target, linkage);
       }
     },
-    handleCache(value, oldValue) {
-      const context = {value, oldValue, data: this.data};
-      if (this.cached.in && this.cached.in.condition) {
-        const shouldCachedIn = this.$onExpressionEval(this.cached.in.condition, context);
-        if (shouldCachedIn) {
-          let cacheInData = this[this.cached.primaryKey];
-          cacheInData = JSON.stringify(cacheInData);
-          sessionStorage.setItem(this.cached.name, cacheInData);
-        }
-      }
-      if (this.cached.out && this.cached.out.condition) {
-        const shouldCacheOut = this.$onExpressionEval(this.cached.out.condition, context);
-        if (shouldCacheOut) {
-          let cacheOutData = sessionStorage.getItem(this.cached.name);
-          if (cacheOutData && typeof cacheOutData === 'string') {
-            cacheOutData = JSON.parse(cacheOutData);
-            this.linkageTrigger(this.cached.target, cacheOutData);
-          }
-        }
-      }
-    }
   },
 };
 </script>

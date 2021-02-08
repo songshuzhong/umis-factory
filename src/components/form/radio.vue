@@ -13,6 +13,8 @@
 
 <script>
 import { ElRadioGroup, ElRadioButton, ElRadio } from 'element-plus';
+import initData from '../mixin/init-data';
+import cache from '../mixin/cache';
 
 export default {
   name: 'MisRadio',
@@ -66,13 +68,17 @@ export default {
       immediate: true,
     },
     iValue: {
-      handler(val) {
-        if (val) {
-          this.updateValue && this.updateValue(val);
+      handler(value, oldValue) {
+        if (value !== oldValue) {
+          this.handleCache({field: {value, oldValue}, form: this.data});
+        }
+        if (value) {
+          this.updateValue && this.updateValue(value);
         }
       }
     }
   },
+  mixins: [initData, cache],
   methods: {
     onChange(value) {
       this.iValue = value;

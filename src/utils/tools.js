@@ -40,6 +40,13 @@ const onExpressionEval = (expression, data) => {
   }
 };
 
+const onFormulaEval = (expression, data) => {
+  const fn = new Function('data', `with(data) { (${expression}); return data; }`);
+  try {
+    return fn.call(data, data);
+  } catch (e) {}
+};
+
 const json2FormData = (isFormData, data) => {
   let formData;
   if (isFormData) {
@@ -113,6 +120,7 @@ export {
   getCompiledUrl,
   getCompiledParams,
   onExpressionEval,
+  onFormulaEval,
   json2FormData,
   saveInitStyle,
   saveInitFormType,

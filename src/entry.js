@@ -11,6 +11,7 @@ import {
   getCompiledUrl,
   getCompiledParams,
   onExpressionEval,
+  onFormulaEval,
   json2FormData,
   saveInitStyle,
   saveInitFormType,
@@ -46,6 +47,7 @@ export default {
     app.config.globalProperties.$misComponents = misNames;
     app.config.globalProperties.$umisConfig = overwrite(options);
     app.config.globalProperties.$onExpressionEval = onExpressionEval;
+    app.config.globalProperties.$onFormulaEval = onFormulaEval;
     app.config.globalProperties.$getRenderedTpl = getRenderedTpl;
     app.config.globalProperties.$getCompiledUrl = getCompiledUrl;
     app.config.globalProperties.$getCompiledParams = getCompiledParams;
