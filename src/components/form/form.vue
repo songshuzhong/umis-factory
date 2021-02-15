@@ -198,6 +198,11 @@ export default {
       type: String,
       required: false,
     },
+    linkageType: {
+      type: String,
+      required: false,
+      default: 'after'
+    },
     linkageTrigger: {
       type: Function,
       required: true,
@@ -328,7 +333,7 @@ export default {
         )
           formData[name] = this.data[name];
       }
-      if (this.target) {
+      if (this.target && this.linkageType === 'before') {
         return this.linkageTrigger(this.target, formData);
       }
       this.handleFetchApi(
@@ -337,15 +342,17 @@ export default {
           method: this.api.method || 'post',
           params: formData,
         },
-        () => {
+        res => {
           feedback && feedback();
-          this.onAfterSubmit();
+          this.onAfterSubmit(res);
         }
       );
     },
-    onAfterSubmit() {
+    onAfterSubmit(res) {
       if (this.redirect) {
         this.$refs['mis-redirect'].$refs['component'].onClick();
+      } else if (this.target && this.linkageType === 'after') {
+        return this.linkageTrigger(this.target, res);
       } else if (this.reload) {
         this.$eventHub.$emit('mis-component:reload', this.reload);
       }

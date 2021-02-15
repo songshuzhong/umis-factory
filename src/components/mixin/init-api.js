@@ -167,7 +167,8 @@ export default {
               showClose: true,
               type: 'success',
             });
-          return 'resolve';
+          feedback && feedback(data);
+          return res;
         })
         .catch(error => {
           this.$message({
@@ -175,12 +176,10 @@ export default {
             showClose: true,
             type: 'error',
           });
-          return 'reject';
+          return error;
         })
-        .finally(status => {
+        .finally(() => {
           this.iLoading = false;
-          feedback && feedback();
-          return status;
         });
     },
     shouldUpdateInitApi(val) {

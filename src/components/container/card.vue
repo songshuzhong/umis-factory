@@ -32,7 +32,7 @@
         :init-data="getInitData(data, header)"
       />
     </template>
-    <div style="padding: 10px">
+    <div v-if="body" style="padding: 10px">
       <template
         v-if="Object.prototype.toString.call(body) === '[object Array]'"
       >

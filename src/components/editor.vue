@@ -34,13 +34,28 @@ export default {
     ElButton,
     ElAlert,
   },
+  props: {
+    schema: {
+      type: Object,
+      required: false,
+      default: {}
+    }
+  },
   data() {
     return {
       errorInfo: '',
-      schema: {},
+      iSchema: {},
       pageInfo: {},
       showErrorBoundary: false,
     };
+  },
+  watch: {
+    schema: {
+      handler(val) {
+        this.iSchema = val;
+      },
+      immediate: true
+    }
   },
   mixins: [monaco],
   mounted() {
@@ -55,11 +70,11 @@ export default {
   },
   methods: {
     updateSchema(pageSchema) {
-      this.schema = {
+      this.iSchema = {
         schema: 'https://github.com/songshuzhong/umis/v1/schemas/page.json',
         ...pageSchema,
       };
-      this.editor.setValue(JSON.stringify(this.schema));
+      this.editor.setValue(JSON.stringify(this.iSchema));
       this.handleFormatSchema(this.editor);
     },
     onSaveRemote() {

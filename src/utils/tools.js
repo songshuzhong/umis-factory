@@ -32,11 +32,11 @@ const getCompiledParams = (params, data = {}) => {
 };
 
 const onExpressionEval = (expression, data) => {
-  const fn = new Function('data', `with(data) { return !!(${expression}) }`);
+  const fn = new Function('data', `with(data) { return (${expression}) }`);
   try {
     return fn.call(data, data);
   } catch (e) {
-    return false;
+    console.error(e);
   }
 };
 

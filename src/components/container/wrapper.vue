@@ -1,5 +1,5 @@
 <template>
-  <div :class="`umis-wrapper__container index-${index} ${classname}`">
+  <div :class="['umis-wrapper__container', `index-${index}`, classname, iComputedClass]">
     <template v-if="Object.prototype.toString.call(body) === '[object Array]'">
       <template v-for="(child, index) in body" :key="`${path}/${index}/${child.renderer}`">
         <mis-component
@@ -57,6 +57,18 @@ export default {
       required: false,
       default: ''
     },
+    computedClass: {
+      type: String,
+      required: false,
+    },
+  },
+  computed: {
+    iComputedClass() {
+      if (this.computedClass) {
+        return this.$onExpressionEval(this.computedClass, this.data);
+      }
+      return '';
+    }
   },
   mixins: [derivedProp, initData],
 };

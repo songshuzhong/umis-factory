@@ -1,5 +1,5 @@
 <template>
-  <el-header :class="classname" :height="`${iHeight}px`">
+  <el-header :class="[classname, iComputedClass]" :height="`${iHeight}px`">
     <template v-if="Object.prototype.toString.call(body) === '[object Array]'">
       <template v-for="(child, index) in body" :key="`${path}/${index}/${child.renderer}`">
         <mis-component
@@ -53,6 +53,10 @@ export default {
       type: String,
       required: false,
     },
+    computedClass: {
+      type: String,
+      required: false,
+    },
     height: {
       type: Number,
       required: false,
@@ -62,7 +66,15 @@ export default {
   mixins: [derivedProp, initData],
   data() {
     return {
-      iHeight: 0
+      iHeight: 0,
+    }
+  },
+  computed: {
+    iComputedClass() {
+      if (this.computedClass) {
+        return this.$onExpressionEval(this.computedClass, this.data);
+      }
+      return '';
     }
   },
   watch: {
@@ -72,6 +84,6 @@ export default {
       },
       immediate: true
     }
-  }
+  },
 };
 </script>

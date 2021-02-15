@@ -5,10 +5,6 @@
         v-for="(item, index) in rows"
         :span="span"
         :key="`${path}/${index}`"
-        :xs="size[0]"
-        :sm="size[1]"
-        :md="size[2]"
-        :lg="size[3]"
       >
         <mis-card
           :path="`${path}/${index}`"
@@ -25,6 +21,7 @@
       </el-col>
     </el-row>
     <el-pagination
+      v-if="hasPageInfo"
       background
       layout="prev, pager, next, total, sizes, jumper"
       :total="iTotal"
@@ -114,6 +111,11 @@ export default {
       required: false,
       default: [24, 12, 8, 4],
     },
+    hasPageInfo: {
+      type: Boolean,
+      required: false,
+      default: true
+    }
   },
   mixins: [initApi, derivedProp, pageInfo],
   watch: {

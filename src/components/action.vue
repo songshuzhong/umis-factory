@@ -8,17 +8,6 @@
     :popper-class="popperClass"
     :width="popperWidth"
   >
-    <mis-component
-      v-if="body"
-      :mis-name="body.renderer"
-      :path="`${path}/${body.renderer}`"
-      :body="getBody(body)"
-      :header="getHeader(body)"
-      :footer="getFooter(body)"
-      :props="getFattingProps(body)"
-      :init-data="getInitData(data, body)"
-      :init-rows="rows"
-    />
     <template #reference>
       <el-button
         v-loading="iApiLoading"
@@ -34,6 +23,17 @@
         {{ renderText }}
       </el-button>
     </template>
+    <mis-component
+      v-if="body"
+      :mis-name="body.renderer"
+      :path="`${path}/${body.renderer}`"
+      :body="getBody(body)"
+      :header="getHeader(body)"
+      :footer="getFooter(body)"
+      :props="getFattingProps(body)"
+      :init-data="getInitData(data, body)"
+      :init-rows="rows"
+    />
   </el-popover>
   <el-popconfirm
     v-else-if="popupType === 'confirm'"
@@ -230,6 +230,7 @@ export default {
     type: {
       type: String,
       required: false,
+      default: ''
     },
     plain: {
       type: Boolean,

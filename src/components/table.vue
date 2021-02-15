@@ -168,6 +168,7 @@
       </template>
     </el-table>
     <el-pagination
+      v-if="hasPageInfo"
       class="umis-crud__container__pagination"
       background
       layout="prev, pager, next, total, sizes, jumper"
@@ -280,6 +281,11 @@ export default {
       type: Boolean,
       required: false,
       default: false,
+    },
+    hasPageInfo: {
+      type: Boolean,
+      required: false,
+      default: true
     },
   },
   data() {
