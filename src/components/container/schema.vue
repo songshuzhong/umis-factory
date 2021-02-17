@@ -114,17 +114,23 @@ export default {
       handler(val) {
         this.iSchema = val;
       },
+      deep: true,
       immediate: true,
     },
     url: {
-      handler() {
-        this.getPageSchema();
+      handler(val) {
+        if (val) {
+          this.getPageSchema();
+        }
       },
       deep: true,
     },
   },
   computed: {
     path() {
+      if (!this.iProtal) {
+        return this.$route.path;
+      }
       return this.canSchemaUpdate ? this.$route.path : '/website';
     },
   },
@@ -134,7 +140,7 @@ export default {
     this.$eventHub.$on('mis-schema:change', this.updatePageSchema);
     this.$eventHub.$on('mis-portal:create', this.createProtal);
     this.$eventHub.$on('mis-portal:destroy', this.destroyProtal);
-    if (this.url) {
+    if (this.url && !this.schema) {
       this.getPageSchema();
     }
     if (!this.canSchemaUpdate) {
