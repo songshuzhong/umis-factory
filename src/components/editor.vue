@@ -1,5 +1,8 @@
 <template>
-  <div class="umis-editor__container">
+  <div
+    class="umis-editor__container"
+    :class="classname"
+  >
     <transition name="el-zoom-in-center">
       <el-alert
         v-if="showErrorBoundary"
@@ -12,7 +15,7 @@
     </transition>
     <div ref="editor" class="monaco-editor" />
     <transition name="el-zoom-in-bottom">
-      <div v-if="!showErrorBoundary" class="umis-editor__container__tools">
+      <div v-if="(!showErrorBoundary && editable)" class="umis-editor__container__tools">
         <el-button type="primary" @click="onSave">
           保存到本地
         </el-button>
@@ -39,7 +42,17 @@ export default {
       type: Object,
       required: false,
       default: {}
-    }
+    },
+    editable: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    classname: {
+      type: String,
+      required: false,
+      default: false
+    },
   },
   data() {
     return {
@@ -59,14 +72,22 @@ export default {
   },
   mixins: [monaco],
   mounted() {
-    const { pageSchema, pageInfo } = window.UMIS;
-    this.pageInfo = pageInfo;
-    this.editor = window.monaco.editor.create(this.$refs.editor, {
-      ...this.defaultConfig,
-      language: 'json',
-      theme: 'vs-dark',
-    });
-    this.updateSchema(pageSchema);
+    if (this.editable) {
+      const { pageSchema, pageInfo } = window.UMIS;
+      this.pageInfo = pageInfo;
+      this.editor = window.monaco.editor.create(this.$refs.editor, {
+        ...this.defaultConfig,
+        language: 'json',
+        theme: 'vs-dark',
+      });
+      this.updateSchema(pageSchema);
+    } else {
+      this.editor = window.monaco.editor.create(this.$refs.editor, {
+        ...this.defaultConfig,
+        language: 'json'
+      });
+      this.updateSchema(this.iSchema);
+    }
   },
   methods: {
     updateSchema(pageSchema) {
