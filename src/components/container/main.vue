@@ -1,5 +1,5 @@
 <template>
-  <el-main :class="classname">
+  <el-main :class="[classname, iComputedClass]">
     <router-view
       v-if="routerView"
       :init-data="getInitData(data)"
@@ -64,6 +64,18 @@ export default {
       type: String,
       required: false,
     },
+    computedClass: {
+      type: String,
+      required: false,
+    },
+  },
+  computed: {
+    iComputedClass() {
+      if (this.computedClass) {
+        return this.$onExpressionEval(this.computedClass, this.data);
+      }
+      return '';
+    }
   },
   mixins: [derivedProp, initData],
 };

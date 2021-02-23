@@ -143,7 +143,7 @@ export default {
     if (this.url && !this.schema) {
       this.getPageSchema();
     }
-    if (!this.canSchemaUpdate) {
+    if (!this.canSchemaUpdate && this.iProtal) {
       this.$initSetting(this, this.$umisConfig);
     }
   },

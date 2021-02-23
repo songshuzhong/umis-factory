@@ -38,6 +38,10 @@ export default {
     ElAlert,
   },
   props: {
+    path: {
+      type: String,
+      required: true,
+    },
     schema: {
       type: Object,
       required: false,
@@ -84,6 +88,7 @@ export default {
     } else {
       this.editor = window.monaco.editor.create(this.$refs.editor, {
         ...this.defaultConfig,
+        theme: 'vs',
         language: 'json'
       });
       this.updateSchema(this.iSchema);

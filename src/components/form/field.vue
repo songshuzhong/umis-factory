@@ -30,6 +30,7 @@
         :action="action"
         :linkage-trigger="onLinkageTrigger"
         :update-value="updateValue"
+        @update:value="updateValue"
       />
     </el-form-item>
   </transition>

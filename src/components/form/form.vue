@@ -140,7 +140,8 @@ const formItems = [
   'mis-input',
   'mis-combo',
   'mis-upload',
-  'mis-list'
+  'mis-list',
+  'mis-delivery-schedule'
 ];
 
 export default {

@@ -2,6 +2,7 @@ export default {
   created() {
     this.defaultConfig = {
       theme: 'vs',
+      inherit: false,
       fontSize: '14px',
       autoIndent: true,
       formatOnType: true,

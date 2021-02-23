@@ -40,6 +40,17 @@ export default {
         componentConfig.default || componentConfig
       );
     });
+    if (options.components) {
+      Object.keys(options.components).forEach(componentName => {
+        const exComponent = options.components[componentName];
+        const exMisName = exComponent.name.replace(/([A-Z])/g, '-$1').toLowerCase();
+        misNames.push(`mis${exMisName}`);
+        app.component(
+          `Mis${exComponent.name}`,
+          exComponent
+        );
+      });
+    }
 
     app.use(ElLoading);
     app.directive('resize', beforeUpdate);

@@ -117,7 +117,7 @@
       <el-button
         v-bind="item"
         :index="index"
-        :disabled="iApiLoading"
+        :disabled="iApiLoading || iDisabled(item.disabledOn)"
         @click="onClick"
       >
         {{ item.text }}
@@ -362,6 +362,13 @@ export default {
     },
   },
   methods: {
+    iDisabled(disabledOn) {
+      if (disabledOn) {
+        const context = {$router: this.$router, ...this.data};
+        return this.$onExpressionEval(disabledOn, this.data);
+      }
+      return false;
+    },
     onClick() {
       const attributes = event.currentTarget.attributes;
       let index;
