@@ -94,6 +94,11 @@ export default {
     iValue: {
       handler(val) {
         this.$emit('update:modelValue', val);
+        /* eslint-disable */
+        this.$nextTick(() => {
+          this.dispatch('ElFormItem', 'el.form.change')
+        })
+        /* eslint-enable */
       },
       deep: true
     },

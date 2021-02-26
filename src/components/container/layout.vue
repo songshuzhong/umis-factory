@@ -52,7 +52,7 @@ export default {
     },
     name: {
       type: String,
-      required: true,
+      required: false,
     },
     body: {
       type: [Object, Array],

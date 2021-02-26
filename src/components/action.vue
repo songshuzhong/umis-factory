@@ -229,8 +229,7 @@ export default {
     },
     type: {
       type: String,
-      required: false,
-      default: ''
+      required: false
     },
     plain: {
       type: Boolean,

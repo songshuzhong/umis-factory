@@ -150,6 +150,12 @@ export default {
         case 'mis-drawer':
           this.handleShowPopup(props, context);
           break;
+        case 'mis-fullscreen':
+          this.handleFullScreen(props, context);
+          break;
+        case '':
+          this.handleHalfScreen(props, context);
+          break;
       }
     },
     onReloadAction(props) {
@@ -209,6 +215,29 @@ export default {
         visible: true,
       });
     },
+    handleFullScreen(props, context) {
+      const ele = props.target || document.body;
+      if (ele.requestFullscreen) {
+        ele.requestFullscreen();
+      } else if (ele.mozRequestFullScreen) {
+        ele.mozRequestFullScreen();
+      } else if (ele.webkitRequestFullscreen) {
+        ele.webkitRequestFullscreen();
+      } else if (ele.msRequestFullscreen) {
+        ele.msRequestFullscreen();
+      }
+    },
+    handleHalfScreen() {
+      if(document.exitFullScreen) {
+        document.exitFullScreen();
+      } else if(document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if(document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if(document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
+    }
   },
 };
 </script>

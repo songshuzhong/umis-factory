@@ -33,6 +33,21 @@
         :init-data="getInitData(data, body)"
       />
     </template>
+    <div v-if="iProtal">
+      <template
+        v-for="({ actionType, body, data, visible }, path) in popMap"
+        :key="path"
+      >
+        <component
+          :is="actionType"
+          v-bind="body"
+          :path="path"
+          :visible="visible"
+          :init-data="data"
+          :on-popup-invisible="destroyProtal"
+        />
+      </template>
+    </div>
   </el-main>
 </template>
 
@@ -41,6 +56,7 @@ import { ElMain } from 'element-plus';
 
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
+import clonedeep from "lodash.clonedeep";
 
 export default {
   name: 'MisMain',
@@ -68,6 +84,16 @@ export default {
       type: String,
       required: false,
     },
+    iProtal: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+  },
+  data() {
+    return {
+      popMap: {},
+    }
   },
   computed: {
     iComputedClass() {
@@ -78,5 +104,21 @@ export default {
     }
   },
   mixins: [derivedProp, initData],
+  mounted() {
+    this.$eventHub.$on('mis-portal:create', this.createProtal);
+    this.$eventHub.$on('mis-portal:destroy', this.destroyProtal);
+  },
+  methods: {
+    createProtal(path, pop) {
+      const popMap = this.popMap;
+      popMap[path] = pop;
+      this.popMap = clonedeep(popMap);
+    },
+    destroyProtal(path) {
+      const popMap = this.popMap;
+      delete popMap[path];
+      this.popMap = clonedeep(popMap);
+    },
+  }
 };
 </script>

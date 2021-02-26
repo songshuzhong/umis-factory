@@ -44,7 +44,7 @@ export default {
       required: true,
     },
     index: {
-      type: String,
+      type: [String, Number],
       required: false,
       default: '0'
     },

@@ -35,6 +35,7 @@
 <script>
 import { ElInput } from 'element-plus';
 import derivedProp from '../mixin/derived-prop';
+import initData from '../mixin/init-data';
 
 export default {
   name: 'MisInput',
@@ -107,10 +108,6 @@ export default {
       type: String,
       required: false,
     },
-    rows: {
-      type: Number,
-      required: false,
-    },
     append: {
       type: Object,
       required: false,
@@ -140,7 +137,7 @@ export default {
       immediate: true,
     },
   },
-  mixins: [derivedProp],
+  mixins: [initData, derivedProp],
   methods: {
     onChange(val) {
       this.updateValue && this.updateValue(val);

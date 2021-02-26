@@ -47,26 +47,10 @@
         </div>
       </template>
     </el-skeleton>
-    <div v-if="!canSchemaUpdate && iProtal">
-      <template
-        v-for="({ actionType, body, data, visible }, path) in popMap"
-        :key="path"
-      >
-        <component
-          :is="actionType"
-          v-bind="body"
-          :path="path"
-          :visible="visible"
-          :init-data="data"
-          :on-popup-invisible="destroyProtal"
-        />
-      </template>
-    </div>
   </div>
 </template>
 <script>
 import { ElSkeleton, ElSkeletonItem } from 'element-plus';
-import clonedeep from 'lodash.clonedeep';
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
 import linkage from '../mixin/linkage';
@@ -87,11 +71,6 @@ export default {
       required: false,
       default: true,
     },
-    iProtal: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
     target: {
       type: String,
       required: false
@@ -106,7 +85,6 @@ export default {
       iSchemaLoading: false,
       iStopAutoRefresh: false,
       iSchema: {},
-      popMap: {},
     };
   },
   watch: {
@@ -138,26 +116,14 @@ export default {
   mounted() {
     this.isMounted = true;
     this.$eventHub.$on('mis-schema:change', this.updatePageSchema);
-    this.$eventHub.$on('mis-portal:create', this.createProtal);
-    this.$eventHub.$on('mis-portal:destroy', this.destroyProtal);
     if (this.url && !this.schema) {
       this.getPageSchema();
     }
-    if (!this.canSchemaUpdate && this.iProtal) {
+    if (!this.canSchemaUpdate) {
       this.$initSetting(this, this.$umisConfig);
     }
   },
   methods: {
-    createProtal(path, pop) {
-      const popMap = this.popMap;
-      popMap[path] = pop;
-      this.popMap = clonedeep(popMap);
-    },
-    destroyProtal(path) {
-      const popMap = this.popMap;
-      delete popMap[path];
-      this.popMap = clonedeep(popMap);
-    },
     getPageSchema() {
       this.iSchemaLoading = true;
       this.$api

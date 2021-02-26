@@ -35,7 +35,7 @@ export default {
   props: {
     options: {
       type: Array,
-      required: true,
+      required: false,
     },
     name: {
       type: String,

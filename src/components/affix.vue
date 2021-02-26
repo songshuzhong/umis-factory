@@ -36,7 +36,7 @@ export default {
       required: false
     },
     offset: {
-      type: String,
+      type: Number,
       required: false
     },
     position: {

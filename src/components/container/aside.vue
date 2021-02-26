@@ -48,7 +48,7 @@ export default {
     },
     body: {
       type: [Array, Object],
-      required: true,
+      required: false,
     },
     classname: {
       type: String,

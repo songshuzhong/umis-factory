@@ -82,13 +82,11 @@ export default {
     size: {
       type: String,
       required: false,
-      default: 'large',
       options: ['number', 'large', 'medium', 'small'],
     },
     shape: {
       type: String,
       required: false,
-      default: 'circle',
       options: ['circle', 'square'],
     },
     src: {
@@ -136,7 +134,7 @@ export default {
     },
     actionType: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   data() {

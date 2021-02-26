@@ -9,11 +9,12 @@
     :inline="inline"
   >
     <template v-if="!fieldset">
-      <template v-for="(item, index) in inactiveControls">
+      <template
+        v-for="(item, index) in inactiveControls"
+        :key="`${path}/${index}/${item.renderer}`"
+      >
         <mis-field
-          v-if="formItems.includes(item.renderer)"
           v-model="data[item.name]"
-          :key="`${path}/${index}/${item.renderer}`"
           :path="`${path}/${index}/${item.renderer}`"
           :name="item.name"
           :props="item"
@@ -23,15 +24,6 @@
           :disabled-on="item.disabledOn"
           :handle-invisible="handleInvisible"
           :linkage-trigger="linkageTrigger"
-        />
-        <mis-component
-          v-else
-          v-bind="getFattingProps(item)"
-          :key="`${path}/${index}/${item.renderer}`"
-          :path="`${path}/${index}/${item.renderer}`"
-          :mis-name="item.renderer"
-          :props="getFattingProps(item)"
-          :init-data="data"
         />
       </template>
     </template>
@@ -57,7 +49,7 @@
                 :key="`${path}/${jndex}/${item.renderer}`"
               >
                 <mis-field
-                  v-if="formItems.includes(item.renderer)"
+                  v-if="item.renderer !== 'mis-action'"
                   v-model="data[item.name]"
                   :path="`${path}/${jndex}/${item.renderer}`"
                   :name="item.name"
@@ -68,18 +60,6 @@
                   :disabled-on="item.disabledOn"
                   :handle-invisible="handleInvisible"
                   :linkage-trigger="linkageTrigger"
-                />
-                <mis-component
-                  v-else-if="'mis-action' !==item.renderer && !formItems.includes(item.renderer)"
-                  v-bind="getFattingProps(item)"
-                  :key="`${path}/${index}/${item.renderer}`"
-                  :path="`${path}/${index}/${item.renderer}`"
-                  :mis-name="item.renderer"
-                  :header="getHeader(item)"
-                  :body="getBody(item)"
-                  :footer="getFooter(item)"
-                  :props="getFattingProps(item)"
-                  :init-data="data"
                 />
               </template>
             </div>
@@ -129,20 +109,6 @@ import { ElForm, ElSpace } from 'element-plus';
 import derivedProp from '../mixin/derived-prop';
 import initApi from '../mixin/init-api';
 import initData from '../mixin/init-data';
-
-const formItems = [
-  'mis-field',
-  'mis-select',
-  'mis-checkbox',
-  'mis-radio',
-  'mis-switch',
-  'mis-datepicker',
-  'mis-input',
-  'mis-combo',
-  'mis-upload',
-  'mis-list',
-  'mis-delivery-schedule'
-];
 
 export default {
   name: 'MisForm',
@@ -219,7 +185,7 @@ export default {
         const renderer = control.renderer;
         const name = control.name;
         let value = control.value;
-        if (name && formItems.includes(renderer) && 'mis-action' !== renderer) {
+        if (name && 'mis-action' !== renderer) {
           if (typeof value === 'undefined') {
             value = '';
           }
@@ -230,7 +196,6 @@ export default {
 
     return {
       activeCollapse,
-      formItems,
       data,
       invisibleField: [],
     };
