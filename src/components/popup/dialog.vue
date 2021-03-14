@@ -20,7 +20,7 @@
       >
         <component
           :is="body.renderer"
-          :path="`${path}/${body.renderer}`"
+          :path="`${path}/body/${body.renderer}`"
           v-bind="body"
           :init-data="data"
         />
@@ -29,7 +29,7 @@
         <template v-for="(item, index) in body" :key="`${path}/${index}/${item.renderer}`">
           <mis-component
             :mis-name="item.renderer"
-            :path="`${path}/${index}/${item.renderer}`"
+            :path="`${path}/body/${index}/${item.renderer}`"
             :header="getHeader(item)"
             :body="getBody(item)"
             :footer="getFooter(item)"
@@ -45,7 +45,7 @@
       >
         <template v-for="(item, index) in footer" :key="`${path}/${index}/${item.renderer}`">
           <mis-component
-            :path="`${path}/${index}/${item.renderer}`"
+            :path="`${path}/footer/${index}/${item.renderer}`"
             :mis-name="item.renderer"
             :header="getHeader(item)"
             :body="getBody(item)"
@@ -61,7 +61,7 @@
       >
         <mis-component
           :mis-name="footer.renderer"
-          :path="`${path}/${footer.renderer}`"
+          :path="`${path}/footer/${footer.renderer}`"
           :header="getHeader(footer)"
           :body="getBody(footer)"
           :footer="getFooter(footer)"

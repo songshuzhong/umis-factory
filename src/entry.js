@@ -25,12 +25,10 @@ const requireComponent = require.context('./components', true, /[\w-]+\.vue$/);
 
 export default {
   install(app, options) {
-    const misNames = [];
 
     requireComponent.keys().forEach(filePath => {
       const componentConfig = requireComponent(filePath);
       let componentName = filePath.replace(/(.*\/)*([^.]+).*/gi, '$2');
-      misNames.push(`mis-${componentName}`);
       componentName = componentName
         .split('-')
         .map(kebab => kebab.charAt(0).toUpperCase() + kebab.slice(1))
@@ -43,8 +41,6 @@ export default {
     if (options.components) {
       Object.keys(options.components).forEach(componentName => {
         const exComponent = options.components[componentName];
-        const exMisName = exComponent.name.replace(/([A-Z])/g, '-$1').toLowerCase();
-        misNames.push(`mis${exMisName}`);
         app.component(
           `Mis${exComponent.name}`,
           exComponent
@@ -55,7 +51,6 @@ export default {
     app.use(ElLoading);
     app.directive('resize', beforeUpdate);
     app.config.globalProperties.$eventHub = new Eventhub();
-    app.config.globalProperties.$misComponents = misNames;
     app.config.globalProperties.$umisConfig = overwrite(options);
     app.config.globalProperties.$onExpressionEval = onExpressionEval;
     app.config.globalProperties.$onFormulaEval = onFormulaEval;

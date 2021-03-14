@@ -16,7 +16,7 @@
         v-bind="getFattingProps(child)"
         :mis-name="child.renderer"
         :key="index"
-        :path="`${path}/${index}/${child.renderer}`"
+        :path="`${path}/body/${index}/${child.renderer}`"
         :label="child.label"
         :header="getHeader(child)"
         :body="getBody(child)"

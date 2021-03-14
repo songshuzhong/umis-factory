@@ -1,0 +1,55 @@
+.umis-toolmaker-wrapper {
+  overflow: hidden;
+  background-color: rgb(234, 234, 234);
+  user-select: none;
+}
+.umis-toolmaker__menu {
+  position: absolute;
+  width: 280px;
+  height: calc(100vh - 110px);
+  padding: 0;
+  margin: 0;
+  background: rgb(255, 255, 255);
+  overflow-y: scroll;
+}
+.umis-toolmaker__menu__item {
+  width: 127px;
+  height: 28px;
+  display: inline-block;
+  margin: 5px;
+  padding: 0 8px;
+  border: 1px solid #ccc;
+  background: #f6f7fb;
+  cursor: move;
+  white-space: nowrap;
+  list-style-type: none;
+}
+.umis-toolmaker__menu__item__label {
+  height: 28px;
+  line-height: 28px;
+  display: inline-block;
+  margin-left: 5px;
+  color: #5e6d82;
+}
+.umis-toolmaker__container {
+  position: relative;
+  margin-left: 280px;
+  padding: 20px;
+  height: calc(100vh - 110px);
+  background-color: #f2f2f2;
+  overflow-y: scroll;
+}
+.umis-toolmaker__active {
+  background: rgba(66, 133, 244, .1);
+  border: 1px dashed #4285f4;
+}
+.umis-toolmaker__wedgets {
+  position: absolute;
+}
+.umis-toolmaker__mask {
+  background: rgba(66, 133, 244, .1);
+}
+.umis-toolmaker__drawer__content {
+  padding: 10px;
+}
+.umis-toolmaker__drawer__footer {}

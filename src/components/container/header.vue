@@ -5,7 +5,7 @@
         <mis-component
           v-bind="getFattingProps(child)"
           :mis-name="child.renderer"
-          :path="`${path}/${index}/${child.renderer}`"
+          :path="`${path}/body/${index}/${child.renderer}`"
           :header="getHeader(child)"
           :body="getBody(child)"
           :footer="getFooter(child)"
@@ -19,7 +19,7 @@
       v-bind="getFattingProps(body)"
       :mis-name="body.renderer"
       :key="`${path}/${body.renderer}`"
-      :path="`${path}/${body.renderer}`"
+      :path="`${path}/body/${body.renderer}`"
       :header="getHeader(body)"
       :body="getBody(body)"
       :footer="getFooter(body)"

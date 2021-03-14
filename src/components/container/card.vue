@@ -12,7 +12,7 @@
         <template v-for="(child, index) in header" :key="`${path}/${index}/${child.renderer}`">
           <mis-component
             :mis-name="child.renderer"
-            :path="`${path}/${index}/${child.renderer}`"
+            :path="`${path}/header/${index}/${child.renderer}`"
             :props="getFattingProps(child)"
             :header="getHeader(child)"
             :body="getBody(child)"
@@ -22,24 +22,27 @@
         </template>
       </template>
       <mis-component
-        v-else
+        v-else-if="Object.prototype.toString.call(header) === '[object Object]'"
         :mis-name="header.renderer"
-        :path="`${path}/${header.renderer}`"
+        :path="`${path}/header/${header.renderer}`"
         :body="getBody(header)"
         :header="getHeader(header)"
         :footer="getFooter(header)"
         :props="getFattingProps(header)"
         :init-data="getInitData(data, header)"
       />
+      <template v-else-if="Object.prototype.toString.call(header) === '[object String]'">
+        {{header}}
+      </template>
     </template>
-    <div v-if="body" style="padding: 10px">
+    <div v-if="body" class="umis-card__body">
       <template
         v-if="Object.prototype.toString.call(body) === '[object Array]'"
       >
         <template v-for="(child, index) in body" :key="`${path}/${index}/${child.renderer}`">
           <mis-component
             :mis-name="child.renderer"
-            :path="`${path}/${index}/${child.renderer}`"
+            :path="`${path}/body/${index}/${child.renderer}`"
             :props="getFattingProps(child)"
             :header="getHeader(child)"
             :body="getBody(child)"
@@ -49,24 +52,27 @@
         </template>
       </template>
       <mis-component
-        v-else
+        v-else-if="Object.prototype.toString.call(header) === '[object Object]'"
         :mis-name="body.renderer"
-        :path="`${path}/${body.renderer}`"
+        :path="`${path}/body/${body.renderer}`"
         :props="getFattingProps(body)"
         :header="getHeader(body)"
         :body="getBody(body)"
         :footer="getFooter(body)"
         :init-data="getInitData(data, body)"
       />
+      <template v-else-if="Object.prototype.toString.call(header) === '[object String]'">
+        {{body}}
+      </template>
     </div>
-    <div class="el-card__footer" v-if="footer">
+    <div v-if="footer" class="umis-card__footer">
       <template
         v-if="Object.prototype.toString.call(footer) === '[object Array]'"
       >
         <template v-for="(child, index) in footer" :key="`${path}/${index}/${child.renderer}`">
           <mis-component
             :mis-name="child.renderer"
-            :path="`${path}/${index}/${child.renderer}`"
+            :path="`${path}/footer/${index}/${child.renderer}`"
             :header="getHeader(child)"
             :body="getBody(child)"
             :footer="getFooter(child)"
@@ -76,15 +82,18 @@
         </template>
       </template>
       <mis-component
-        v-else
+        v-else-if="Object.prototype.toString.call(footer) === '[object Object]'"
         :mis-name="footer.renderer"
-        :path="`${path}/${footer.renderer}`"
+        :path="`${path}/footer/${footer.renderer}`"
         :header="getHeader(footer)"
         :body="getBody(footer)"
         :footer="getFooter(footer)"
         :props="getFattingProps(footer)"
         :init-data="getInitData(data, footer)"
       />
+      <template v-else-if="Object.prototype.toString.call(footer) === '[object String]'">
+        {{footer}}
+      </template>
     </div>
   </el-card>
 </template>
@@ -111,16 +120,19 @@ export default {
       required: false,
     },
     body: {
-      type: [Array, Object],
+      type: [Array, Object, String],
       required: false,
+      default: 'Body'
     },
     header: {
-      type: String,
+      type: [Array, Object, String],
       required: false,
+      default: 'Header'
     },
     footer: {
-      type: [Array, Object],
+      type: [Array, Object, String],
       required: false,
+      default: 'Footer'
     },
     actions: {
       type: Object,

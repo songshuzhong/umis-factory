@@ -21,6 +21,7 @@ export default {
     title: {
       type: String,
       required: false,
+      default: 'Title'
     },
     type: {
       type: String,
@@ -35,6 +36,7 @@ export default {
     description: {
       type: String,
       required: false,
+      default: 'Description'
     },
     closable: {
       type: Boolean,
@@ -49,10 +51,12 @@ export default {
     closeText: {
       type: String,
       required: false,
+      default: '关闭'
     },
     classname: {
       type: String,
       required: false,
+      default: ''
     },
   },
 };

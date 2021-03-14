@@ -18,7 +18,7 @@
     <template v-if="header" #title>
       <mis-component
         :mis-name="header.renderer"
-        :path="`${path}/${header.renderer}`"
+        :path="`${path}/header/${header.renderer}`"
         :action="onClose"
         :after-action="onClose"
         :props="getFattingProps(header)"
@@ -35,7 +35,7 @@
         <template v-for="(item, index) in body" :key="index">
           <mis-component
             :mis-name="item.renderer"
-            :path="`${path}/${index}/${item.renderer}`"
+            :path="`${path}/body/${index}/${item.renderer}`"
             :action="onClose"
             :props="getFattingProps(item)"
             :header="getHeader(item)"
@@ -48,7 +48,7 @@
       <mis-component
         v-else
         :mis-name="body.renderer"
-        :path="`${path}/${body.renderer}`"
+        :path="`${path}/body/${body.renderer}`"
         :action="onClose"
         :props="getFattingProps(body)"
         :header="getHeader(body)"
@@ -61,7 +61,7 @@
       <template v-for="(item, index) in footer" :key="`${path}/${index}/${item.renderer}`">
         <mis-component
           :mis-name="item.renderer"
-          :path="`${path}/${index}/${item.renderer}`"
+          :path="`${path}/footer/${index}/${item.renderer}`"
           :footer="item.footer"
           :props="getFattingProps(item)"
           :init-data="getInitData(data, item)"

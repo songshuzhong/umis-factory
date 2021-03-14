@@ -13,13 +13,48 @@
         @close="closeErrorInfo"
       />
     </transition>
-    <div ref="editor" class="monaco-editor" />
+    <div
+      v-if="isJson"
+      ref="editor"
+      class="monaco-editor"
+    />
+    <toolmaker
+      v-if="!isJson"
+      :path="`${path}/toolmaker`"
+    />
     <transition name="el-zoom-in-bottom">
-      <div v-if="(!showErrorBoundary && editable)" class="umis-editor__container__tools">
-        <el-button type="primary" @click="onSave">
+      <div
+        v-if="(!showErrorBoundary && editable)"
+        class="umis-editor__container__tools"
+      >
+        <el-button
+          v-if="isJson"
+          size="mini"
+          type="primary"
+          @click="onChange"
+        >
+          拖拽模式
+        </el-button>
+        <el-button
+          v-if="!isJson"
+          size="mini"
+          type="primary"
+          @click="onChange"
+        >
+          JSON模式
+        </el-button>
+        <el-button
+          size="mini"
+          type="primary"
+          @click="onSave"
+        >
           保存到本地
         </el-button>
-        <el-button type="primary" @click="onSaveRemote">
+        <el-button
+          size="mini"
+          type="danger"
+          @click="onSaveRemote"
+        >
           保存到远程
         </el-button>
       </div>
@@ -30,12 +65,14 @@
 import { ElButton, ElAlert } from 'element-plus';
 
 import monaco from './mixin/monaco';
+import Toolmaker from './toolmaker';
 
 export default {
   name: 'MisEditor',
   components: {
     ElButton,
     ElAlert,
+    Toolmaker
   },
   props: {
     path: {
@@ -61,6 +98,7 @@ export default {
   data() {
     return {
       errorInfo: '',
+      isJson: true,
       iSchema: {},
       pageInfo: {},
       showErrorBoundary: false,
@@ -72,29 +110,44 @@ export default {
         this.iSchema = val;
       },
       immediate: true
-    }
+    },
+    isJson: {
+      handler(val, old) {
+        if (val && !old) {
+          this.$nextTick(() => {
+            this.initEditor();
+          });
+        }
+      }
+    },
   },
   mixins: [monaco],
   mounted() {
-    if (this.editable) {
-      const { pageSchema, pageInfo } = window.UMIS;
-      this.pageInfo = pageInfo;
-      this.editor = window.monaco.editor.create(this.$refs.editor, {
-        ...this.defaultConfig,
-        language: 'json',
-        theme: 'vs-dark',
-      });
-      this.updateSchema(pageSchema);
-    } else {
-      this.editor = window.monaco.editor.create(this.$refs.editor, {
-        ...this.defaultConfig,
-        theme: 'vs',
-        language: 'json'
-      });
-      this.updateSchema(this.iSchema);
-    }
+    this.initEditor()
   },
   methods: {
+    initEditor() {
+      if (this.editable) {
+        const { pageSchema, pageInfo } = window.UMIS;
+        this.pageInfo = pageInfo;
+        this.editor = window.monaco.editor.create(this.$refs.editor, {
+          ...this.defaultConfig,
+          language: 'json',
+          theme: 'vs-dark',
+        });
+        this.updateSchema(pageSchema);
+      } else {
+        this.editor = window.monaco.editor.create(this.$refs.editor, {
+          ...this.defaultConfig,
+          theme: 'vs',
+          language: 'json'
+        });
+        this.updateSchema(this.iSchema);
+      }
+    },
+    onChange() {
+      this.isJson = !this.isJson;
+    },
     updateSchema(pageSchema) {
       this.iSchema = {
         schema: 'https://github.com/songshuzhong/umis/v1/schemas/page.json',

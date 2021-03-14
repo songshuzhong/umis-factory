@@ -172,6 +172,7 @@ export default {
     text: {
       type: String,
       required: false,
+      default: 'Action'
     },
     body: {
       type: Object,

@@ -13,7 +13,7 @@
     <el-carousel-item v-for="(item, index) in body" :key="index">
       <mis-component
         :mis-name="item.renderer"
-        :path="`${path}/${index}/${item.renderer}`"
+        :path="`${path}/body/${index}/${item.renderer}`"
         :body="getBody(item)"
         :header="getHeader(item)"
         :footer="getFooter(item)"

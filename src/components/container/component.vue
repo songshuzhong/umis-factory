@@ -7,7 +7,9 @@
       v-show="iHidden && forceRerender"
       v-bind="getSlimmingProps(props)"
       :path="path"
+      :track="path"
       :index="index"
+      :class="className"
       :header="header"
       :body="body"
       :footer="footer"
@@ -49,6 +51,10 @@ export default {
     },
     props: {
       type: Object,
+      required: false,
+    },
+    className: {
+      type: String,
       required: false,
     },
     header: {
@@ -104,7 +110,11 @@ export default {
     return false;
   },
   created() {
-    if (!this.$misComponents.includes(this.misName)) {
+    const misName = this.misName
+      .split('-')
+      .map(kebab => kebab.charAt(0).toUpperCase() + kebab.slice(1))
+      .join('');
+    if (!this.$.appContext.components[misName]) {
       this.error = '找不到对应的渲染器';
     }
   },
