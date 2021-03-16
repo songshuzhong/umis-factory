@@ -1,6 +1,7 @@
 import clonedeep from 'lodash.clonedeep';
 
 export default {
+  name: 'InitData',
   props: {
     initData: {
       type: Object,

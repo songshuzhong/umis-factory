@@ -1,4 +1,5 @@
 export default {
+  name: 'MisVisible',
   props: {
     hiddenOn: {
       type: String,

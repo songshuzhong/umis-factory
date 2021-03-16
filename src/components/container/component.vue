@@ -8,6 +8,7 @@
       v-bind="getSlimmingProps(props)"
       :path="path"
       :track="path"
+      :track-id="componentName"
       :index="index"
       :class="className"
       :header="header"

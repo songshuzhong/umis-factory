@@ -3,6 +3,7 @@ import clonedeep from 'lodash.clonedeep';
 import { getUrlParams } from '../../utils/url';
 
 export default {
+  name: 'InitApi',
   props: {
     initApi: {
       type: Object,
@@ -12,27 +13,33 @@ export default {
       type: Number,
       required: false,
       default: 0,
+      desc: '定时轮询'
     },
     sendOn: {
       type: String,
       required: false,
+      desc: '满足条件时请求'
     },
     stopAutoRefreshWhen: {
       type: String,
       required: false,
+      desc: '满足条件时停止轮询'
     },
     silentLoading: {
       type: Boolean,
       required: false,
+      desc: '屏蔽加载动画'
     },
     silentMessage: {
       type: Boolean,
       required: false,
+      desc: '响应信息'
     },
     syncLocation: {
       type: Boolean,
       required: false,
       default: true,
+      desc: '将参数锁定到地址栏'
     },
   },
   data() {

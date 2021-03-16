@@ -65,7 +65,7 @@
 import { ElButton, ElAlert } from 'element-plus';
 
 import monaco from './mixin/monaco';
-import Toolmaker from './toolmaker';
+import Toolmaker from './toolmaker/toolmaker';
 
 export default {
   name: 'MisEditor',

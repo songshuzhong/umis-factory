@@ -51,32 +51,40 @@
     </section>
     <el-drawer
       v-model="drawerVisible"
-      append-to-body
       destroy-on-close
+      custom-class="umis-toolmaker__drawer__container"
     >
       <div class="umis-toolmaker__drawer__content">
-        <el-form :model="formData">
-          <el-form-item label="活动名称">
-            <el-input v-model="formData.name" autocomplete="off" />
-          </el-form-item>
-        </el-form>
-        <div class="umis-toolmaker__drawer__footer">
-          <el-button @click="drawerVisible = false">取 消</el-button>
-          <el-button
-            type="primary"
-            :loading="loading"
-          >
-            {{ loading ? '提交中 ...' : '确 定' }}
-          </el-button>
-        </div>
+        <props-editor
+          :value="editableProps"
+          :api-props="apiProps"
+        />
+      </div>
+      <div class="umis-toolmaker__drawer__footer">
+        <el-button
+          size="mini"
+          type="primary"
+          @click="drawerVisible = false"
+        >
+          取 消
+        </el-button>
+        <el-button
+          size="mini"
+          type="danger"
+          :loading="loading"
+          @click="submitForm"
+        >
+          {{ loading ? '提交中 ...' : '确 定' }}
+        </el-button>
       </div>
     </el-drawer>
   </section>
 </template>
 <script>
 import { ElButtonGroup, ElButton, ElDrawer, ElForm, ElFormItem, ElInput } from 'element-plus';
-import MisSchema from './container/schema';
-import componentMap from '../utils/map';
+import MisSchema from '../container/schema';
+import PropsEditor from './props-editor';
+import componentMap from '../../utils/map';
 
 export default {
   name: 'MisDragger',
@@ -88,6 +96,7 @@ export default {
     ElFormItem,
     ElInput,
     MisSchema,
+    PropsEditor
   },
   props: {
     path: {
@@ -106,8 +115,8 @@ export default {
       offsetWidth: '',
       offsetHeight: '',
       drawerVisible: false,
-      editableProps: [],
-      formData: {}
+      editableProps: {},
+      apiProps: {},
     }
   },
   mounted() {
@@ -129,6 +138,11 @@ export default {
         this.activeNode = node;
         this.activeNode.classList.add('umis-toolmaker__active');
       }
+    },
+    submitForm() {
+      let { json } = this.beforeJSONEdit();
+      this.drawerVisible = false;
+      Object.assign(json, this.editableProps);
     },
     dragStart(e) {
       let componentName = e.target.getAttribute('data-name');
@@ -152,11 +166,11 @@ export default {
     },
     handleInactive() {
       this.activeTrack = '';
-      this.activeNode.classList.remove('umis-toolmaker__active');
+      this.activeNode && this.activeNode.classList.remove('umis-toolmaker__active');
       this.activeNode = '';
     },
     onEdit() {
-      const misName = this.activeNode.getAttribute('renderer')
+      const misName = this.activeNode.getAttribute('track-id')
           .split('-')
           .map(kebab => kebab.charAt(0).toUpperCase() + kebab.slice(1))
           .join('');
@@ -164,7 +178,40 @@ export default {
         this.$message('找不到对应的渲染器');
         return;
       }
-      this.editableProps = this.$.appContext.components[misName].props.map(item => item.required);
+      const { json } = this.beforeJSONEdit();
+      const mixinsProps = this.$.appContext.components[misName].mixins || [];
+      const editableProps = this.$.appContext.components[misName].props;
+      const apiProps = {};
+      const dataProps = {};
+      for (let i = 0; i < mixinsProps.length; i++) {
+        if (mixinsProps[i].name === 'InitApi') {
+          for (const key in mixinsProps[i].props) {
+            if (mixinsProps[i].props.hasOwnProperty(key)) {
+              apiProps[key] = mixinsProps[i].props[key].default || mixinsProps[i].props[key];
+            }
+          }
+        }
+      }
+
+      for (const key in apiProps) {
+        if (apiProps.hasOwnProperty(key)) {
+          if (json[key]) {
+            apiProps[key] = json[key];
+          }
+        }
+      }
+
+      for (const key in editableProps) {
+        if (editableProps.hasOwnProperty(key)) {
+          if (json[key]) {
+            editableProps[key] = json[key];
+          } else {
+            editableProps[key] = editableProps[key]
+          }
+        }
+      }
+      this.apiProps = apiProps;
+      this.editableProps = editableProps;
       this.drawerVisible = true;
     },
     onBottom() {
