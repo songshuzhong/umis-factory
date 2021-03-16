@@ -246,7 +246,7 @@ export default {
         controls: [
           {
             renderer: 'mis-input',
-            name: 'prop',
+            name: 'name',
             label: '列索引'
           },
           {

@@ -2,12 +2,14 @@
   <el-tabs v-model="activeTab">
     <el-tab-pane label="常规" name="normal">
       <mis-form
+        ref="normalFormRef"
         label-position="top"
         :controls="normalProps.controls"
       />
     </el-tab-pane>
     <el-tab-pane label="接口" name="api">
       <mis-form
+        ref="apiFormRef"
         label-position="top"
         :controls="iApiProps.controls"
       />
@@ -48,16 +50,22 @@ export default {
     apiProps: {
       type: Object,
       required: true
+    },
+    editTabChange: {
+      type: Function,
+      required: true
     }
   },
   data() {
     const normalProps = {
+      name: 'normalForm',
       renderer: 'mis-form',
       labelPosition: 'top',
       controls: []
     };
     const instance = this.$.appContext.components[this.activeRenderer];
     const iApiProps = {
+      name: 'apiForm',
       renderer: 'mis-form',
       labelPosition: 'top',
       controls: []
@@ -104,8 +112,13 @@ export default {
       dataProps
     }
   },
-  methods: {
-    formattedControls() {}
+  watch: {
+    activeTab: {
+      handler(val) {
+        this.editTabChange(val);
+      },
+      immediate: true
+    }
   }
 }
 </script>

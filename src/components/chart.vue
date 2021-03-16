@@ -39,6 +39,10 @@ export default {
     name: {
       type: String,
       required: false,
+      edit: {
+        renderer: 'mis-input',
+        tip: '唯一名称，字母数字下划线构成'
+      }
     },
     path: {
       type: String,

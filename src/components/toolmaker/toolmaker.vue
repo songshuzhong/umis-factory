@@ -52,14 +52,17 @@
     <el-drawer
       v-model="drawerVisible"
       destroy-on-close
+      append-to-body
       custom-class="umis-toolmaker__drawer__container"
     >
       <div class="umis-toolmaker__drawer__content">
         <props-editor
+          ref="propsEditorRef"
           :active-renderer="activeRenderer"
           :editable-props="editableProps"
           :api-props="apiProps"
           :origin-api-props="originApiProps"
+          :edit-tab-change="onEditTabChange"
         />
       </div>
       <div class="umis-toolmaker__drawer__footer">
@@ -110,6 +113,7 @@ export default {
     return {
       componentMap,
       schema: '',
+      activeTab: '',
       activeRenderer: '',
       activeNode: '',
       activeTrack: '',
@@ -145,8 +149,19 @@ export default {
     },
     submitForm() {
       let { json } = this.beforeJSONEdit();
+      const form = this.$refs.propsEditorRef.$refs[`${this.activeTab}FormRef`].$refs.form;
+      form.validate(valid => {
+        if (valid) {
+          const model = form.model;
+          this.$nextTick(() => {
+            Object.assign(json, model);
+          });
+        }
+      });
       this.drawerVisible = false;
-      Object.assign(json, this.editableProps);
+    },
+    onEditTabChange(name) {
+      this.activeTab = name;
     },
     dragStart(e) {
       let componentName = e.target.getAttribute('data-name');
