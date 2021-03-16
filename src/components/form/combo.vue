@@ -8,12 +8,14 @@
       >
         <mis-field
           v-for="(value, name, key) in item"
-          v-model="iValue[index][name]"
+          v-model="item[name]"
           :key="`${path}/${index}/${name}`"
           :name="name"
           :data="iValue"
           :field="getFieldByKey(key, index)"
           :path="`${path}/${index}/${name}`"
+          :props="controls[key % controls.length]"
+          :handle-invisible="handleInvisible"
         />
         <span
           class="umis-form__combo__delete"
@@ -23,7 +25,7 @@
         </span>
       </div>
       <el-form-item :label="' '" class="umis-form__combo__plus">
-        <el-button icon="el-icon-plus" @click="onAdd" />
+        <el-button size="mini" icon="el-icon-plus" @click="onAdd" />
       </el-form-item>
     </template>
     <template v-else>
@@ -39,6 +41,8 @@
           :data="iValue"
           :field="getField(item)"
           :path="`${path}/${index}/${item.renderer}`"
+          :props="item"
+          :handle-invisible="handleInvisible"
         />
       </div>
     </template>
@@ -47,6 +51,7 @@
 <script>
 import clonedeep from 'lodash.clonedeep';
 import { ElFormItem, ElLink, ElButton } from 'element-plus';
+import visible from '../mixin/visible';
 
 export default {
   name: 'MisCombo',
@@ -86,13 +91,18 @@ export default {
     updateValue: {
       type: Function,
       required: true,
-    }
+    },
+    handleInvisible: {
+      type: Function,
+      required: false,
+    },
   },
   data() {
     return {
       iValue: '',
     };
   },
+  mixins: [visible],
   watch: {
     value: {
       handler(val) {

@@ -56,8 +56,10 @@
     >
       <div class="umis-toolmaker__drawer__content">
         <props-editor
-          :value="editableProps"
+          :active-renderer="activeRenderer"
+          :editable-props="editableProps"
           :api-props="apiProps"
+          :origin-api-props="originApiProps"
         />
       </div>
       <div class="umis-toolmaker__drawer__footer">
@@ -108,6 +110,7 @@ export default {
     return {
       componentMap,
       schema: '',
+      activeRenderer: '',
       activeNode: '',
       activeTrack: '',
       offsetTop: '',
@@ -117,6 +120,7 @@ export default {
       drawerVisible: false,
       editableProps: {},
       apiProps: {},
+      originApiProps: {}
     }
   },
   mounted() {
@@ -170,10 +174,11 @@ export default {
       this.activeNode = '';
     },
     onEdit() {
-      const misName = this.activeNode.getAttribute('track-id')
+      const misName =this.activeNode.getAttribute('track-id')
           .split('-')
           .map(kebab => kebab.charAt(0).toUpperCase() + kebab.slice(1))
           .join('');
+
       if (!this.$.appContext.components[misName]) {
         this.$message('找不到对应的渲染器');
         return;
@@ -182,9 +187,10 @@ export default {
       const mixinsProps = this.$.appContext.components[misName].mixins || [];
       const editableProps = this.$.appContext.components[misName].props;
       const apiProps = {};
-      const dataProps = {};
+
       for (let i = 0; i < mixinsProps.length; i++) {
         if (mixinsProps[i].name === 'InitApi') {
+          this.originApiProps = mixinsProps[i].__props[0];
           for (const key in mixinsProps[i].props) {
             if (mixinsProps[i].props.hasOwnProperty(key)) {
               apiProps[key] = mixinsProps[i].props[key].default || mixinsProps[i].props[key];
@@ -210,6 +216,8 @@ export default {
           }
         }
       }
+
+      this.activeRenderer = misName;
       this.apiProps = apiProps;
       this.editableProps = editableProps;
       this.drawerVisible = true;

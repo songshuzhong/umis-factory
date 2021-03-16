@@ -30,6 +30,7 @@
         :action="action"
         :linkage-trigger="onLinkageTrigger"
         :update-value="updateValue"
+        :handle-invisible="handleInvisible"
         @update:value="updateValue"
       />
     </el-form-item>
@@ -95,9 +96,9 @@ export default {
       handler(val) {
         this.$emit('update:modelValue', val);
         /* eslint-disable */
-        this.$nextTick(() => {
-          this.dispatch('ElFormItem', 'el.form.change')
-        })
+        // this.$nextTick(() => {
+          // this.dispatch('ElFormItem', 'el.form.change')
+        // })
         /* eslint-enable */
       },
       deep: true

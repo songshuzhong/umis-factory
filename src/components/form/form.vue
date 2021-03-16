@@ -179,7 +179,12 @@ export default {
     let activeCollapse = [];
     let data = {};
     for (let i = 0; i < this.controls.length; i++) {
-      const controls = this.controls[i].controls || [this.controls[i]];
+      let controls;
+      if (this.fieldset && this.controls[i].renderer !== 'mis-combo') {
+        controls = this.controls[i].controls
+      } else {
+        controls = [this.controls[i]];
+      }
       activeCollapse.push(i);
       controls.forEach(control => {
         const renderer = control.renderer;
@@ -193,7 +198,6 @@ export default {
         }
       })
     }
-
     return {
       activeCollapse,
       data,
