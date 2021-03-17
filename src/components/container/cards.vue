@@ -39,6 +39,7 @@ import MisCard from './card';
 import initApi from '../mixin/init-api';
 import derivedProp from '../mixin/derived-prop';
 import pageInfo from '../mixin/page-info';
+import mixinProps from '../mixin/props/cards';
 
 export default {
   name: 'MisCards',
@@ -49,75 +50,7 @@ export default {
     ElCard,
     ElPagination,
   },
-  props: {
-    path: {
-      type: String,
-      required: true,
-    },
-    name: {
-      type: String,
-      required: false,
-    },
-    body: {
-      type: [Array, Object],
-      required: false,
-    },
-    header: {
-      type: String,
-      required: false,
-    },
-    footer: {
-      type: [Array, Object],
-      required: false,
-    },
-    initApi: {
-      type: [String, Object],
-      required: false,
-    },
-    actions: {
-      type: Object,
-      required: false,
-    },
-    action: {
-      type: Function,
-      required: true,
-    },
-    classname: {
-      type: String,
-      required: false,
-    },
-    bodyStyle: {
-      type: Object,
-      required: false,
-    },
-    shadow: {
-      type: String,
-      required: false,
-      options: ['always', 'hover', 'never'],
-      default: 'always',
-    },
-    gutter: {
-      type: Number,
-      required: false,
-      default: 0,
-    },
-    span: {
-      type: Number,
-      required: false,
-      default: 12,
-    },
-    size: {
-      type: Array,
-      required: false,
-      default: [24, 12, 8, 4],
-    },
-    hasPageInfo: {
-      type: Boolean,
-      required: false,
-      default: true
-    }
-  },
-  mixins: [initApi, derivedProp, pageInfo],
+  mixins: [mixinProps, initApi, derivedProp, pageInfo],
   watch: {
     body: {
       handler(val) {

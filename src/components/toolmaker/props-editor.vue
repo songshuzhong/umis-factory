@@ -21,7 +21,7 @@
 <script>
 import { ElTabs, ElTabPane, ElForm, ElFormItem, ElInput, ElTooltip } from 'element-plus';
 import MisForm from '../form/form';
-const disalbedProps = ['renderer', 'path', 'action', 'actions', 'afterAction', 'linkageTrigger'];
+const disalbedProps = ['renderer', 'value', 'data', 'path', 'action', 'actions', 'afterAction', 'linkageTrigger', 'handleInvisible', 'updateValue'];
 
 export default {
   name: 'PropsEditor',
@@ -39,7 +39,11 @@ export default {
       type: String,
       required: true
     },
-    editableProps: {
+    activeJson: {
+      type: Object,
+      required: true
+    },
+    originNormalProps: {
       type: Object,
       required: true
     },
@@ -57,13 +61,13 @@ export default {
     }
   },
   data() {
+    const instance = this.$.appContext.components[this.activeRenderer];
     const normalProps = {
       name: 'normalForm',
       renderer: 'mis-form',
       labelPosition: 'top',
       controls: []
     };
-    const instance = this.$.appContext.components[this.activeRenderer];
     const iApiProps = {
       name: 'apiForm',
       renderer: 'mis-form',
@@ -77,24 +81,28 @@ export default {
 
     for (const key in this.originApiProps) {
       if (this.originApiProps.hasOwnProperty(key)) {
+        const value = this.activeJson[key];
         const { renderer, ...other } = this.originApiProps[key].edit;
         iApiProps.controls.push({
           renderer,
+          value,
           ...other
         });
       }
     }
-    for (const key in this.editableProps) {
-      if (this.editableProps.hasOwnProperty(key)) {
+    for (const key in this.originNormalProps) {
+      if (this.originNormalProps.hasOwnProperty(key)) {
         if (['header', 'body', 'footer'].includes(key)) {
           hasNodeProps = true;
-          nodeProps.header = this.editableProps[key].header;
-          nodeProps.body = this.editableProps[key].body;
-          nodeProps.footer = this.editableProps[key].footer;
+          nodeProps.header = this.originNormalProps[key].header;
+          nodeProps.body = this.originNormalProps[key].body;
+          nodeProps.footer = this.originNormalProps[key].footer;
         } else if (!disalbedProps.includes(key)) {
+          const value = this.activeJson[key];
           const { renderer, ...other } = instance.__props[0][key].edit;
           normalProps.controls.push({
             renderer,
+            value,
             name: key,
             label: key,
             ...other

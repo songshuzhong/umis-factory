@@ -35,26 +35,13 @@
 import { ElAside } from 'element-plus';
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
+import mixinProps from '../mixin/props/aside';
 
 export default {
   name: 'MisAside',
   components: {
     ElAside,
   },
-  props: {
-    path: {
-      type: String,
-      required: true,
-    },
-    body: {
-      type: [Array, Object],
-      required: false,
-    },
-    classname: {
-      type: String,
-      required: false,
-    }
-  },
-  mixins: [derivedProp, initData],
+  mixins: [mixinProps, derivedProp, initData],
 };
 </script>

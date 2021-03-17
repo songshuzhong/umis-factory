@@ -57,45 +57,13 @@ import { ElTabs, ElTabPane } from 'element-plus';
 
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
+import mixinProps from '../mixin/props/tabs';
 
 export default {
   name: 'MisTabs',
   components: {
     ElTabs,
     ElTabPane,
-  },
-  props: {
-    path: {
-      type: String,
-      required: true,
-    },
-    type: {
-      type: String,
-      required: false,
-      default: '',
-    },
-    tabStyle: {
-      type: Object,
-      required: false,
-    },
-    tabPosition: {
-      type: String,
-      required: false,
-      options: ['left', 'right', 'top', 'bottom'],
-    },
-    stretch: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-    activeName: {
-      type: String,
-      required: true,
-    },
-    body: {
-      type: Array,
-      required: true,
-    },
   },
   data() {
     return {
@@ -104,7 +72,7 @@ export default {
       },
     };
   },
-  mixins: [derivedProp, initData],
+  mixins: [mixinProps, derivedProp, initData],
   watch: {
     activeName: {
       handler(val) {

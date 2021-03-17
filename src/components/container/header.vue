@@ -34,36 +34,14 @@ import { ElHeader } from 'element-plus';
 
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
+import mixinProps from '../mixin/props/header';
 
 export default {
   name: 'MisHeader',
   components: {
     ElHeader,
   },
-  props: {
-    path: {
-      type: String,
-      required: true,
-    },
-    body: {
-      type: Array,
-      required: true,
-    },
-    classname: {
-      type: String,
-      required: false,
-    },
-    computedClass: {
-      type: String,
-      required: false,
-    },
-    height: {
-      type: Number,
-      required: false,
-      default: 60
-    }
-  },
-  mixins: [derivedProp, initData],
+  mixins: [mixinProps, derivedProp, initData],
   data() {
     return {
       iHeight: 0,

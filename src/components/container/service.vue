@@ -38,44 +38,10 @@
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
 import initApi from '../mixin/init-api';
+import mixinProps from '../mixin/props/service';
 
 export default {
   name: 'MisService',
-  props: {
-    path: {
-      type: String,
-      required: true,
-    },
-    name: {
-      type: String,
-      required: false,
-    },
-    header: {
-      type: [Array, Object],
-      required: false,
-    },
-    body: {
-      type: [Array, Object],
-      required: false,
-    },
-    footer: {
-      type: [Array, Object],
-      required: false,
-    },
-    classname: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    target: {
-      type: String,
-      required: false,
-    },
-    linkageTrigger: {
-      type: Function,
-      required: false,
-    },
-  },
   watch: {
     data: {
       handler() {
@@ -84,7 +50,7 @@ export default {
       deep: true
     },
   },
-  mixins: [initData, initApi, derivedProp],
+  mixins: [mixinProps, initData, initApi, derivedProp],
   methods: {
     handleLinkage() {
       if (this.target) {

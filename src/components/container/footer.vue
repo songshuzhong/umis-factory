@@ -33,26 +33,13 @@
 import { ElFooter } from 'element-plus';
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
+import mixinProps from '../mixin/props/footer';
 
 export default {
   name: 'MisMain',
   components: {
     ElFooter,
   },
-  props: {
-    path: {
-      type: String,
-      required: true,
-    },
-    body: {
-      type: [Object, Array],
-      required: true,
-    },
-    classname: {
-      type: String,
-      required: false,
-    },
-  },
-  mixins: [derivedProp, initData],
+  mixins: [mixinProps, derivedProp, initData],
 };
 </script>

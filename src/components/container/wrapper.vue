@@ -35,33 +35,10 @@
 <script>
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
+import mixinProps from '../mixin/props/wrapper';
 
 export default {
   name: 'MisWrapper',
-  props: {
-    path: {
-      type: String,
-      required: true,
-    },
-    index: {
-      type: [String, Number],
-      required: false,
-      default: '0'
-    },
-    body: {
-      type: [Object, Array],
-      required: true,
-    },
-    classname: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    computedClass: {
-      type: String,
-      required: false,
-    },
-  },
   computed: {
     iComputedClass() {
       if (this.computedClass) {
@@ -70,6 +47,6 @@ export default {
       return '';
     }
   },
-  mixins: [derivedProp, initData],
+  mixins: [mixinProps, derivedProp, initData],
 };
 </script>

@@ -77,6 +77,9 @@ export default {
   },
   methods: {
     handleClick(data) {
+      if (!this.action) {
+        return;
+      }
       const { $vars, encode, event, dimensionNames, ...other } = data;
       this.action(this.actions, other);
     },

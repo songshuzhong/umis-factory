@@ -58,10 +58,10 @@
       <div class="umis-toolmaker__drawer__content">
         <props-editor
           ref="propsEditorRef"
+          :active-json="activeJson"
           :active-renderer="activeRenderer"
-          :editable-props="editableProps"
-          :api-props="apiProps"
           :origin-api-props="originApiProps"
+          :origin-normal-props="originNormalProps"
           :edit-tab-change="onEditTabChange"
         />
       </div>
@@ -87,6 +87,7 @@
 </template>
 <script>
 import { ElButtonGroup, ElButton, ElDrawer, ElForm, ElFormItem, ElInput } from 'element-plus';
+import clonedeep from "lodash.clonedeep";
 import MisSchema from '../container/schema';
 import PropsEditor from './props-editor';
 import componentMap from '../../utils/map';
@@ -122,9 +123,9 @@ export default {
       offsetWidth: '',
       offsetHeight: '',
       drawerVisible: false,
-      editableProps: {},
-      apiProps: {},
-      originApiProps: {}
+      activeJson: {},
+      originApiProps: {},
+      originNormalProps: {}
     }
   },
   mounted() {
@@ -190,51 +191,28 @@ export default {
     },
     onEdit() {
       const misName =this.activeNode.getAttribute('track-id')
-          .split('-')
-          .map(kebab => kebab.charAt(0).toUpperCase() + kebab.slice(1))
-          .join('');
+        .split('-')
+        .map(kebab => kebab.charAt(0).toUpperCase() + kebab.slice(1))
+        .join('');
 
       if (!this.$.appContext.components[misName]) {
         this.$message('找不到对应的渲染器');
         return;
       }
       const { json } = this.beforeJSONEdit();
-      const mixinsProps = this.$.appContext.components[misName].mixins || [];
-      const editableProps = this.$.appContext.components[misName].props;
-      const apiProps = {};
+      const mixinsList = this.$.appContext.components[misName].mixins || [];
 
-      for (let i = 0; i < mixinsProps.length; i++) {
-        if (mixinsProps[i].name === 'InitApi') {
-          this.originApiProps = mixinsProps[i].__props[0];
-          for (const key in mixinsProps[i].props) {
-            if (mixinsProps[i].props.hasOwnProperty(key)) {
-              apiProps[key] = mixinsProps[i].props[key].default || mixinsProps[i].props[key];
-            }
-          }
+      for (let i = 0; i < mixinsList.length; i++) {
+        if (mixinsList[i].name === 'MixinProps') {
+          this.originNormalProps = mixinsList[i].__props[0];
+        }
+        if (mixinsList[i].name === 'InitApi') {
+          this.originApiProps = mixinsList[i].__props[0];
         }
       }
 
-      for (const key in apiProps) {
-        if (apiProps.hasOwnProperty(key)) {
-          if (json[key]) {
-            apiProps[key] = json[key];
-          }
-        }
-      }
-
-      for (const key in editableProps) {
-        if (editableProps.hasOwnProperty(key)) {
-          if (json[key]) {
-            editableProps[key] = json[key];
-          } else {
-            editableProps[key] = editableProps[key]
-          }
-        }
-      }
-
+      this.activeJson = clonedeep(json);
       this.activeRenderer = misName;
-      this.apiProps = apiProps;
-      this.editableProps = editableProps;
       this.drawerVisible = true;
     },
     onBottom() {

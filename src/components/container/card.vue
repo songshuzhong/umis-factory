@@ -104,65 +104,14 @@ import { ElCard } from 'element-plus';
 import initApi from '../mixin/init-api';
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
+import mixinProps from '../mixin/props/card';
 
 export default {
   name: 'MisCard',
   components: {
     ElCard,
   },
-  props: {
-    path: {
-      type: String,
-      required: true,
-    },
-    name: {
-      type: String,
-      required: false,
-    },
-    body: {
-      type: [Array, Object, String],
-      required: false,
-      default: 'Body'
-    },
-    header: {
-      type: [Array, Object, String],
-      required: false,
-      default: 'Header'
-    },
-    footer: {
-      type: [Array, Object, String],
-      required: false,
-      default: 'Footer'
-    },
-    actions: {
-      type: Object,
-      required: false,
-    },
-    action: {
-      type: Function,
-      required: true,
-    },
-    initApi: {
-      type: [String, Object],
-      required: false,
-    },
-    classname: {
-      type: String,
-      required: false,
-    },
-    bodyStyle: {
-      type: Object,
-      required: false,
-      default: { padding: 0 },
-    },
-    shadow: {
-      type: String,
-      required: false,
-      options: ['always', 'hover', 'never'],
-      default: 'always',
-    },
-  },
-  mixins: [initApi, initData, derivedProp],
+  mixins: [mixinProps, initApi, initData, derivedProp],
   methods: {
     renderHeader(data) {
       return this.$getRenderedTpl(this.header, data);

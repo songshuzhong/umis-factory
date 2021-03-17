@@ -35,6 +35,7 @@ import { ElContainer, ElHeader, ElMain, ElAside, ElFooter } from 'element-plus';
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
 import linkage from '../mixin/linkage';
+import mixinProps from '../mixin/props/layout';
 
 export default {
   name: 'MisLayout',
@@ -45,28 +46,6 @@ export default {
     ElAside,
     ElFooter,
   },
-  props: {
-    path: {
-      type: String,
-      required: true,
-    },
-    name: {
-      type: String,
-      required: false,
-    },
-    body: {
-      type: [Object, Array],
-      required: true,
-    },
-    direction: {
-      type: String,
-      required: false,
-    },
-    classname: {
-      type: String,
-      required: false,
-    },
-  },
-  mixins: [derivedProp, initData, linkage],
+  mixins: [mixinProps, derivedProp, initData, linkage],
 };
 </script>

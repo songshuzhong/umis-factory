@@ -34,23 +34,10 @@
 import initApi from '../mixin/init-api';
 import initData from '../mixin/init-data';
 import derivedProp from '../mixin/derived-prop';
+import mixinProps from '../mixin/props/page';
 
 export default {
   name: 'MisPage',
-  props: {
-    body: {
-      type: [Array, Object],
-      required: false,
-    },
-    path: {
-      type: String,
-      required: true,
-    },
-    classname: {
-      type: String,
-      required: false,
-    },
-  },
-  mixins: [initApi, initData, derivedProp],
+  mixins: [mixinProps, initApi, initData, derivedProp],
 };
 </script>

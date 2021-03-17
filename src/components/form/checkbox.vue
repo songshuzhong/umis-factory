@@ -24,6 +24,7 @@
 </template>
 <script>
 import { ElCheckboxGroup, ElCheckboxButton, ElCheckbox } from 'element-plus';
+import mixinProps from '../mixin/props/checkbox';
 
 export default {
   name: 'MisCheckbox',
@@ -32,35 +33,12 @@ export default {
     ElCheckboxButton,
     ElCheckbox,
   },
-  props: {
-    options: {
-      type: Array,
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    type: {
-      type: String,
-      required: false,
-      default: 'checkbox',
-      options: ['checkbox', 'button'],
-    },
-    value: {
-      type: [Array, String, Number],
-      required: false,
-    },
-    updateValue: {
-      type: Function,
-      required: true,
-    },
-  },
   data() {
     return {
       iValue: [],
     };
   },
+  mixins: [mixinProps],
   watch: {
     value: {
       handler(val) {

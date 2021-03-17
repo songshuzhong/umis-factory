@@ -52,6 +52,7 @@
 import clonedeep from 'lodash.clonedeep';
 import { ElFormItem, ElLink, ElButton } from 'element-plus';
 import visible from '../mixin/visible';
+import mixinProps from '../mixin/props/combo';
 
 export default {
   name: 'MisCombo',
@@ -60,49 +61,12 @@ export default {
     ElLink,
     ElButton,
   },
-  props: {
-    controls: {
-      type: Array,
-      required: true,
-    },
-    path: {
-      type: String,
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    value: {
-      type: [Array, Object],
-      required: false,
-      default: {},
-    },
-    data: {
-      type: [Array, Object],
-      required: false,
-      default: {},
-    },
-    multiple: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-    updateValue: {
-      type: Function,
-      required: true,
-    },
-    handleInvisible: {
-      type: Function,
-      required: false,
-    },
-  },
   data() {
     return {
       iValue: '',
     };
   },
-  mixins: [visible],
+  mixins: [mixinProps, visible],
   watch: {
     value: {
       handler(val) {

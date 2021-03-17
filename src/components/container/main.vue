@@ -53,42 +53,16 @@
 
 <script>
 import { ElMain } from 'element-plus';
+import clonedeep from "lodash.clonedeep";
 
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
-import clonedeep from "lodash.clonedeep";
+import mixinProps from '../mixin/props/main';
 
 export default {
   name: 'MisMain',
   components: {
     ElMain,
-  },
-  props: {
-    path: {
-      type: String,
-      required: true,
-    },
-    body: {
-      type: [Object, Array],
-      required: false,
-    },
-    routerView: {
-      type: Boolean,
-      required: false,
-    },
-    classname: {
-      type: String,
-      required: false,
-    },
-    computedClass: {
-      type: String,
-      required: false,
-    },
-    iProtal: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
   },
   data() {
     return {
@@ -103,7 +77,7 @@ export default {
       return '';
     }
   },
-  mixins: [derivedProp, initData],
+  mixins: [mixinProps, derivedProp, initData],
   mounted() {
     this.$eventHub.$on('mis-portal:create', this.createProtal);
     this.$eventHub.$on('mis-portal:destroy', this.destroyProtal);
