@@ -24,9 +24,6 @@
           <i class="el-icon-delete" />
         </span>
       </div>
-      <el-form-item :label="' '" class="umis-form__combo__plus">
-        <el-button size="mini" icon="el-icon-plus" @click="onAdd" />
-      </el-form-item>
     </template>
     <template v-else>
       <div
@@ -44,8 +41,17 @@
           :props="item"
           :handle-invisible="handleInvisible"
         />
+        <span
+          class="umis-form__combo__delete"
+          @click="onMapDelete(item.name)"
+        >
+          <i class="el-icon-delete" />
+        </span>
       </div>
     </template>
+    <el-form-item :label="' '" class="umis-form__combo__plus">
+      <el-button size="mini" icon="el-icon-plus" @click="onAdd" />
+    </el-form-item>
   </div>
 </template>
 <script>
@@ -109,6 +115,9 @@ export default {
     onDelete(index) {
       this.iValue.splice(index, 1);
     },
+    onMapDelete(name) {
+      delete this.iValue[name];
+    }
   },
 };
 </script>

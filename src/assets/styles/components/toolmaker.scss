@@ -38,6 +38,33 @@
   height: calc(100vh - 110px);
   background-color: #f2f2f2;
   overflow-y: scroll;
+  .umis-service__body,
+  .wrapper__container,
+  .umis-form__container,
+  .umis-card,
+  .el-aside,
+  .el-footer,
+  .el-header,
+  .el-main,
+  .el-divider--horizontal {
+    position: relative;
+    min-height: 75px;
+    padding: 25px;
+    background: white;
+    border: 1px solid #DDDDDD;
+    &:after {
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      padding: 3px 7px;
+      border: 1px solid #DDDDDD;
+      background: rgba(245, 245, 245, .1);
+      color: #9DA0A4;
+      content: attr(track-id);
+      font-size: 12px;
+      font-weight: bold;
+    }
+  }
 }
 .umis-toolmaker__active {
   background: rgba(66, 133, 244, .1);

@@ -22,8 +22,8 @@
       @click.capture.stop="handleClick"
     >
       <mis-schema
-        v-if="schema"
-        :schema="schema"
+        v-if="schemaInstance"
+        :schema="schemaInstance"
       />
     </section>
     <section
@@ -87,9 +87,10 @@
 </template>
 <script>
 import { ElButtonGroup, ElButton, ElDrawer, ElForm, ElFormItem, ElInput } from 'element-plus';
-import clonedeep from "lodash.clonedeep";
+import clonedeep from 'lodash.clonedeep';
 import MisSchema from '../container/schema';
 import PropsEditor from './props-editor';
+import dropTools from '../mixin/drop-tools';
 import componentMap from '../../utils/map';
 
 export default {
@@ -113,11 +114,9 @@ export default {
   data() {
     return {
       componentMap,
-      schema: '',
       activeTab: '',
       activeRenderer: '',
       activeNode: '',
-      activeTrack: '',
       offsetTop: '',
       offsetLeft: '',
       offsetWidth: '',
@@ -128,8 +127,15 @@ export default {
       originNormalProps: {}
     }
   },
-  mounted() {
-    this.schema = window.UMIS.pageSchema;
+  mixins: [dropTools],
+  watch: {
+    drawerVisible: {
+      handler(val) {
+        if (!val) {
+          this.handleInactive();
+        }
+      }
+    }
   },
   methods: {
     handleClick(e) {
@@ -164,30 +170,13 @@ export default {
     onEditTabChange(name) {
       this.activeTab = name;
     },
-    dragStart(e) {
-      let componentName = e.target.getAttribute('data-name');
-      let info = {
-        renderer: componentName,
-      };
-      e.dataTransfer.setData('info', JSON.stringify(info));
-    },
-    dragOver(e) {
-      e.preventDefault();
-    },
-    drop(e) {
-      let info = JSON.parse(e.dataTransfer.getData('info'));
-      this.schema.body.push(info);
-    },
-    findMisComponent(node) {
-      while (node && !node.classList.contains('umis-toolmaker__container') && !node.getAttribute('track')) {
-        node = node.parentNode;
-      }
-      return node;
-    },
     handleInactive() {
       this.activeTrack = '';
       this.activeNode && this.activeNode.classList.remove('umis-toolmaker__active');
       this.activeNode = '';
+      this.activeJson = {};
+      this.originApiProps = {};
+      this.originNormalProps = {};
     },
     onEdit() {
       const misName =this.activeNode.getAttribute('track-id')
@@ -238,30 +227,6 @@ export default {
       pJson.splice(trackIndex, 1);
       this.handleInactive();
     },
-    beforeJSONEdit() {
-      let trackList = this.activeTrack.split('/');
-      trackList = trackList.slice(2);
-      return this.findOneInJSON(this.schema, trackList);
-    },
-    swapOneInJSON(json, trackIndex, targetIndex) {
-      json[trackIndex] = json.splice(targetIndex, 1, json[trackIndex])[0];
-    },
-    findOneInJSON(json, tracks, pJson, trackIndex) {
-      const track = tracks.shift();
-      let index = trackIndex;
-      if (tracks.length === 1) {
-        index = track;
-      }
-      if (!track) {
-        return { json, pJson, trackIndex: Number(trackIndex) };
-      }
-      if (track.startsWith('mis-') && json.renderer === track) {
-        return this.findOneInJSON(json, tracks, pJson, index);
-      }
-      if (json[track]) {
-        return this.findOneInJSON(json[track], tracks, json, index)
-      }
-    }
   }
 }
 </script>

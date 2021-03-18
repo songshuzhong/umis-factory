@@ -2,7 +2,7 @@
   <el-card
     :shadow="shadow"
     :body-style="bodyStyle"
-    :class="classname"
+    :class="`umis-card ${classname}`"
     @click.native="handleClick"
   >
     <template v-if="header" #header>
@@ -35,7 +35,13 @@
         {{header}}
       </template>
     </template>
-    <div v-if="body" class="umis-card__body">
+    <div
+      v-if="body"
+      class="umis-card__body"
+      drop-position="body"
+      @dragover="dragOver"
+      @drop="drop"
+    >
       <template
         v-if="Object.prototype.toString.call(body) === '[object Array]'"
       >
@@ -65,7 +71,13 @@
         {{body}}
       </template>
     </div>
-    <div v-if="footer" class="umis-card__footer">
+    <div
+      v-if="footer"
+      class="umis-card__footer"
+      drop-position="footer"
+      @dragover="dragOver"
+      @drop="drop"
+    >
       <template
         v-if="Object.prototype.toString.call(footer) === '[object Array]'"
       >
@@ -105,13 +117,14 @@ import initApi from '../mixin/init-api';
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
 import mixinProps from '../mixin/props/card';
+import dropTools from '../mixin/drop-tools';
 
 export default {
   name: 'MisCard',
   components: {
     ElCard,
   },
-  mixins: [mixinProps, initApi, initData, derivedProp],
+  mixins: [mixinProps, initApi, initData, derivedProp, dropTools],
   methods: {
     renderHeader(data) {
       return this.$getRenderedTpl(this.header, data);

@@ -61,7 +61,6 @@ export default {
     }
   },
   data() {
-    const instance = this.$.appContext.components[this.activeRenderer];
     const normalProps = {
       name: 'normalForm',
       renderer: 'mis-form',
@@ -99,7 +98,7 @@ export default {
           nodeProps.footer = this.originNormalProps[key].footer;
         } else if (!disalbedProps.includes(key)) {
           const value = this.activeJson[key];
-          const { renderer, ...other } = instance.__props[0][key].edit;
+          const { renderer, ...other } = this.originNormalProps[key].edit;
           normalProps.controls.push({
             renderer,
             value,

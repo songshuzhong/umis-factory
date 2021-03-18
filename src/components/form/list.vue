@@ -12,7 +12,7 @@
           :class="{ checked: iValue.includes(item.value) }"
           @click="handleClick(index)"
         >
-          <el-checkbox :ref="`list__${index}`" :label="item.value" />
+          <el-checkbox :ref="`options__${index}`" :label="item.value" />
           <mis-component
             :mis-name="body.renderer"
             :path="`${path}/${body.renderer}`"
@@ -36,7 +36,7 @@
           :class="{ checked: iValue.includes(item.value) }"
           @click="handleClick(index)"
         >
-          <el-radio :ref="`list__${index}`" :label="item.value" />
+          <el-radio :ref="`options__${index}`" :label="item.value" />
           <mis-component
             :mis-name="body.renderer"
             :path="`${path}/${body.renderer}`"
@@ -56,6 +56,7 @@
 import { ElCheckboxGroup, ElCheckbox, ElRadioGroup, ElRadio } from 'element-plus';
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
+import mixinProps from '../mixin/props/list';
 
 export default {
   name: 'MisList',
@@ -64,45 +65,6 @@ export default {
     ElCheckbox,
     ElRadioGroup,
     ElRadio
-  },
-  props: {
-    path: {
-      type: String,
-      required: true
-    },
-    name: {
-      type: String,
-      required: true
-    },
-    value: {
-      type: [Array, String],
-      required: false
-    },
-    min: {
-      type: Number,
-      required: false
-    },
-    max: {
-      type: Number,
-      required: false
-    },
-    multiple: {
-      type: Boolean,
-      required: false,
-      default: true
-    },
-    body: {
-      type: Object,
-      required: true
-    },
-    list: {
-      type: Array,
-      required: true
-    },
-    updateValue: {
-      type: Function,
-      required: true,
-    }
   },
   data() {
     return {
@@ -119,7 +81,7 @@ export default {
         immediate: true,
       },
     },
-    list: {
+    options: {
       handler(val) {
         if (!this.initApi && val) {
           this.rows = val;
@@ -131,10 +93,10 @@ export default {
       this.updateValue && this.updateValue(val);
     }
   },
-  mixins: [derivedProp, initData],
+  mixins: [mixinProps, derivedProp, initData],
   methods: {
     handleClick(index) {
-      this.$refs[`list__${index}`].$el.click();
+      this.$refs[`options__${index}`].$el.click();
     }
   }
 }

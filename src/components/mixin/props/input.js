@@ -10,27 +10,25 @@ export default {
       required: true,
       edit: {
         renderer: 'mis-input',
-        tip: '类型'
+        tip: 'name'
       }
     },
     value: {
       type: [String, Number],
       required: false,
     },
+    label: {
+      type: String,
+      required: false,
+      edit: {
+        renderer: 'mis-input',
+      }
+    },
     type: {
       type: String,
       required: false,
       edit: {
         renderer: 'mis-input',
-        tip: '类型'
-      }
-    },
-    readonly: {
-      type: Boolean,
-      required: false,
-      edit: {
-        renderer: 'mis-switch',
-        tip: '是否只读'
       }
     },
     disabled: {
@@ -38,16 +36,48 @@ export default {
       required: false,
       edit: {
         renderer: 'mis-switch',
-        tip: '不可用'
       }
     },
-    editable: {
+    readonly: {
       type: Boolean,
       required: false,
-      default: true,
       edit: {
         renderer: 'mis-switch',
-        tip: '是否可编辑'
+      }
+    },
+    minlength: {
+      type: Number,
+      required: false,
+      edit: {
+        renderer: 'mis-input',
+      }
+    },
+    maxlength: {
+      type: Number,
+      required: false,
+      edit: {
+        renderer: 'mis-input',
+      }
+    },
+    showWordLimit: {
+      type: Boolean,
+      required: false,
+      edit: {
+        renderer: 'mis-switch',
+      }
+    },
+    showPassword: {
+      type: Boolean,
+      required: false,
+      edit: {
+        renderer: 'mis-switch',
+      }
+    },
+    placeholder: {
+      type: String,
+      required: false,
+      edit: {
+        renderer: 'mis-input',
       }
     },
     clearable: {
@@ -56,7 +86,6 @@ export default {
       default: true,
       edit: {
         renderer: 'mis-switch',
-        tip: '是否可清除'
       }
     },
     size: {
@@ -64,67 +93,6 @@ export default {
       required: false,
       edit: {
         renderer: 'mis-input',
-        tip: '大小'
-      }
-    },
-    placeholder: {
-      type: String,
-      required: false,
-      edit: {
-        renderer: 'mis-input',
-        tip: '占位文案'
-      }
-    },
-    startPlaceholder: {
-      type: String,
-      required: false,
-      default: '开始日期',
-      edit: {
-        renderer: 'mis-input',
-        tip: '开始日期占位符'
-      }
-    },
-    endPlaceholder: {
-      type: String,
-      required: false,
-      default: '结束日期占位符',
-      edit: {
-        renderer: 'mis-input',
-        tip: '结束日期占位符'
-      }
-    },
-    rangeSeparator: {
-      type: String,
-      required: false,
-      default: '至',
-      edit: {
-        renderer: 'mis-input',
-        tip: '连接文案'
-      }
-    },
-    defaultValue: {
-      type: Date,
-      required: false,
-      edit: {
-        renderer: 'mis-input',
-        tip: '默认值'
-      }
-    },
-    format: {
-      type: String,
-      required: false,
-      default: 'YYYY年MM月DD日',
-      edit: {
-        renderer: 'mis-input',
-        tip: '格式化模板，例：YYYY年MM月DD日'
-      }
-    },
-    align: {
-      type: String,
-      required: false,
-      edit: {
-        renderer: 'mis-input',
-        tip: '连接文案'
       }
     },
     prefixIcon: {
@@ -132,28 +100,25 @@ export default {
       required: false,
       edit: {
         renderer: 'mis-input',
-        tip: '前缀Icon'
       }
     },
-    unlinkPanels: {
-      type: Boolean,
-      required: false,
-      edit: {
-        renderer: 'mis-switch',
-        tip: 'unlinkPanels'
-      }
-    },
-    clearIcon: {
+    suffixIcon: {
       type: String,
       required: false,
       edit: {
         renderer: 'mis-input',
-        tip: '清除Icon'
+      }
+    },
+    append: {
+      type: Object,
+      required: false,
+      edit: {
+        renderer: 'mis-input',
       }
     },
     updateValue: {
       type: Function,
       required: true,
-    },
+    }
   },
 }

@@ -36,86 +36,12 @@
 import { ElInput } from 'element-plus';
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
+import mixinProps from '../mixin/props/input';
 
 export default {
   name: 'MisInput',
   components: {
     ElInput,
-  },
-  props: {
-    path: {
-      type: String,
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    value: {
-      type: [String, Number],
-      required: false,
-    },
-    label: {
-      type: String,
-      required: false,
-    },
-    type: {
-      type: String,
-      required: false,
-    },
-    disabled: {
-      type: Boolean,
-      required: false,
-    },
-    readonly: {
-      type: Boolean,
-      required: false,
-    },
-    minlength: {
-      type: Number,
-      required: false,
-    },
-    maxlength: {
-      type: Number,
-      required: false,
-    },
-    showWordLimit: {
-      type: Boolean,
-      required: false,
-    },
-    showPassword: {
-      type: Boolean,
-      required: false,
-    },
-    placeholder: {
-      type: String,
-      required: false,
-    },
-    clearable: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
-    size: {
-      type: String,
-      required: false,
-    },
-    prefixIcon: {
-      type: String,
-      required: false,
-    },
-    suffixIcon: {
-      type: String,
-      required: false,
-    },
-    append: {
-      type: Object,
-      required: false,
-    },
-    updateValue: {
-      type: Function,
-      required: true,
-    }
   },
   data() {
     return {
@@ -137,7 +63,7 @@ export default {
       immediate: true,
     },
   },
-  mixins: [initData, derivedProp],
+  mixins: [mixinProps, initData, derivedProp],
   methods: {
     onChange(val) {
       this.updateValue && this.updateValue(val);

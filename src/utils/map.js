@@ -55,7 +55,7 @@ const map = {
         chName: '组合',
         icon: 'el-icon-c-scale-to-original'
     },
-    datapicker: {
+    datepicker: {
         chName: '日期',
         icon: 'el-icon-c-scale-to-original'
     },

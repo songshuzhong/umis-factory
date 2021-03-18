@@ -109,71 +109,13 @@ import { ElForm, ElSpace } from 'element-plus';
 import derivedProp from '../mixin/derived-prop';
 import initApi from '../mixin/init-api';
 import initData from '../mixin/init-data';
+import mixinProps from '../mixin/props/form';
 
 export default {
   name: 'MisForm',
   components: {
     ElForm,
     ElSpace
-  },
-  props: {
-    path: {
-      type: String,
-      required: true,
-    },
-    api: {
-      type: [Object, String],
-      required: false,
-    },
-    name: {
-      type: String,
-      required: false,
-    },
-    controls: {
-      type: Array,
-      required: false,
-    },
-    fieldset: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-    labelWidth: {
-      type: Number,
-      required: false,
-      default: 'auto'
-    },
-    labelPosition: {
-      type: String,
-      required: false,
-      default: 'right',
-    },
-    inline: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-    redirect: {
-      type: String,
-      required: false,
-    },
-    reload: {
-      type: String,
-      required: false,
-    },
-    target: {
-      type: String,
-      required: false,
-    },
-    linkageType: {
-      type: String,
-      required: false,
-      default: 'after'
-    },
-    linkageTrigger: {
-      type: Function,
-      required: true,
-    },
   },
   data() {
     let activeCollapse = [];
@@ -209,7 +151,7 @@ export default {
       if (!this.fieldset) {
         return this.controls.filter(item => {
           if ('mis-action' === item.renderer) {
-            item.actionApi = this.api;
+            item.actionApi = this.initApi;
             return item;
           }
         });
@@ -219,7 +161,7 @@ export default {
         if (this.controls.hasOwnProperty(key)) {
           const active = this.controls[key].controls.filter(item => {
             if ('mis-action' === item.renderer) {
-              item.actionApi = this.api;
+              item.actionApi = this.initApi;
               return item;
             }
           })
@@ -235,7 +177,7 @@ export default {
       return [];
     },
   },
-  mixins: [initApi, initData, derivedProp],
+  mixins: [mixinProps, initApi, initData, derivedProp],
   mounted() {
     this.$eventHub.$on('mis-component:remoteComponent', this.handleRemoteSubmit);
   },
@@ -308,8 +250,8 @@ export default {
       }
       this.handleFetchApi(
         {
-          url: this.api.url || this.api,
-          method: this.api.method || 'post',
+          url: this.initApi.url,
+          method: this.initApi.method || 'post',
           params: formData,
         },
         res => {
