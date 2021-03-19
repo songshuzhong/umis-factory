@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue';
 import { ElContainer, ElHeader, ElMain, ElAside, ElFooter } from 'element-plus';
 
 import derivedProp from '../mixin/derived-prop';
@@ -37,7 +38,7 @@ import initData from '../mixin/init-data';
 import linkage from '../mixin/linkage';
 import mixinProps from '../mixin/props/layout';
 
-export default {
+export default defineComponent({
   name: 'MisLayout',
   components: {
     ElContainer,
@@ -47,5 +48,5 @@ export default {
     ElFooter,
   },
   mixins: [mixinProps, derivedProp, initData, linkage],
-};
+});
 </script>

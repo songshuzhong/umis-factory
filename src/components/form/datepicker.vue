@@ -21,32 +21,26 @@
   />
 </template>
 <script>
+import {defineComponent, reactive} from 'vue';
 import { ElDatePicker } from 'element-plus';
 import mixinProps from '../mixin/props/datepicker';
 
-export default {
+export default defineComponent({
   name: 'MisDatePicker',
   components: {
     ElDatePicker,
   },
-  data() {
+  mixins: [mixinProps],
+  setup(props) {
+    const iValue = reactive(props.value || []);
+    const onChange = val => {
+      props.updateValue && props.updateValue(val);
+    };
+
     return {
-      iValue: '',
+      iValue,
+      onChange
     };
   },
-  mixins: [mixinProps],
-  watch: {
-    value: {
-      handler(val) {
-        this.iValue = val;
-      },
-      immediate: true,
-    },
-  },
-  methods: {
-    onChange(val) {
-      this.updateValue && this.updateValue(val);
-    },
-  },
-};
+});
 </script>

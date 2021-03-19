@@ -28,17 +28,18 @@
   </el-row>
 </template>
 <script>
+import { defineComponent } from 'vue';
 import { ElRow, ElCol } from 'element-plus';
 
 import derivedProp from '../mixin/derived-prop';
 import mixinProps from '../mixin/props/grid';
 
-export default {
+export default defineComponent({
   name: 'MisGrid',
   components: {
     ElRow,
     ElCol,
   },
   mixins: [mixinProps, derivedProp],
-};
+});
 </script>

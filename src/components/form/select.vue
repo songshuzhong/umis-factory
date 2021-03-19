@@ -21,141 +21,63 @@
   </el-select>
 </template>
 <script>
+import { defineComponent, watch, ref, reactive } from 'vue';
 import { ElSelect, ElOption } from 'element-plus';
 import initApi from '../mixin/init-api';
 import initData from '../mixin/init-data';
+import mixinProps from '../mixin/props/select';
 import cache from '../mixin/cache';
 
-export default {
+export default defineComponent({
   name: 'MisSelect',
   components: {
     ElSelect,
     ElOption,
   },
-  props: {
-    options: {
-      type: Array,
-      required: false,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    value: {
-      type: [Array, String, Number],
-      required: false,
-    },
-    size: {
-      type: String,
-      required: false,
-    },
-    disabled: {
-      type: Boolean,
-      required: false,
-    },
-    clearable: {
-      type: Boolean,
-      required: false,
-    },
-    multiple: {
-      type: Boolean,
-      required: false,
-    },
-    joinValue: {
-      type: Boolean,
-      required: false,
-    },
-    filterable: {
-      type: Boolean,
-      required: false,
-    },
-    placeholder: {
-      type: String,
-      required: false,
-    },
-    cached: {
-      type: Object,
-      required: false,
-      default: {}
-    },
-    target: {
-      type: String,
-      required: false,
-    },
-    linkageTrigger: {
-      type: Function,
-      required: false,
-    },
-    updateValue: {
-      type: Function,
-      required: true,
-    }
-  },
-  data() {
-    return {
-      iValue: [],
-      iOptions: [],
-      iClear: false
+  mixins: [mixinProps, initApi, initData, cache],
+  setup(props) {
+    const iClear = ref(false);
+    const iValue = reactive(props.value);
+    const iOptions = reactive(props.options);
+    const onChange = val => {
+      iValue.value = val;
+      iClear.value = false;
+      props.handleLinkage();
     };
-  },
-  watch: {
-    value: {
-      handler(val) {
-        this.iValue = val;
-      },
-      immediate: true,
-    },
-    iValue: {
-      handler(value, oldValue) {
-        if (event && event.target.nodeName === 'I') {
-          this.iClear = true;
-        }
-        this.handleCache({field: {value, oldValue, iClear: this.iClear}, form: this.data});
-        this.updateValue && this.updateValue(value);
-      },
-    },
-    options: {
-      handler(val) {
-        if (val && val.length) {
-          this.iOptions = val;
-        }
-      },
-      immediate: true,
-      deep: true,
-    },
-    rows: {
-      handler(val) {
-        if (val && val.length) {
-          this.iOptions = val;
-        }
-      },
-      immediate: true,
-      deep: true,
-    },
-  },
-  mixins: [initApi, initData, cache],
-  methods: {
-    onChange(val) {
-      this.iValue = val;
-      this.iClear = false;
-      this.handleLinkage();
-    },
-    onClear() {
-      this.iClear = true;
-    },
-    getJoinValue(option) {
-      if (this.joinValue) {
+    const onClear = () => {
+      iClear.value = true;
+    };
+    const getJoinValue = (option) => {
+      if (props.joinValue) {
         return { value: option.value, text: option.text };
       }
       return option.value;
-    },
-    handleLinkage() {
-      if (this.target) {
+    };
+    const handleLinkage = () => {
+      if (props.target) {
         const linkage = {};
-        linkage[this.name] = this.iValue;
-        this.linkageTrigger(this.target, linkage);
+        linkage[props.name] = iValue.value;
+        props.linkageTrigger(props.target, linkage);
       }
-    },
+    };
+    watch(iValue, (val, old) => {
+      if (event && event.target.nodeName === 'I') {
+        iClear.value = true;
+      }
+      // this.handleCache({field: {value, oldValue, iClear: this.iClear}, form: this.data});
+      props.updateValue && props.updateValue(val);
+    });
+    // watch(rows, val => iOptions.value = val);
+
+    return {
+      iClear,
+      iOptions,
+      iValue,
+      onChange,
+      onClear,
+      getJoinValue,
+      handleLinkage
+    };
   },
-};
+});
 </script>

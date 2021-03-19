@@ -1,5 +1,9 @@
 <template>
-  <el-upload :action="action" :on-change="handleChange" :file-list="fileList">
+  <el-upload
+    :action="action"
+    :on-change="handleChange"
+    :file-list="fileList"
+  >
     <el-button size="small" type="primary">
       点击上传
     </el-button>
@@ -10,9 +14,10 @@
 </template>
 
 <script>
+import { defineComponent, reactive } from 'vue';
 import { ElUpload, ElButton } from 'element-plus';
 
-export default {
+export default defineComponent({
   name: 'MisUpload',
   components: {
     ElUpload,
@@ -28,18 +33,15 @@ export default {
       required: true,
     },
   },
-  data() {
+  setup() {
+    const fileList = reactive([]);
+    const handleChange = (file, fileList) => {
+      fileList.value = fileList.slice(-3);
+    };
     return {
-      fileList: [],
+      fileList,
+      handleChange
     };
   },
-  methods: {
-    handleChange(file, fileList) {
-      this.fileList = fileList.slice(-3);
-    },
-    handlePreview() {},
-    handleRemove() {},
-    submitUpload() {},
-  },
-};
+});
 </script>

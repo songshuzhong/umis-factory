@@ -26,7 +26,7 @@ export default {
       const dropPosition = e.target.getAttribute('drop-position');
       const node = this.findMisComponent(e.target);
       const activeTrack = node.getAttribute('track');
-      if (this.path !== activeTrack) {
+      if (activeTrack && activeTrack !== this.path) {
         return;
       }
       if (!activeTrack || !dropPosition) {

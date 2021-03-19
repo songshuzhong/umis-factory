@@ -5,121 +5,136 @@ export default {
       type: String,
       required: true,
     },
-    name: {
-      type: String,
-      required: true,
-      edit: {
-        renderer: 'mis-input',
-        tip: 'name'
-      }
-    },
-    value: {
-      type: [String, Number],
-      required: false,
-    },
-    label: {
+    text: {
       type: String,
       required: false,
       edit: {
         renderer: 'mis-input',
+        tip: '辅助性文字'
       }
     },
-    type: {
+    visible: {
+      type: Boolean,
+      required: false,
+      edit: {
+        renderer: 'mis-switch',
+        tip: '辅助性文字'
+      }
+    },
+    title: {
+      type: String,
+      required: false,
+      default: 'Dialog',
+      edit: {
+        renderer: 'mis-input',
+        tip: '辅助性文字'
+      }
+    },
+    width: {
       type: String,
       required: false,
       edit: {
         renderer: 'mis-input',
+        tip: '辅助性文字'
       }
     },
-    disabled: {
-      type: Boolean,
-      required: false,
-      edit: {
-        renderer: 'mis-switch',
-      }
-    },
-    readonly: {
-      type: Boolean,
-      required: false,
-      edit: {
-        renderer: 'mis-switch',
-      }
-    },
-    minlength: {
-      type: Number,
-      required: false,
-      edit: {
-        renderer: 'mis-input',
-      }
-    },
-    maxlength: {
-      type: Number,
-      required: false,
-      edit: {
-        renderer: 'mis-input',
-      }
-    },
-    showWordLimit: {
-      type: Boolean,
-      required: false,
-      edit: {
-        renderer: 'mis-switch',
-      }
-    },
-    showPassword: {
-      type: Boolean,
-      required: false,
-      default: false,
-      edit: {
-        renderer: 'mis-switch',
-      }
-    },
-    placeholder: {
+    fullscreen: {
       type: String,
       required: false,
       edit: {
         renderer: 'mis-input',
+        tip: '辅助性文字'
       }
     },
-    clearable: {
+    modal: {
       type: Boolean,
       required: false,
       default: true,
       edit: {
         renderer: 'mis-switch',
+        tip: '辅助性文字'
       }
     },
-    size: {
+    lockScroll: {
+      type: Boolean,
+      required: false,
+      default: false,
+      edit: {
+        renderer: 'mis-switch',
+        tip: '辅助性文字'
+      }
+    },
+    closeOnModal: {
+      type: Boolean,
+      required: false,
+      default: true,
+      edit: {
+        renderer: 'mis-switch',
+        tip: '辅助性文字'
+      }
+    },
+    showClose: {
+      type: Boolean,
+      required: false,
+      default: true,
+      edit: {
+        renderer: 'mis-switch',
+        tip: '辅助性文字'
+      }
+    },
+    destroyOnClose: {
+      type: Boolean,
+      required: false,
+      default: false,
+      edit: {
+        renderer: 'mis-switch',
+        tip: '辅助性文字'
+      }
+    },
+    header: {
+      type: [Array, Object],
+      required: false,
+      edit: {
+        renderer: 'mis-input',
+        tip: '辅助性文字'
+      }
+    },
+    body: {
+      type: [Array, Object],
+      required: false,
+      edit: {
+        renderer: 'mis-input',
+        tip: '辅助性文字'
+      }
+    },
+    footer: {
+      type: [Array, Object],
+      required: false,
+      edit: {
+        renderer: 'mis-input',
+        tip: '辅助性文字'
+      }
+    },
+    classname: {
       type: String,
       required: false,
       edit: {
         renderer: 'mis-input',
+        tip: '辅助性文字'
       }
     },
-    prefixIcon: {
-      type: String,
-      required: false,
-      edit: {
-        renderer: 'mis-input',
-      }
-    },
-    suffixIcon: {
-      type: String,
-      required: false,
-      edit: {
-        renderer: 'mis-input',
-      }
-    },
-    append: {
-      type: Object,
-      required: false,
-      edit: {
-        renderer: 'mis-input',
-      }
-    },
-    updateValue: {
+    onPopupInvisible: {
       type: Function,
-      required: true,
-    }
+      required: false,
+    },
+    appendToBody: {
+      type: Boolean,
+      required: false,
+      default: false,
+      edit: {
+        renderer: 'mis-switch',
+        tip: '辅助性文字'
+      }
+    },
   },
 }

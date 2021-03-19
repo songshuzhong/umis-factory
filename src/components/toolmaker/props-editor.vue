@@ -21,7 +21,7 @@
 <script>
 import { ElTabs, ElTabPane, ElForm, ElFormItem, ElInput, ElTooltip } from 'element-plus';
 import MisForm from '../form/form';
-const disalbedProps = ['renderer', 'value', 'data', 'path', 'action', 'actions', 'afterAction', 'linkageTrigger', 'handleInvisible', 'updateValue'];
+const disalbedProps = ['renderer', 'value', 'data', 'path', 'action', 'actions', 'afterAction', 'linkageTrigger', 'handleInvisible', 'onPopupInvisible', 'updateValue'];
 
 export default {
   name: 'PropsEditor',

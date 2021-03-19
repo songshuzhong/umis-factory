@@ -25,13 +25,15 @@
 </template>
 
 <script>
+import { defineComponent, nextTick, computed, ref, onBeforeMount, onMounted, onErrorCaptured, getCurrentInstance } from 'vue';
+import { useRouter } from 'vue-router';
 import copy from 'copy-to-clipboard';
 import derivedProp from '../mixin/derived-prop';
 import linkage from '../mixin/linkage';
 import visible from '../mixin/visible';
 import initData from '../mixin/init-data';
 
-export default {
+export default defineComponent({
   name: 'MisComponent',
   props: {
     path: {
@@ -84,149 +86,139 @@ export default {
     },
   },
   mixins: [visible, initData, linkage, derivedProp],
-  data() {
-    return {
-      error: '',
-      clipboard: '',
-      forceRerender: true,
-    };
-  },
-  computed: {
-    errorInfo() {
-      if (this.error) {
+  setup(props) {
+    const { ctx } = getCurrentInstance();
+    const router = useRouter();
+    const componentRef = ref(null);
+    const error = ref('');
+    const forceRerender = ref(true);
+    const errorInfo = computed(() => {
+      if (error.value) {
         return {
-          props: this.props,
-          error: this.error,
+          props: props,
+          error: error,
         };
       }
       return {};
-    },
-    componentName() {
-      return this.error ? 'mis-error' : this.misName;
-    },
-  },
-  errorCaptured(err, vm, info) {
-    this.error = `'${err.message}' is found in ${info} of ${this.misName} component`;
-    console.error(err);
-    return false;
-  },
-  created() {
-    const misName = this.misName
-      .split('-')
-      .map(kebab => kebab.charAt(0).toUpperCase() + kebab.slice(1))
-      .join('');
-    if (!this.$.appContext.components[misName]) {
-      this.error = '找不到对应的渲染器';
-    }
-  },
-  mounted() {
-    this.$eventHub.$on('mis-component:reload', this.handleReload);
-  },
-  methods: {
-    filterAction(props, context, feedback) {
+    });
+    const componentName = computed(() => {
+      return error.value ? 'mis-error' : props.misName;
+    });
+
+    const filterAction = (props, context, feedback) => {
       if (
         (props.renderer === 'mis-action' && props.actions) ||
         (props.renderer === 'mis-chart' && props.footer.actionType)
       ) {
         if (props && ['mis-submit', 'mis-reset'].includes(props.actionType)) {
-          return this.action();
+          return props.action();
         }
-        return this.dispatchAction(props, context, feedback);
+        return dispatchAction(props, context, feedback);
       } else if (['mis-submit', 'mis-reset'].includes(props.actionType)) {
-        return this.action();
+        return props.action();
       } else {
-        return this.dispatchAction(props, context, feedback);
+        return dispatchAction(props, context, feedback);
       }
-    },
-    dispatchAction(props, context, feedback) {
+    };
+
+    const dispatchAction = (props, context, feedback) => {
       switch (props.actionType) {
         case 'mis-linkage':
-          this.handleLinkageAction(props, context, feedback);
+          handleLinkageAction(props, context, feedback);
           break;
         case 'mis-ajax':
-          this.handleAjaxAction(props, context, feedback);
+          handleAjaxAction(props, context, feedback);
           break;
         case 'mis-redirect':
-          this.handleRedirectAction(props, context);
+          handleRedirectAction(props, context);
           break;
         case 'mis-url':
-          this.handleUrlAction(props, context);
+          handleUrlAction(props, context);
           break;
         case 'mis-copy':
-          this.handleCopyAction(props, context);
+          handleCopyAction(props, context);
           break;
         case 'mis-dialog':
-          this.handleShowPopup(props, context);
+          handleShowPopup(props, context);
           break;
         case 'mis-drawer':
-          this.handleShowPopup(props, context);
+          handleShowPopup(props, context);
           break;
         case 'mis-fullscreen':
-          this.handleFullScreen(props, context);
+          handleFullScreen(props, context);
           break;
         case '':
-          this.handleHalfScreen(props, context);
+          handleHalfScreen(props, context);
           break;
       }
-    },
-    onReloadAction(props) {
+    };
+
+    const onReloadAction = (props) => {
       const { reload } = props;
       if (reload) {
-        this.$eventHub.$emit('mis-component:reload', reload);
+        ctx.$eventHub.$emit('mis-component:reload', reload);
       }
-    },
-    handleReload(target) {
+    };
+
+    const handleReload = (target) => {
       if (target === 'window') {
         window.location.reload();
-      } else if (this.props && target === this.props.name) {
-        this.forceRerender = false;
-        this.$nextTick(() => (this.forceRerender = true));
+      } else if (props && target === props.name) {
+        forceRerender.value = false;
+        nextTick(() => (forceRerender.value = true));
       }
-    },
-    handleLinkageAction(props, context, feedback) {
+    };
+
+    const handleLinkageAction = (props, context, feedback) => {
       feedback();
-    },
-    handleAjaxAction(props, context, feedback) {
-      this.$refs.component
+    };
+
+    const handleAjaxAction = (props, context, feedback) => {
+      componentRef.value
         .handleFetchApi(props.actionApi, feedback)
         .then(status => {
           if (status === 'resolve') {
-            this.onReloadAction(props);
+            onReloadAction(props);
           }
         });
-    },
-    handleUrlAction(props, context) {
-      const url = this.$getCompiledUrl(props.url, context);
+    };
+
+    const handleUrlAction = (props, context) => {
+      const url = ctx.$getCompiledUrl(props.url, context);
       props.blank ? window.open(url) : (window.location.href = url);
-    },
-    handleRedirectAction(props, context) {
-      const url = this.$getCompiledUrl(props.redirect, context);
-      let params = this.$getCompiledParams(props.params, context);
+    };
+
+    const handleRedirectAction= (props, context) => {
+      const url = ctx.$getCompiledUrl(props.redirect, context);
+      let params = ctx.$getCompiledParams(props.params, context);
       if (/^https?:\/\//.test(url)) {
         window.location.replace(url);
       } else if (props.redirectType === 'routeName') {
-        this.$router.push({
+        router.push({
           name: url,
           params
         });
       } else {
-        this.$router.push(url);
+        router.push(url);
       }
-    },
-    handleCopyAction(props, context) {
-      const content = this.$getCompiledUrl(props.content, context);
+    };
+
+    const handleCopyAction = (props, context) => {
+      const content = ctx.$getCompiledUrl(props.content, context);
       copy(content);
-      this.$message.success(`已复制：${content}.`);
-    },
-    handleShowPopup(props, context) {
-      this.$eventHub.$emit('mis-portal:create', this.path, {
-        body: props.body || this.body,
+      ctx.$message.success(`已复制：${content}.`);
+    };
+
+    const handleShowPopup = (props, context) => {
+      ctx.$eventHub.$emit('mis-portal:create', props.path, {
+        body: props.body || props.body,
         data: props.data || context,
         actionType: props.actionType,
         visible: true,
       });
-    },
-    handleFullScreen(props, context) {
+    };
+
+    const handleFullScreen = (props, context) => {
       const ele = props.target || document.body;
       if (ele.requestFullscreen) {
         ele.requestFullscreen();
@@ -237,8 +229,9 @@ export default {
       } else if (ele.msRequestFullscreen) {
         ele.msRequestFullscreen();
       }
-    },
-    handleHalfScreen() {
+    };
+
+    const handleHalfScreen = () => {
       if(document.exitFullScreen) {
         document.exitFullScreen();
       } else if(document.mozCancelFullScreen) {
@@ -248,7 +241,35 @@ export default {
       } else if(document.msExitFullscreen) {
         document.msExitFullscreen();
       }
-    }
+    };
+
+    onBeforeMount(() => {
+      const misName = props.misName
+        .split('-')
+        .map(kebab => kebab.charAt(0).toUpperCase() + kebab.slice(1))
+        .join('');
+      if (!ctx.$.appContext.components[misName]) {
+        error.value = '找不到对应的渲染器';
+      }
+    });
+
+    onMounted(() => {
+      ctx.$eventHub.$on('mis-component:reload', handleReload);
+    });
+
+    onErrorCaptured((err, vm, info) => {
+      error.value = `'${err.message}' is found in ${info} of ${props.misName} component`;
+      console.error(err);
+      return false;
+    });
+
+    return {
+      error,
+      errorInfo,
+      forceRerender,
+      componentName,
+      filterAction,
+    };
   },
-};
+});
 </script>

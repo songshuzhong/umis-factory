@@ -30,16 +30,17 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue';
 import { ElFooter } from 'element-plus';
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
 import mixinProps from '../mixin/props/footer';
 
-export default {
+export default defineComponent({
   name: 'MisMain',
   components: {
     ElFooter,
   },
   mixins: [mixinProps, derivedProp, initData],
-};
+});
 </script>

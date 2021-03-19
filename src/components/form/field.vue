@@ -23,6 +23,8 @@
         v-bind="props"
         :is="props.renderer"
         :path="`${path}/${props.renderer}`"
+        :track="`${path}/${props.renderer}`"
+        :track-id="props.renderer"
         :name="props.name"
         :init-data="data"
         :value="iValue"
@@ -95,11 +97,6 @@ export default {
     iValue: {
       handler(val) {
         this.$emit('update:modelValue', val);
-        /* eslint-disable */
-        // this.$nextTick(() => {
-          // this.dispatch('ElFormItem', 'el.form.change')
-        // })
-        /* eslint-enable */
       },
       deep: true
     },

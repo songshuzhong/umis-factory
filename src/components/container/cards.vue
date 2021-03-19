@@ -34,6 +34,7 @@
   </div>
 </template>
 <script>
+import { defineComponent, reactive, getCurrentInstance } from 'vue';
 import { ElRow, ElCol, ElCard, ElPagination } from 'element-plus';
 import MisCard from './card';
 import initApi from '../mixin/init-api';
@@ -41,7 +42,7 @@ import derivedProp from '../mixin/derived-prop';
 import pageInfo from '../mixin/page-info';
 import mixinProps from '../mixin/props/cards';
 
-export default {
+export default defineComponent({
   name: 'MisCards',
   components: {
     MisCard,
@@ -51,19 +52,15 @@ export default {
     ElPagination,
   },
   mixins: [mixinProps, initApi, derivedProp, pageInfo],
-  watch: {
-    body: {
-      handler(val) {
-        this.iBody = val;
-      },
-      immediate: true,
-      deep: true,
-    },
+  setup(props) {
+    const { ctx } = getCurrentInstance();
+    const iBody = reactive(props.body);
+    const renderHeader = (data) => ctx.$getRenderedTpl(props.header, data);
+
+    return {
+      iBody,
+      renderHeader
+    };
   },
-  methods: {
-    renderHeader(data) {
-      return this.$getRenderedTpl(this.header, data);
-    },
-  },
-};
+});
 </script>

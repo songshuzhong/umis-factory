@@ -74,119 +74,36 @@
   </el-dialog>
 </template>
 <script>
+import { defineComponent, computed, ref, getCurrentInstance } from 'vue';
 import { ElDialog, ElMain } from 'element-plus';
 
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
+import mixinProps from '../mixin/props/dialog';
 
-export default {
+export default defineComponent({
   name: 'MisDialog',
   components: {
     ElMain,
     ElDialog,
   },
-  props: {
-    path: {
-      type: String,
-      required: true,
-    },
-    text: {
-      type: String,
-      required: false,
-    },
-    visible: {
-      type: Boolean,
-      required: false,
-    },
-    title: {
-      type: String,
-      required: false,
-      default: 'Dialog',
-    },
-    width: {
-      type: String,
-      required: false,
-    },
-    fullscreen: {
-      type: String,
-      required: false,
-    },
-    modal: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
-    lockScroll: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-    closeOnModal: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
-    showClose: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
-    destroyOnClose: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-    header: {
-      type: [Array, Object],
-      required: false,
-    },
-    body: {
-      type: [Array, Object],
-      required: false,
-    },
-    footer: {
-      type: [Array, Object],
-      required: false,
-    },
-    classname: {
-      type: String,
-      required: false,
-    },
-    onPopupInvisible: {
-      type: Function,
-      required: false,
-    },
-    appendToBody: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-  },
-  watch: {
-    visible: {
-      handler(val) {
-        this.iVisible = val;
-      },
-      immediate: true,
-      deep: true,
-    },
-  },
-  computed: {
-    renderTitle() {
-      return this.$getRenderedTpl(this.title, this.data);
-    },
-  },
-  data() {
-    return {
-      iVisible: false,
+  mixins: [mixinProps, derivedProp, initData],
+  setup(props) {
+    const { ctx } = getCurrentInstance();
+    const iVisible = ref(props.visible);
+    const onClose = () => {
+      iVisible.value = false;
+      props.onPopupInvisible && props.onPopupInvisible(`${props.path}/mis-dialog`);
     };
-  },
-  mixins: [derivedProp, initData],
-  methods: {
-    onClose() {
-      this.iVisible = false;
-      this.onPopupInvisible && this.onPopupInvisible(this.path);
-    },
-  },
-};
+    const renderTitle = computed(() => {
+      return ctx.$getRenderedTpl(props.title, props.initData);
+    });
+
+    return {
+      iVisible,
+      renderTitle,
+      onClose
+    };
+  }
+});
 </script>

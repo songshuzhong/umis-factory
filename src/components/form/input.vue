@@ -31,43 +31,35 @@
     </template>
   </el-input>
 </template>
-
 <script>
+import { defineComponent, computed, ref } from 'vue';
 import { ElInput } from 'element-plus';
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
 import mixinProps from '../mixin/props/input';
 
-export default {
+export default defineComponent({
   name: 'MisInput',
   components: {
     ElInput,
   },
-  data() {
-    return {
-      iValue: '',
-    };
-  },
-  computed: {
-    derivedDataProp() {
-      const data = {};
-      data[this.name] = this.iValue;
-      return data;
-    },
-  },
-  watch: {
-    value: {
-      handler(val) {
-        this.iValue = val;
-      },
-      immediate: true,
-    },
-  },
   mixins: [mixinProps, initData, derivedProp],
-  methods: {
-    onChange(val) {
-      this.updateValue && this.updateValue(val);
-    },
-  },
-};
+  setup(props) {
+    const iValue = ref(props.value);
+    const derivedDataProp = computed(() => {
+      const data = {};
+      data[props.name] = iValue.value;
+      return data;
+    });
+    const onChange = val => {
+      props.updateValue && props.updateValue(val);
+    };
+
+    return {
+      iValue,
+      derivedDataProp,
+      onChange
+    };
+  }
+});
 </script>

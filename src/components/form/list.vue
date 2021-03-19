@@ -5,14 +5,15 @@
       v-model="iValue"
       :min="min"
       :max="max"
+      @change="onChange"
     >
-      <template v-for="(item, index) in rows" :key="index">
+      <template v-for="(item, index) in iOptions" :key="index">
         <div
           class="umis-list__item"
           :class="{ checked: iValue.includes(item.value) }"
           @click="handleClick(index)"
         >
-          <el-checkbox :ref="`options__${index}`" :label="item.value" />
+          <el-checkbox :ref="setRef" :label="item.value" />
           <mis-component
             :mis-name="body.renderer"
             :path="`${path}/${body.renderer}`"
@@ -29,14 +30,15 @@
     <el-radio-group
       v-else
       v-model="iValue"
+      @change="onChange"
     >
-      <template v-for="(item, index) in rows" :key="index">
+      <template v-for="(item, index) in iOptions" :key="index">
         <div
           class="umis-list__item"
           :class="{ checked: iValue.includes(item.value) }"
           @click="handleClick(index)"
         >
-          <el-radio :ref="`options__${index}`" :label="item.value" />
+          <el-radio :ref="setRef" :label="item.value" />
           <mis-component
             :mis-name="body.renderer"
             :path="`${path}/${body.renderer}`"
@@ -53,12 +55,13 @@
   </div>
 </template>
 <script>
+import { defineComponent, reactive, onBeforeUpdate } from 'vue';
 import { ElCheckboxGroup, ElCheckbox, ElRadioGroup, ElRadio } from 'element-plus';
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
 import mixinProps from '../mixin/props/list';
 
-export default {
+export default defineComponent({
   name: 'MisList',
   components: {
     ElCheckboxGroup,
@@ -66,39 +69,29 @@ export default {
     ElRadioGroup,
     ElRadio
   },
-  data() {
-    return {
-      rows: [],
-      iValue: []
-    };
-  },
-  watch: {
-    watch: {
-      value: {
-        handler(val) {
-          this.iValue = val;
-        },
-        immediate: true,
-      },
-    },
-    options: {
-      handler(val) {
-        if (!this.initApi && val) {
-          this.rows = val;
-        }
-      },
-      immediate: true
-    },
-    iValue(val) {
-      this.updateValue && this.updateValue(val);
-    }
-  },
   mixins: [mixinProps, derivedProp, initData],
-  methods: {
-    handleClick(index) {
-      this.$refs[`options__${index}`].$el.click();
-    }
-  }
-}
-</script>
+  setup(props) {
+    const iValue = reactive(props.value);
+    const iOptions = reactive(props.options);
+    const setRef = el => optionRefs.push(el);
+    const handleClick = index => {
+      optionRefs[index].$el.click();
+    };
+    const onChange = val => {
+      props.updateValue && props.updateValue(val);
+    };
+    let optionRefs = [];
 
+    onBeforeUpdate(() => {
+      // optionRefs = [];
+    });
+    return {
+      iOptions,
+      iValue,
+      setRef,
+      onChange,
+      handleClick
+    };
+  }
+});
+</script>

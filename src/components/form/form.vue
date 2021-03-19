@@ -7,15 +7,18 @@
     :label-position="labelPosition"
     :model="data"
     :inline="inline"
+    drop-position="controls"
+    @dragover="dragOver"
+    @drop="drop"
   >
     <template v-if="!fieldset">
       <template
         v-for="(item, index) in inactiveControls"
-        :key="`${path}/${index}/${item.renderer}`"
+        :key="`${path}/controls/${index}/${item.renderer}`"
       >
         <mis-field
           v-model="data[item.name]"
-          :path="`${path}/${index}/${item.renderer}`"
+          :path="`${path}/controls/${index}`"
           :name="item.name"
           :props="item"
           :init-data="data"
@@ -51,7 +54,7 @@
                 <mis-field
                   v-if="item.renderer !== 'mis-action'"
                   v-model="data[item.name]"
-                  :path="`${path}/${jndex}/${item.renderer}`"
+                  :path="`${path}/${jndex}`"
                   :name="item.name"
                   :props="item"
                   :init-data="data"
@@ -86,7 +89,7 @@
         <template v-for="(item, index) in activeControls" :key="`${path}/${index}/${item.renderer}`">
           <mis-component
             :ref="item.actionType"
-            :path="`${path}/${index}/${item.renderer}`"
+            :path="`${path}/controls/${index}`"
             :mis-name="item.renderer"
             :header="getHeader(item)"
             :body="getBody(item)"
@@ -110,6 +113,7 @@ import derivedProp from '../mixin/derived-prop';
 import initApi from '../mixin/init-api';
 import initData from '../mixin/init-data';
 import mixinProps from '../mixin/props/form';
+import dropTools from '../mixin/drop-tools';
 
 export default {
   name: 'MisForm',
@@ -177,7 +181,7 @@ export default {
       return [];
     },
   },
-  mixins: [mixinProps, initApi, initData, derivedProp],
+  mixins: [dropTools, mixinProps, initApi, initData, derivedProp],
   mounted() {
     this.$eventHub.$on('mis-component:remoteComponent', this.handleRemoteSubmit);
   },

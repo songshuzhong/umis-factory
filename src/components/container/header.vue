@@ -30,38 +30,39 @@
 </template>
 
 <script>
+import { defineComponent, ref, computed, watch, getCurrentInstance } from 'vue';
 import { ElHeader } from 'element-plus';
 
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
 import mixinProps from '../mixin/props/header';
 
-export default {
+export default defineComponent({
   name: 'MisHeader',
   components: {
     ElHeader,
   },
   mixins: [mixinProps, derivedProp, initData],
-  data() {
-    return {
-      iHeight: 0,
-    }
-  },
-  computed: {
-    iComputedClass() {
-      if (this.computedClass) {
-        return this.$onExpressionEval(this.computedClass, this.data);
+  setup(props) {
+    const { ctx } = getCurrentInstance();
+    const iHeight = ref(60);
+    const iComputedClass = computed(() => {
+      if (props.computedClass) {
+        return ctx.$onExpressionEval(props.computedClass, props.initData);
       }
       return '';
-    }
-  },
-  watch: {
-    height: {
-      handler(val) {
-        this.iHeight = val;
-      },
-      immediate: true
-    }
-  },
-};
+    });
+
+    watch(props.height, val => {
+      if (val) {
+        iHeight.value = val;
+      }
+    }, { immediate:true });
+
+    return {
+      iHeight,
+      iComputedClass
+    };
+  }
+});
 </script>

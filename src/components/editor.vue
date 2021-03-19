@@ -98,7 +98,7 @@ export default {
   data() {
     return {
       errorInfo: '',
-      isJson: true,
+      isJson: false,
       iSchema: {},
       pageInfo: {},
       showErrorBoundary: false,
@@ -123,7 +123,9 @@ export default {
   },
   mixins: [monaco],
   mounted() {
-    this.initEditor()
+    if (this.isJson) {
+      this.initEditor()
+    }
   },
   methods: {
     initEditor() {
@@ -149,10 +151,7 @@ export default {
       this.isJson = !this.isJson;
     },
     updateSchema(pageSchema) {
-      this.iSchema = {
-        schema: 'https://github.com/songshuzhong/umis/v1/schemas/page.json',
-        ...pageSchema,
-      };
+      this.iSchema = pageSchema;
       this.editor.setValue(JSON.stringify(this.iSchema));
       this.handleFormatSchema(this.editor);
     },

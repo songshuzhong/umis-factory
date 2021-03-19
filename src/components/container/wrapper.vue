@@ -33,20 +33,26 @@
   </div>
 </template>
 <script>
+import { defineComponent, computed, getCurrentInstance } from 'vue';
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
 import mixinProps from '../mixin/props/wrapper';
 
-export default {
+export default defineComponent({
   name: 'MisWrapper',
-  computed: {
-    iComputedClass() {
-      if (this.computedClass) {
-        return this.$onExpressionEval(this.computedClass, this.data);
+  mixins: [mixinProps, derivedProp, initData],
+  setup(props) {
+    const { ctx } = getCurrentInstance();
+    const iComputedClass = computed(() => {
+      if (props.computedClass) {
+        return ctx.$onExpressionEval(props.computedClass, props.data);
       }
       return '';
-    }
-  },
-  mixins: [mixinProps, derivedProp, initData],
-};
+    });
+
+    return {
+      iComputedClass
+    };
+  }
+});
 </script>

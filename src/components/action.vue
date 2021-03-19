@@ -394,6 +394,7 @@ export default {
         this.action(
           {
             actions: true,
+            path: this.path,
             ...this.actions[index],
           },
           this.data,

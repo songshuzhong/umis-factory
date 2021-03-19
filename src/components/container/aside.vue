@@ -32,16 +32,17 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue';
 import { ElAside } from 'element-plus';
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
 import mixinProps from '../mixin/props/aside';
 
-export default {
+export default defineComponent({
   name: 'MisAside',
   components: {
     ElAside,
   },
   mixins: [mixinProps, derivedProp, initData],
-};
+});
 </script>

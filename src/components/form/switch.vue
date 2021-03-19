@@ -14,111 +14,51 @@
   />
 </template>
 <script>
+import { defineComponent, onMounted, getCurrentInstance, watch, ref } from 'vue';
 import { ElSwitch } from 'element-plus';
+import mixinProps from '../mixin/props/switch';
 
-export default {
+export default defineComponent({
   name: 'MisSwitch',
   components: {
-    ElSwitch,
+    ElSwitch
   },
-  props: {
-    name: {
-      type: String,
-      required: true,
-    },
-    value: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    disabled: {
-      type: Boolean,
-      required: false,
-    },
-    width: {
-      type: Number,
-      required: false,
-    },
-    activeIconClass: {
-      type: String,
-      required: false,
-    },
-    activeText: {
-      type: String,
-      required: false,
-    },
-    inActiveText: {
-      type: String,
-      required: false,
-    },
-    activeValue: {
-      type: [Boolean, String, Number],
-      required: false,
-      default: true,
-    },
-    inActiveValue: {
-      type: [Boolean, String, Number],
-      required: false,
-      default: false,
-    },
-    activeColor: {
-      type: String,
-      required: false,
-    },
-    inActiveColor: {
-      type: String,
-      required: false,
-    },
-    target: {
-      type: String,
-      required: false,
-    },
-    linkageTrigger: {
-      type: Function,
-      required: true,
-    },
-    updateValue: {
-      type: Function,
-      required: false,
-    }
-  },
-  data() {
-    return {
-      iValue: '',
-    };
-  },
-  watch: {
-    value: {
-      handler(val) {
-        this.iValue = val;
-      },
-      immediate: true,
-    },
-  },
-  mounted() {
-    this.$eventHub.$on('mis-component:remoteComponent', this.handleRemoteClick);
-  },
-  methods: {
-    onChange(val) {
-      this.iValue = val;
-      this.updateValue && this.updateValue(val);
+  mixins: [mixinProps],
+  setup(props) {
+    const { ctx } = getCurrentInstance();
+    const iValue = ref(props.value);
+    const onChange = val => {
+      iValue.value = val;
+      props.updateValue && props.updateValue(val);
 
-      if (this.target) {
+      if (props.target) {
         const linkage = {};
-        linkage[this.name] = this.iValue;
-        this.linkageTrigger && this.linkageTrigger(this.target, linkage);
+        linkage[props.name] = iValue.value;
+        props.linkageTrigger && props.linkageTrigger(props.target, linkage);
       }
-    },
-    handleRemoteClick(actionType, target, feedback) {
-      if (target && target === this.name) {
+    };
+    const handleRemoteClick = (actionType, target, feedback) => {
+      if (target && target === props.name) {
         const linkage = {};
-        this.iValue = !this.iValue;
-        this.updateValue && this.updateValue(this.iValue);
-        linkage[this.name] = this.iValue;
-        this.linkageTrigger && this.linkageTrigger(this.target, linkage);
+        iValue.value = !iValue.value;
+        props.updateValue && props.updateValue(iValue.value);
+        linkage[props.name] = iValue.value;
+        props.linkageTrigger && props.linkageTrigger(props.target, linkage);
         feedback();
       }
-    }
-  },
-};
+    };
+
+    onMounted(() => {
+      ctx.$eventHub.$on('mis-component:remoteComponent', handleRemoteClick);
+    });
+
+    watch(props.value, val => iValue.value = val);
+
+    return {
+      iValue,
+      onChange,
+      handleRemoteClick
+    };
+  }
+});
 </script>

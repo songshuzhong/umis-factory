@@ -55,69 +55,67 @@
   </div>
 </template>
 <script>
+import { defineComponent, watch, reactive, ref } from 'vue';
 import clonedeep from 'lodash.clonedeep';
 import { ElFormItem, ElLink, ElButton } from 'element-plus';
 import visible from '../mixin/visible';
 import mixinProps from '../mixin/props/combo';
 
-export default {
+export default defineComponent({
   name: 'MisCombo',
   components: {
     ElFormItem,
     ElLink,
     ElButton,
   },
-  data() {
-    return {
-      iValue: '',
-    };
-  },
   mixins: [mixinProps, visible],
-  watch: {
-    value: {
-      handler(val) {
-        if (this.multiple && !Array.isArray(val)) {
-          this.iValue = [];
-        } else if (!this.multiple && !val) {
-          this.iValue = {};
-        } else {
-          this.iValue = val;
-        }
-      },
-      immediate: true,
-    },
-    iValue: {
-      handler(val) {
-        this.updateValue && this.updateValue(val);
-      },
-      deep: true,
-    },
-  },
-  methods: {
-    getField(item) {
+  setup(props) {
+    const iValue = reactive([]);
+    const getField = (item) => {
       const field = clonedeep(item);
-      field.prop = `${this.name}.${field.name}`;
+      field.prop = `${props.name}.${field.name}`;
 
       return field;
-    },
-    getFieldByKey(key, index) {
-      const field = clonedeep(this.controls[key]);
-      field.prop = `${this.name}[${index}].${field.name}`;
+    };
+    const getFieldByKey = (key, index) => {
+      const field = clonedeep(props.controls[key]);
+      field.prop = `${props.name}[${index}].${field.name}`;
       return field;
-    },
-    onAdd() {
-      const keyMap = this.controls.reduce((total, control) => {
+    };
+    const onAdd = () => {
+      const keyMap = props.controls.reduce((total, control) => {
         total[control.name] = '';
         return total;
       }, {});
-      this.iValue.push(keyMap);
-    },
-    onDelete(index) {
-      this.iValue.splice(index, 1);
-    },
-    onMapDelete(name) {
-      delete this.iValue[name];
-    }
+      iValue.push(keyMap);
+    };
+    const onDelete = (index) => {
+      iValue.splice(index, 1);
+    };
+    const onMapDelete = (name) => {
+      delete iValue[name];
+    };
+    watch(props.value, val => {
+      if (props.multiple && !Array.isArray(val)) {
+        iValue.value = [];
+      } else if (!props.multiple && !val) {
+        iValue = {};
+      } else {
+        iValue = val;
+      }
+    });
+    watch(iValue, val => {
+      props.updateValue && props.updateValue(val);
+    });
+
+    return {
+      iValue,
+      getField,
+      getFieldByKey,
+      onAdd,
+      onDelete,
+      onMapDelete
+    };
   },
-};
+});
 </script>

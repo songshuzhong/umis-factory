@@ -1,10 +1,6 @@
 export default {
   name: 'MixinProps',
   props: {
-    path: {
-      type: String,
-      required: true,
-    },
     name: {
       type: String,
       required: true,
@@ -14,112 +10,99 @@ export default {
       }
     },
     value: {
-      type: [String, Number],
+      type: Boolean,
       required: false,
-    },
-    label: {
-      type: String,
-      required: false,
-      edit: {
-        renderer: 'mis-input',
-      }
-    },
-    type: {
-      type: String,
-      required: false,
-      edit: {
-        renderer: 'mis-input',
-      }
+      default: false
     },
     disabled: {
       type: Boolean,
       required: false,
       edit: {
         renderer: 'mis-switch',
+        tip: 'disabled'
       }
     },
-    readonly: {
-      type: Boolean,
-      required: false,
-      edit: {
-        renderer: 'mis-switch',
-      }
-    },
-    minlength: {
+    width: {
       type: Number,
       required: false,
       edit: {
         renderer: 'mis-input',
+        tip: 'width'
       }
     },
-    maxlength: {
-      type: Number,
-      required: false,
-      edit: {
-        renderer: 'mis-input',
-      }
-    },
-    showWordLimit: {
-      type: Boolean,
-      required: false,
-      edit: {
-        renderer: 'mis-switch',
-      }
-    },
-    showPassword: {
-      type: Boolean,
-      required: false,
-      default: false,
-      edit: {
-        renderer: 'mis-switch',
-      }
-    },
-    placeholder: {
+    activeIconClass: {
       type: String,
       required: false,
       edit: {
         renderer: 'mis-input',
+        tip: 'activeIconClass'
       }
     },
-    clearable: {
-      type: Boolean,
+    activeText: {
+      type: String,
+      required: false,
+      edit: {
+        renderer: 'mis-input',
+        tip: 'activeText'
+      }
+    },
+    inActiveText: {
+      type: String,
+      required: false,
+      edit: {
+        renderer: 'mis-input',
+        tip: 'inActiveText'
+      }
+    },
+    activeValue: {
+      type: [Boolean, String, Number],
       required: false,
       default: true,
       edit: {
-        renderer: 'mis-switch',
+        renderer: 'mis-input',
+        tip: 'activeValue'
       }
     },
-    size: {
+    inActiveValue: {
+      type: [Boolean, String, Number],
+      required: false,
+      default: false,
+      edit: {
+        renderer: 'mis-input',
+        tip: 'inActiveValue'
+      }
+    },
+    activeColor: {
       type: String,
       required: false,
       edit: {
         renderer: 'mis-input',
+        tip: 'activeColor'
       }
     },
-    prefixIcon: {
+    inActiveColor: {
       type: String,
       required: false,
       edit: {
         renderer: 'mis-input',
+        tip: 'inActiveColor'
       }
     },
-    suffixIcon: {
+    target: {
       type: String,
       required: false,
       edit: {
         renderer: 'mis-input',
+        tip: 'target'
       }
     },
-    append: {
-      type: Object,
-      required: false,
-      edit: {
-        renderer: 'mis-input',
-      }
+    linkageTrigger: {
+      type: Function,
+      required: true,
     },
     updateValue: {
       type: Function,
-      required: true,
+      required: false,
     }
   },
 }

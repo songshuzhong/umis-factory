@@ -1,34 +1,45 @@
 export default {
   name: 'MixinProps',
   props: {
-    path: {
-      type: String,
-      required: true,
+    options: {
+      type: Array,
+      required: false,
+      edit: {
+        renderer: 'mis-combo',
+        multiple: true,
+        tip: '选项',
+        controls: [
+          {
+            renderer: 'mis-input',
+            name: 'text',
+            label: '文案'
+          },
+          {
+            renderer: 'mis-input',
+            name: 'value',
+            label: '值'
+          }
+        ]
+      }
     },
     name: {
       type: String,
       required: true,
       edit: {
         renderer: 'mis-input',
-        tip: 'name'
+        tip: '属性名'
       }
     },
     value: {
-      type: [String, Number],
+      type: [Array, String, Number],
       required: false,
     },
-    label: {
+    size: {
       type: String,
       required: false,
       edit: {
         renderer: 'mis-input',
-      }
-    },
-    type: {
-      type: String,
-      required: false,
-      edit: {
-        renderer: 'mis-input',
+        tip: 'size'
       }
     },
     disabled: {
@@ -36,42 +47,39 @@ export default {
       required: false,
       edit: {
         renderer: 'mis-switch',
+        tip: 'disabled'
       }
     },
-    readonly: {
+    clearable: {
       type: Boolean,
       required: false,
       edit: {
         renderer: 'mis-switch',
+        tip: 'clearable'
       }
     },
-    minlength: {
-      type: Number,
-      required: false,
-      edit: {
-        renderer: 'mis-input',
-      }
-    },
-    maxlength: {
-      type: Number,
-      required: false,
-      edit: {
-        renderer: 'mis-input',
-      }
-    },
-    showWordLimit: {
+    multiple: {
       type: Boolean,
       required: false,
       edit: {
         renderer: 'mis-switch',
+        tip: 'multiple'
       }
     },
-    showPassword: {
+    joinValue: {
       type: Boolean,
       required: false,
-      default: false,
       edit: {
         renderer: 'mis-switch',
+        tip: 'joinValue'
+      }
+    },
+    filterable: {
+      type: Boolean,
+      required: false,
+      edit: {
+        renderer: 'mis-switch',
+        tip: 'filterable'
       }
     },
     placeholder: {
@@ -79,43 +87,29 @@ export default {
       required: false,
       edit: {
         renderer: 'mis-input',
+        tip: 'placeholder'
       }
     },
-    clearable: {
-      type: Boolean,
-      required: false,
-      default: true,
-      edit: {
-        renderer: 'mis-switch',
-      }
-    },
-    size: {
-      type: String,
-      required: false,
-      edit: {
-        renderer: 'mis-input',
-      }
-    },
-    prefixIcon: {
-      type: String,
-      required: false,
-      edit: {
-        renderer: 'mis-input',
-      }
-    },
-    suffixIcon: {
-      type: String,
-      required: false,
-      edit: {
-        renderer: 'mis-input',
-      }
-    },
-    append: {
+    cached: {
       type: Object,
       required: false,
+      default: {},
       edit: {
         renderer: 'mis-input',
+        tip: 'cached'
       }
+    },
+    target: {
+      type: String,
+      required: false,
+      edit: {
+        renderer: 'mis-input',
+        tip: 'target'
+      }
+    },
+    linkageTrigger: {
+      type: Function,
+      required: false,
     },
     updateValue: {
       type: Function,

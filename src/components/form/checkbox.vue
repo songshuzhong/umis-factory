@@ -1,56 +1,41 @@
 <template>
-  <el-checkbox-group v-model="iValue" :name="name">
-    <template v-if="type === 'button'">
-      <el-checkbox-button
-        v-for="(option, index) in options"
-        :key="index"
+  <el-checkbox-group v-model="iValue" :name="name" @change="onChange">
+    <template
+      v-for="(option, index) in options"
+      :key="index"
+    >
+      <component
+        :is="type === 'button' ? 'el-checkbox-button' : 'el-checkbox'"
         :label="option.value"
-        @change="onSelect"
       >
         {{ option.text }}
-      </el-checkbox-button>
-    </template>
-    <template v-else>
-      <el-checkbox
-        v-for="(option, index) in options"
-        :key="index"
-        :label="option.value"
-        @change="onSelect"
-      >
-        {{ option.text }}
-      </el-checkbox>
+      </component>
     </template>
   </el-checkbox-group>
 </template>
 <script>
+import { defineComponent, reactive } from 'vue';
 import { ElCheckboxGroup, ElCheckboxButton, ElCheckbox } from 'element-plus';
 import mixinProps from '../mixin/props/checkbox';
 
-export default {
+export default defineComponent({
   name: 'MisCheckbox',
   components: {
     ElCheckboxGroup,
     ElCheckboxButton,
     ElCheckbox,
   },
-  data() {
+  mixins: [mixinProps],
+  setup(props) {
+    const iValue = reactive(props.value || []);
+    const onChange = val => {
+      props.updateValue && props.updateValue(val);
+    };
+
     return {
-      iValue: [],
+      iValue,
+      onChange
     };
   },
-  mixins: [mixinProps],
-  watch: {
-    value: {
-      handler(val) {
-        this.iValue = val || [];
-      },
-      immediate: true,
-    },
-  },
-  methods: {
-    onSelect() {
-      this.updateValue && this.updateValue(this.iValue);
-    },
-  },
-};
+});
 </script>

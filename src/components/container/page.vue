@@ -31,13 +31,14 @@
   </div>
 </template>
 <script>
+import { defineComponent } from 'vue';
 import initApi from '../mixin/init-api';
 import initData from '../mixin/init-data';
 import derivedProp from '../mixin/derived-prop';
 import mixinProps from '../mixin/props/page';
 
-export default {
+export default defineComponent({
   name: 'MisPage',
   mixins: [mixinProps, initApi, initData, derivedProp],
-};
+});
 </script>
