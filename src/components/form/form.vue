@@ -107,29 +107,33 @@
   </el-form>
 </template>
 <script>
+import { defineComponent, onMounted, watch, computed, reactive, ref, getCurrentInstance } from 'vue';
 import { ElForm, ElSpace } from 'element-plus';
 
-import derivedProp from '../mixin/derived-prop';
-import initApi from '../mixin/init-api';
+import useDerivedProp from '../mixin/useDerivedProp';
+import useInitApi from '../mixin/useInitApi';
+import initApi from '../mixin/props/init-api';
 import initData from '../mixin/init-data';
 import mixinProps from '../mixin/props/form';
 import dropTools from '../mixin/drop-tools';
 
-export default {
+export default defineComponent({
   name: 'MisForm',
   components: {
     ElForm,
     ElSpace
   },
-  data() {
-    let activeCollapse = [];
-    let data = {};
-    for (let i = 0; i < this.controls.length; i++) {
+  mixins: [dropTools, mixinProps, initApi, initData],
+  setup(props) {
+    const { ctx } = getCurrentInstance();
+    const activeCollapse = [];
+    const data = {};
+    for (let i = 0; i < props.controls.length; i++) {
       let controls;
-      if (this.fieldset && this.controls[i].renderer !== 'mis-combo') {
-        controls = this.controls[i].controls
+      if (props.fieldset && props.controls[i].renderer !== 'mis-combo') {
+        controls = props.controls[i].controls
       } else {
-        controls = [this.controls[i]];
+        controls = [props.controls[i]];
       }
       activeCollapse.push(i);
       controls.forEach(control => {
@@ -144,28 +148,23 @@ export default {
         }
       })
     }
-    return {
-      activeCollapse,
-      data,
-      invisibleField: [],
-    };
-  },
-  computed: {
-    activeControls() {
-      if (!this.fieldset) {
-        return this.controls.filter(item => {
+    const iData = reactive(data);
+    let invisibleField = [];
+    const activeControls = computed(() => {
+      if (!props.fieldset) {
+        return props.controls.filter(item => {
           if ('mis-action' === item.renderer) {
-            item.actionApi = this.initApi;
+            item.actionApi = props.initApi;
             return item;
           }
         });
       }
       let activeControls = [];
-      for (const key in this.controls) {
-        if (this.controls.hasOwnProperty(key)) {
-          const active = this.controls[key].controls.filter(item => {
+      for (const key in props.controls) {
+        if (props.controls.hasOwnProperty(key)) {
+          const active = props.controls[key].controls.filter(item => {
             if ('mis-action' === item.renderer) {
-              item.actionApi = this.initApi;
+              item.actionApi = props.initApi;
               return item;
             }
           })
@@ -173,42 +172,37 @@ export default {
         }
       }
       return activeControls;
-    },
-    inactiveControls() {
-      if (!this.fieldset) {
-        return this.controls.filter(item => 'mis-action' !== item.renderer);
+    });
+    const inactiveControls = computed(() => {
+      if (!props.fieldset) {
+        return props.controls.filter(item => 'mis-action' !== item.renderer);
       }
       return [];
-    },
-  },
-  mixins: [dropTools, mixinProps, initApi, initData, derivedProp],
-  mounted() {
-    this.$eventHub.$on('mis-component:remoteComponent', this.handleRemoteSubmit);
-  },
-  methods: {
-    handleInvisible(visible, field) {
+    });
+
+    const handleInvisible = (visible, field) => {
       if (visible) {
-        this.invisibleField = this.invisibleField.filter(
+        invisibleField = invisibleField.filter(
           item => item !== field
         );
       } else {
-        this.invisibleField.push(field);
-        this.handleResetField(field);
+        invisibleField.push(field);
+        handleResetField(field);
       }
-    },
-    handleResetField(field) {
-      const type = Object.prototype.toString.call(this.data[field]);
+    };
+    const handleResetField = (field) => {
+      const type = Object.prototype.toString.call(iData[field]);
       switch (type) {
-        case '[object String]': this.data[field] = ''; break;
-        case '[object Number]': this.data[field] = 0; break;
-        case '[object Boolean]': this.data[field] = false; break;
-        case '[object Array]': this.data[field] = []; break;
-        case '[object Object]': this.data[field] = {}; break;
+        case '[object String]': iData[field] = ''; break;
+        case '[object Number]': iData[field] = 0; break;
+        case '[object Boolean]': iData[field] = false; break;
+        case '[object Array]': iData[field] = []; break;
+        case '[object Object]': iData[field] = {}; break;
       }
-    },
-    handleRemoteSubmit(actionType, target, feedback) {
-      if (this.name && this.name === target) {
-        const form = this.$refs['form'];
+    };
+    const handleRemoteSubmit = (actionType, target, feedback) => {
+      if (props.name && props.name === target) {
+        const form = ctx.$.$refs['form'];
         if (form && actionType === 'mis-reset') {
           form.resetFields();
         } else if (form && actionType === 'mis-submit') {
@@ -219,10 +213,10 @@ export default {
           });
         }
       }
-    },
-    onBeforeSubmit() {
+    };
+    const onBeforeSubmit = () => {
       const attributes = event.currentTarget.attributes;
-      const form = this.$refs['form'];
+      const form = ctx.$.$refs['form'];
       if (
         attributes.actionType &&
         attributes.actionType.value === 'mis-reset'
@@ -234,45 +228,61 @@ export default {
       ) {
         form.validate(valid => {
           if (valid) {
-            this.sendFormData();
+            sendFormData();
           }
         });
       }
-    },
-    sendFormData(feedback) {
+    };
+    const sendFormData = (feedback) => {
       const formData = {};
 
-      for (let name in this.data) {
+      for (let name in iData) {
         if (
-          this.data.hasOwnProperty(name) &&
-          !this.invisibleField.includes(name)
+          iData.hasOwnProperty(name) &&
+          !invisibleField.includes(name)
         )
-          formData[name] = this.data[name];
+          formData[name] = iData[name];
       }
-      if (this.target && this.linkageType === 'before') {
-        return this.linkageTrigger(this.target, formData);
+      if (props.target && props.linkageType === 'before') {
+        return props.linkageTrigger(props.target, formData);
       }
       this.handleFetchApi(
         {
-          url: this.initApi.url,
-          method: this.initApi.method || 'post',
+          url: props.initApi.url,
+          method: props.initApi.method || 'post',
           params: formData,
         },
         res => {
           feedback && feedback();
-          this.onAfterSubmit(res);
+          onAfterSubmit(res);
         }
       );
-    },
-    onAfterSubmit(res) {
-      if (this.redirect) {
-        this.$refs['mis-redirect'].$refs['component'].onClick();
-      } else if (this.target && this.linkageType === 'after') {
-        return this.linkageTrigger(this.target, res);
-      } else if (this.reload) {
-        this.$eventHub.$emit('mis-component:reload', this.reload);
+    };
+    const onAfterSubmit = res => {
+      if (props.redirect) {
+        ctx.$.$refs['mis-redirect'].$refs['component'].onClick();
+      } else if (props.target && props.linkageType === 'after') {
+        return props.linkageTrigger(props.target, res);
+      } else if (props.reload) {
+        ctx.$eventHub.$emit('mis-component:reload', props.reload);
       }
-    },
-  },
-};
+    };
+
+    onMounted(() => {
+      ctx.$eventHub.$on('mis-component:remoteComponent', handleRemoteSubmit);
+    });
+
+    return {
+      iData,
+      activeCollapse,
+      invisibleField,
+      activeControls,
+      inactiveControls,
+      handleInvisible,
+      onBeforeSubmit,
+      ...useInitApi(props, ctx),
+      ...useDerivedProp()
+    };
+  }
+});
 </script>

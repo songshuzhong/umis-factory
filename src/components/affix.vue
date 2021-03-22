@@ -17,11 +17,12 @@
   </el-affix>
 </template>
 <script>
+import { defineComponent } from 'vue';
 import { ElAffix } from 'element-plus';
-import derivedProp from './mixin/derived-prop';
+import useDerivedProp from './mixin/useDerivedProp';
 import initData from './mixin/init-data';
 
-export default {
+export default defineComponent({
   name: 'MisAffix',
   components: {
     ElAffix
@@ -52,6 +53,11 @@ export default {
       required: true
     }
   },
-  mixins: [derivedProp, initData],
-}
+  mixins: [initData],
+  setup() {
+    return {
+      ...useDerivedProp()
+    };
+  }
+})
 </script>

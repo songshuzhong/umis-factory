@@ -8,8 +8,9 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue';
 import { ElAlert } from 'element-plus';
-export default {
+export default defineComponent({
   name: 'MisError',
   components: {
     ElAlert,
@@ -24,5 +25,5 @@ export default {
       required: false,
     },
   },
-};
+});
 </script>

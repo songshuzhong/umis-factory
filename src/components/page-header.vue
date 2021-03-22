@@ -3,10 +3,13 @@
 </template>
 
 <script>
+import { defineComponent, computed, getCurrentInstance} from 'vue';
+import { useRouter } from 'vue-router';
 import { ElPageHeader } from 'element-plus';
-import initData from './mixin/init-data';
+import useInitApi from './mixin/useInitApi';
+import initApi from './mixin/props/init-api';
 
-export default {
+export default defineComponent({
   name: 'MisPageHeader',
   components: {
     ElPageHeader,
@@ -25,16 +28,24 @@ export default {
       required: true,
     },
   },
-  computed: {
-    getContent() {
-      return this.$getRenderedTpl(this.content, this.data);
-    },
-  },
-  mixins: [initData],
-  methods: {
-    handleClick() {
-      this.$router.push(this.url);
-    },
-  },
-};
+  mixins: [initApi],
+  setup(props) {
+    const router = useRouter();
+    const { ctx } = getCurrentInstance();
+    const { data } = useInitApi(props);
+
+    const handleClick = () => {
+      router.push(props.url);
+    };
+
+    const getContent = computed(() => {
+      return ctx.$getRenderedTpl(props.content, data);
+    });
+
+    return {
+      getContent,
+      handleClick
+    };
+  }
+});
 </script>

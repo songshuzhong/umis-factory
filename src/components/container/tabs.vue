@@ -1,6 +1,6 @@
 <template>
   <el-tabs
-    v-model="data.iActiveTab"
+    v-model="iData.iActiveTab"
     :path="`${path}`"
     :type="type"
     :style="tabStyle"
@@ -31,7 +31,7 @@
             :header="getHeader(item.body)"
             :body="getBody(item.body)"
             :footer="getFooter(item.body)"
-            :init-data="getInitData(data, item)"
+            :init-data="getInitData(iData, item)"
           />
         </template>
         <template v-else>
@@ -44,7 +44,7 @@
               :header="getHeader(child)"
               :body="getBody(child)"
               :footer="getFooter(child)"
-              :init-data="getInitData(data, child)"
+              :init-data="getInitData(iData, child)"
             />
           </template>
         </template>
@@ -53,41 +53,38 @@
   </el-tabs>
 </template>
 <script>
+import { defineComponent, watch, reactive, ref } from 'vue';
 import { ElTabs, ElTabPane } from 'element-plus';
 
-import derivedProp from '../mixin/derived-prop';
-import initData from '../mixin/init-data';
+import useDerivedProp from '../mixin/useDerivedProp';
+import useInitApi from '../mixin/useInitApi';
+import initApi from '../mixin/props/init-api';
 import mixinProps from '../mixin/props/tabs';
 
-export default {
+export default defineComponent({
   name: 'MisTabs',
   components: {
     ElTabs,
     ElTabPane,
   },
-  data() {
-    return {
-      data: {
-        iActiveTab: '',
-      },
-    };
-  },
-  mixins: [mixinProps, derivedProp, initData],
-  watch: {
-    activeName: {
-      handler(val) {
-        this.data.iActiveTab = val;
-      },
-      immediate: true,
-    },
-  },
-  methods: {
-    isPanelAlive(item) {
+  mixins: [mixinProps, initApi],
+  setup(props) {
+    const { data } = useInitApi(props);
+    const iActiveName = ref(props.activeName);
+    const isPanelAlive = item => {
       if (item.keepAlive === false) {
-        return this.data.iActiveTab === item.name;
+        return data.iActiveTab === item.name;
       }
       return true;
-    },
+    };
+    watch(iActiveName, val => data.iActiveTab = val);
+
+    return {
+      data,
+      iActiveName,
+      isPanelAlive,
+      ...useDerivedProp()
+    };
   },
-};
+});
 </script>

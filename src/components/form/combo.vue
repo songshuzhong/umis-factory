@@ -58,7 +58,7 @@
 import { defineComponent, watch, reactive, ref } from 'vue';
 import clonedeep from 'lodash.clonedeep';
 import { ElFormItem, ElLink, ElButton } from 'element-plus';
-import visible from '../mixin/visible';
+import useVisible from '../mixin/useVisible';
 import mixinProps from '../mixin/props/combo';
 
 export default defineComponent({
@@ -68,9 +68,10 @@ export default defineComponent({
     ElLink,
     ElButton,
   },
-  mixins: [mixinProps, visible],
+  mixins: [mixinProps],
   setup(props) {
-    const iValue = reactive([]);
+    useVisible();
+    let iValue = reactive([]);
     const getField = (item) => {
       const field = clonedeep(item);
       field.prop = `${props.name}.${field.name}`;

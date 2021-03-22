@@ -57,7 +57,7 @@
 <script>
 import { defineComponent, reactive, onBeforeUpdate } from 'vue';
 import { ElCheckboxGroup, ElCheckbox, ElRadioGroup, ElRadio } from 'element-plus';
-import derivedProp from '../mixin/derived-prop';
+import derivedProp from '../mixin/useDerivedProp';
 import initData from '../mixin/init-data';
 import mixinProps from '../mixin/props/list';
 

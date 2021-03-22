@@ -33,7 +33,7 @@
 import { defineComponent, ref, computed, watch, getCurrentInstance } from 'vue';
 import { ElHeader } from 'element-plus';
 
-import derivedProp from '../mixin/derived-prop';
+import useDerivedProp from '../mixin/useDerivedProp';
 import initData from '../mixin/init-data';
 import mixinProps from '../mixin/props/header';
 
@@ -42,7 +42,7 @@ export default defineComponent({
   components: {
     ElHeader,
   },
-  mixins: [mixinProps, derivedProp, initData],
+  mixins: [mixinProps, initData],
   setup(props) {
     const { ctx } = getCurrentInstance();
     const iHeight = ref(60);
@@ -61,7 +61,8 @@ export default defineComponent({
 
     return {
       iHeight,
-      iComputedClass
+      iComputedClass,
+      ...useDerivedProp()
     };
   }
 });

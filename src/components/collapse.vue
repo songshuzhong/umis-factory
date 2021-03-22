@@ -21,11 +21,13 @@
 </template>
 
 <script>
+import { defineComponent, watch } from 'vue';
 import { ElCollapse, ElCollapseItem } from 'element-plus';
-import derivedProp from './mixin/derived-prop';
-import initData from './mixin/init-data';
+import useDerivedProp from './mixin/useDerivedProp';
+import useInitApi from './mixin/useInitApi';
+import initApi from './mixin/props/init-api';
 
-export default {
+export default defineComponent({
   name: 'MisCollapse',
   components: {
     ElCollapse,
@@ -50,13 +52,15 @@ export default {
       required: true,
     },
   },
-  watch: {
-    value: {
-      handler(val) {
-        this.data.value = val;
-      },
-    },
-  },
-  mixins: [initData, derivedProp],
-};
+  mixins: [initApi],
+  setup() {
+    watch(props.value, val => {
+      data.value = val;
+    });
+    return {
+      ...useDerivedProp(),
+      ...useInitApi(props)
+    };
+  }
+});
 </script>

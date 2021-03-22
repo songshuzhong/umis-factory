@@ -114,9 +114,9 @@
 import { defineComponent, getCurrentInstance } from 'vue';
 import { ElCard } from 'element-plus';
 
-import initApi from '../mixin/init-api';
-import derivedProp from '../mixin/derived-prop';
-import initData from '../mixin/init-data';
+import useInitApi from '../mixin/useInitApi';
+import useDerivedProp from '../mixin/useDerivedProp';
+import initApi from '../mixin/props/init-api';
 import mixinProps from '../mixin/props/card';
 import dropTools from '../mixin/drop-tools';
 
@@ -125,10 +125,11 @@ export default defineComponent({
   components: {
     ElCard,
   },
-  mixins: [mixinProps, initApi, initData, derivedProp, dropTools],
+  mixins: [mixinProps, initApi, dropTools],
   setup(props) {
     const { ctx } = getCurrentInstance();
-    const renderHeader = data => ctx.$getRenderedTpl(this.header, data);
+    const { data, ...other } = useInitApi(props);
+    const renderHeader = () => ctx.$getRenderedTpl(props.header, data);
 
     const handleClick= () => {
       if (props.actions) {
@@ -136,21 +137,24 @@ export default defineComponent({
           let props = props.actions.find(item => {
             if (
               item.actionOn &&
-              ctx.$onExpressionEval(item.actionOn, props.data)
+              ctx.$onExpressionEval(item.actionOn, data)
             ) {
               return item;
             }
           });
-          props.actions && props.action(props, props.data);
+          props.actions && props.action(props, data);
         } else {
-          props.actions && props.action(props.actions, props.data);
+          props.actions && props.action(props.actions, data);
         }
       }
     };
 
     return {
+      data,
+      ...other,
       renderHeader,
-      handleClick
+      handleClick,
+      ...useDerivedProp()
     };
   }
 });

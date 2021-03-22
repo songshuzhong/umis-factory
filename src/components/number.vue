@@ -15,10 +15,12 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue';
 import { ElInputNumber } from 'element-plus';
-import initData from './mixin/init-data';
+import useInitApi from './mixin/useInitApi';
+import initApi from './mixin/props/init-api';
 
-export default {
+export default defineComponent({
   name: 'MisNumber',
   components: {
     ElInputNumber,
@@ -82,22 +84,20 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      data: {
-        percentage: 0,
-      },
-    };
-  },
-  mixins: [initData],
-  methods: {
-    handleChange(value) {
-      if (this.target) {
+  mixins: [initApi],
+  setup(props) {
+    const handleChange = (value) => {
+      if (props.target) {
         const triggerData = {};
-        triggerData[this.name] = value;
-        this.linkageTrigger(this.target, triggerData);
+        triggerData[props.name] = value;
+        props.linkageTrigger(props.target, triggerData);
       }
-    },
-  },
-};
+    };
+
+    return {
+      handleChange,
+      ...useInitApi(props)
+    };
+  }
+});
 </script>

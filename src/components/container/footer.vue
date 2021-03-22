@@ -32,8 +32,9 @@
 <script>
 import { defineComponent } from 'vue';
 import { ElFooter } from 'element-plus';
-import derivedProp from '../mixin/derived-prop';
-import initData from '../mixin/init-data';
+import useDerivedProp from '../mixin/useDerivedProp';
+import useInitApi from '../mixin/useInitApi';
+import initApi from '../mixin/props/init-api';
 import mixinProps from '../mixin/props/footer';
 
 export default defineComponent({
@@ -41,6 +42,12 @@ export default defineComponent({
   components: {
     ElFooter,
   },
-  mixins: [mixinProps, derivedProp, initData],
+  mixins: [mixinProps, initApi],
+  setup(props) {
+    return {
+      ...useInitApi(props),
+      ...useDerivedProp()
+    }
+  }
 });
 </script>

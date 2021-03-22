@@ -14,7 +14,7 @@
   />
 </template>
 <script>
-import { defineComponent, onMounted, getCurrentInstance, watch, ref } from 'vue';
+import { defineComponent, onMounted, getCurrentInstance, ref } from 'vue';
 import { ElSwitch } from 'element-plus';
 import mixinProps from '../mixin/props/switch';
 
@@ -51,8 +51,6 @@ export default defineComponent({
     onMounted(() => {
       ctx.$eventHub.$on('mis-component:remoteComponent', handleRemoteClick);
     });
-
-    watch(props.value, val => iValue.value = val);
 
     return {
       iValue,

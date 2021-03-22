@@ -42,10 +42,12 @@
   />
 </template>
 <script>
+import { defineComponent, computed, ref, reactive, onBeforeMount, getCurrentInstance } from 'vue';
 import { ElAvatar } from 'element-plus';
-import initData from './mixin/init-data';
+import useInitApi from './mixin/useInitApi';
+import initApi from './mixin/props/init-api';
 
-export default {
+export default defineComponent({
   name: 'MisAvatar',
   components: {
     ElAvatar,
@@ -137,58 +139,64 @@ export default {
       required: false,
     },
   },
-  data() {
-    return {
-      computedSrc: '',
-      iconProps: {},
-    };
-  },
-  computed: {
-    renderTitle() {
-      if (this.title) {
-        return this.$getRenderedTpl(this.title, this.data);
+  mixins: [initApi],
+  setup(props) {
+    const { ctx } = getCurrentInstance();
+    const { data } = useInitApi(props);
+    const computedSrc = ref();
+    let iconProps = reactive({});
+    const renderTitle = computed(() => {
+      if (props.title) {
+        return ctx.$getRenderedTpl(props.title, data);
       }
       return undefined;
-    },
-    renderSubTitle() {
-      if (this.subTitle) {
-        return this.$getRenderedTpl(this.subTitle, this.data);
+    });
+    const renderSubTitle = computed(() => {
+      if (props.subTitle) {
+        return ctx.$getRenderedTpl(props.subTitle, data);
       }
       return undefined;
-    },
-    renderDescription() {
-      if (this.description) {
-        return this.$getRenderedTpl(this.description, this.data);
+    });
+    const renderDescription = computed(() => {
+      if (props.description) {
+        return ctx.$getRenderedTpl(props.description, data);
       }
       return undefined;
-    },
-  },
-  mixins: [initData],
-  created() {
-    if (this.src) {
-      this.computedSrc = this.$getCompiledUrl(this.src, this.data);
-    }
-    this.iconProps = {
-      size: this.size,
-      color: this.color,
-      bgColor: this.bgColor,
-      icon: this.icon,
-      invert: this.invert,
-      borderRadius: this.borderRadius,
-      action: this.action,
-      actionType: this.actionType,
-    };
-  },
-  methods: {
-    onClick() {
-      const { renderer, content, url, redirect, blank } = this.$attrs;
-      if (this.action && typeof this.action === 'function') {
-        this.action(
-          { renderer, content, url, redirect, blank, actionType: this.actionType },
-          this.data
+    });
+
+    const onClick = () => {
+      const { renderer, content, url, redirect, blank } = ctx.attrs;
+      if (props.action && typeof props.action === 'function') {
+        props.action(
+          { renderer, content, url, redirect, blank, actionType: props.actionType },
+          data
         );
       }
-    },
-  },
-};
+    };
+    onBeforeMount(() => {
+      if (props.src) {
+        computedSrc.value = ctx.$getCompiledUrl(props.src, data);
+      }
+      iconProps = {
+        size: props.size,
+        color: props.color,
+        bgColor: props.bgColor,
+        icon: props.icon,
+        invert: props.invert,
+        borderRadius: props.borderRadius,
+        action: props.action,
+        actionType: props.actionType,
+      };
+    });
+
+    return {
+      computedSrc,
+      iconProps,
+      renderTitle,
+      renderSubTitle,
+      renderDescription,
+      onClick
+    };
+  }
+});
 </script>

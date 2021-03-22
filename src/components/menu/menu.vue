@@ -1,6 +1,6 @@
 <template>
   <el-menu
-    ref="menu"
+    ref="menuRef"
     :mode="mode"
     :default-active="defaultActive"
     :collapse="data.collapse"
@@ -33,10 +33,12 @@
 </template>
 
 <script>
+import { defineComponent, onMounted, nextTick, watch, ref, getCurrentInstance } from 'vue';
 import { ElMenu } from 'element-plus';
-import initData from '../mixin/init-data';
+import useInitApi from '../mixin/useInitApi';
+import initApi from '../mixin/props/init-api';
 
-export default {
+export default defineComponent({
   name: 'MisMenu',
   components: {
     ElMenu,
@@ -106,46 +108,46 @@ export default {
       required: false,
     },
   },
-  data() {
+  mixins: [initApi],
+  setup(props) {
+    const { data } = useInitApi(props);
+    const width = ref(0);
+    const activeIndex = ref('');
+    const menuRef = ref(null);
+    const autoWidth = () => {
+      nextTick(() => {
+        width.value = menuRef.value.$el.clientWidth;
+        if (props.target) {
+          props.linkageTrigger(props.target, { width: width.value });
+        }
+      });
+    };
+
+    watch(data.collapse, val => {
+      if (val) {
+        props.linkageTrigger(props.target, { width: 64 });
+      } else {
+        props.linkageTrigger(props.target, { width });
+      }
+      data.collapse = val;
+    });
+    onMounted(() => {
+      autoWidth()
+    });
+
+    const handleSelect = (index) => {
+      activeIndex.value = index;
+      autoWidth();
+      props.linkageTrigger(props.target, { activeIndex: index });
+    };
+
     return {
-      data: {
-        collapse: false,
-      },
-      width: 0,
-      activeIndex: '',
+      data,
+      width,
+      activeIndex,
+      menuRef,
+      handleSelect
     };
   },
-  watch: {
-    'data.collapse': {
-      handler(val) {
-        if (val) {
-          this.linkageTrigger(this.target, { width: 64 });
-        } else {
-          this.linkageTrigger(this.target, { width: this.width });
-        }
-        this.data.collapse = val;
-      },
-      immediate: true,
-    },
-    activeIndex: {
-      handler(val) {
-        this.linkageTrigger(this.target, { activeIndex: val });
-      }
-    }
-  },
-  mixins: [initData],
-  mounted() {
-    this.$nextTick(() => {
-      this.width = this.$refs.menu.$el.clientWidth;
-      if (this.target) {
-        this.linkageTrigger(this.target, { width: this.width });
-      }
-    });
-  },
-  methods: {
-    handleSelect(index) {
-      this.activeIndex = index;
-    }
-  }
-};
+});
 </script>

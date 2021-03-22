@@ -77,7 +77,7 @@
 import { defineComponent, computed, ref, getCurrentInstance } from 'vue';
 import { ElDialog, ElMain } from 'element-plus';
 
-import derivedProp from '../mixin/derived-prop';
+import useDerivedProp from '../mixin/useDerivedProp';
 import initData from '../mixin/init-data';
 import mixinProps from '../mixin/props/dialog';
 
@@ -87,13 +87,13 @@ export default defineComponent({
     ElMain,
     ElDialog,
   },
-  mixins: [mixinProps, derivedProp, initData],
+  mixins: [mixinProps, initData],
   setup(props) {
     const { ctx } = getCurrentInstance();
     const iVisible = ref(props.visible);
     const onClose = () => {
       iVisible.value = false;
-      props.onPopupInvisible && props.onPopupInvisible(`${props.path}/mis-dialog`);
+      props.onPopupInvisible && props.onPopupInvisible(props.path);
     };
     const renderTitle = computed(() => {
       return ctx.$getRenderedTpl(props.title, props.initData);
@@ -102,7 +102,8 @@ export default defineComponent({
     return {
       iVisible,
       renderTitle,
-      onClose
+      onClose,
+      ...useDerivedProp()
     };
   }
 });

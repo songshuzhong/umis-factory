@@ -20,6 +20,7 @@
     />
     <toolmaker
       v-if="!isJson"
+      ref="toolmaker"
       :path="`${path}/toolmaker`"
     />
     <transition name="el-zoom-in-bottom">
@@ -178,10 +179,15 @@ export default {
     onSave() {
       return new Promise((resolve, reject) => {
         try {
-          const json = this.editor.getValue();
-          const schema = JSON.parse(json);
+          let schema;
+          if (this.isJson) {
+            const json = this.editor.getValue();
+            schema = JSON.parse(json);
+            this.handleFormatSchema(this.editor);
+          } else {
+            schema = this.$refs.toolmaker.schemaInstance;
+          }
           this.$eventHub.$emit('mis-schema:change', schema);
-          this.handleFormatSchema(this.editor);
           this.$message({
             message: '保存成功',
             showClose: true,

@@ -8,10 +8,12 @@
 </template>
 
 <script>
+import { defineComponent, computed, getCurrentInstance } from 'vue';
 import { ElDivider } from 'element-plus';
-import initData from './mixin/init-data';
+import useInitApi from './mixin/useInitApi';
+import initApi from './mixin/props/init-api';
 
-export default {
+export default defineComponent({
   name: 'MisDivider',
   components: {
     ElDivider,
@@ -44,9 +46,19 @@ export default {
   },
   computed: {
     renderTitle() {
-      return this.$getRenderedTpl(this.text, this.data);
     },
   },
-  mixins: [initData],
-};
+  mixins: [initApi],
+  setup(props) {
+    const { ctx } = getCurrentInstance();
+    const { data } = useInitApi(props);
+    const renderTitle = computed(() => {
+      return ctx.$getRenderedTpl(props.text, data);
+    });
+
+    return {
+      renderTitle
+    };
+  }
+});
 </script>

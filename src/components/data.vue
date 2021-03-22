@@ -5,9 +5,11 @@
 </template>
 
 <script>
-import initData from './mixin/init-data';
+import { defineComponent } from 'vue';
+import useInitApi from './mixin/useInitApi';
+import initApi from './mixin/props/init-api';
 
-export default {
+export default defineComponent({
   name: 'MisStatic',
   props: {
     path: {
@@ -15,6 +17,11 @@ export default {
       required: true,
     },
   },
-  mixins: [initData],
-};
+  mixins: [initApi],
+  setup(props) {
+    return {
+      ...useInitApi(props)
+    };
+  }
+});
 </script>

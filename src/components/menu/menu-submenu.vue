@@ -26,10 +26,11 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue';
 import { ElSubmenu } from 'element-plus';
-import derivedProp from '../mixin/derived-prop';
+import derivedProp from '../mixin/useDerivedProp';
 
-export default {
+export default defineComponent({
   name: 'MisSubmenu',
   components: {
     ElSubmenu,
@@ -83,6 +84,10 @@ export default {
       required: false,
     },
   },
-  mixins: [derivedProp],
-};
+  setup() {
+    return {
+      ...derivedProp()
+    }
+  }
+});
 </script>

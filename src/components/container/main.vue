@@ -37,14 +37,14 @@
     </template>
     <div v-if="iProtal">
       <template
-        v-for="({ actionType, body, data, visible }, path) in popMap"
+        v-for="({ actionType, body, data, visible }, track) in popMap"
         :key="path"
       >
         <component
           :is="actionType"
           v-bind="body"
-          :path="`${path}/${actionType}`"
-          :track="`${path}/${actionType}`"
+          :path="track"
+          :track="track"
           :track-id="actionType"
           :visible="visible"
           :init-data="data"
@@ -58,10 +58,10 @@
 <script>
 import { defineComponent, computed, reactive, onMounted, getCurrentInstance } from 'vue';
 import { ElMain } from 'element-plus';
-import clonedeep from "lodash.clonedeep";
 
-import derivedProp from '../mixin/derived-prop';
-import initData from '../mixin/init-data';
+import useDerivedProp from '../mixin/useDerivedProp';
+import useInitApi from '../mixin/useInitApi';
+import initApi from '../mixin/props/init-api';
 import mixinProps from '../mixin/props/main';
 
 export default defineComponent({
@@ -69,36 +69,32 @@ export default defineComponent({
   components: {
     ElMain,
   },
-  mixins: [mixinProps, derivedProp, initData],
+  mixins: [mixinProps, initApi],
   setup(props) {
     const { ctx } = getCurrentInstance();
-    let popMap = reactive({});
+    const { data } = useInitApi(props);
+    const popMap = reactive({});
     const iComputedClass = computed(() => {
       if (props.computedClass) {
-        return ctx.$onExpressionEval(props.computedClass, props.initData);
+        return ctx.$onExpressionEval(props.computedClass, data);
       }
       return '';
     });
-    const createProtal = (path, pop) => {
-      const iPopMap = popMap;
-      iPopMap[path] = pop;
-      popMap = clonedeep(iPopMap);
-    };
+    const createProtal = (path, pop) => popMap[path] = pop;
+    const destroyProtal = (path) => delete popMap[path];
 
-    const destroyProtal = (path) => {
-      const iPopMap = popMap;
-      delete iPopMap[path];
-      popMap = clonedeep(iPopMap);
-    };
     onMounted(() => {
       ctx.$eventHub.$on('mis-portal:create', createProtal);
       ctx.$eventHub.$on('mis-portal:destroy', destroyProtal);
     });
 
     return {
+      data,
       popMap,
       iComputedClass,
-      destroyProtal
+      destroyProtal,
+      ...useDerivedProp(),
+      ...useInitApi(props)
     };
   }
 });

@@ -16,10 +16,12 @@
 </template>
 
 <script>
-import initData from './mixin/init-data';
-import derivedProp from './mixin/derived-prop';
+import { defineComponent, computed } from 'vue';
+import initApi from './mixin/props/init-api';
+import useInitApi from './mixin/useInitApi';
+import useDerivedProp from './mixin/useDerivedProp';
 
-export default {
+export default defineComponent({
   name: 'MisEach',
   props: {
     path: {
@@ -40,14 +42,20 @@ export default {
       required: true,
     },
   },
-  computed: {
-    eachData() {
-      if (this.type === 'list') {
-        return this.rows;
+  mixins: [initApi],
+  setup(props) {
+    const { data, rows } = useInitApi(props);
+    const eachData = computed(() => {
+      if (props.type === 'list') {
+        return rows;
       }
-      return this.data;
-    }
-  },
-  mixins: [initData, derivedProp],
-};
+      return data;
+    });
+
+    return {
+      eachData,
+      ...useDerivedProp()
+    };
+  }
+});
 </script>

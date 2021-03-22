@@ -24,13 +24,14 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue';
 import { ElTimeline, ElTimelineItem } from 'element-plus';
 
-import initApi from './mixin/init-api';
-import derivedProp from './mixin/derived-prop';
-import initData from './mixin/init-data';
+import useInitApi from './mixin/useInitApi';
+import useDerivedProp from './mixin/useDerivedProp';
+import initApi from './mixin/props/init-api';
 
-export default {
+export default defineComponent({
   name: 'MisTimeline',
   components: {
     ElTimeline,
@@ -70,6 +71,12 @@ export default {
       required: true,
     },
   },
-  mixins: [initApi, initData, derivedProp],
-};
+  mixins: [initApi],
+  setup(props) {
+    return {
+      ...useInitApi(props),
+      ...useDerivedProp()
+    };
+  }
+});
 </script>

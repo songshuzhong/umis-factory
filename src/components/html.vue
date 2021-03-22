@@ -11,10 +11,12 @@
   />
 </template>
 <script>
-import derivedProp from './mixin/derived-prop';
-import initData from './mixin/init-data';
+import { defineComponent, computed, getCurrentInstance } from 'vue';
+import useDerivedProp from './mixin/useDerivedProp';
+import useInitApi from './mixin/useInitApi';
+import initApi from './mixin/props/init-api';
 
-export default {
+export default defineComponent({
   name: 'MisHtml',
   props: {
     path: {
@@ -39,11 +41,18 @@ export default {
       default: false,
     },
   },
-  computed: {
-    getHtml() {
-      return this.$getRenderedTpl(this.html, this.data);
-    },
-  },
-  mixins: [initData, derivedProp],
-};
+  mixins: [initApi],
+  setup(props) {
+    const { ctx } = getCurrentInstance();
+    const { data } = useInitApi(props);
+    const getHtml = computed(() => {
+      return ctx.$getRenderedTpl(props.html, data);
+    });
+
+    return {
+      getHtml,
+      ...useDerivedProp()
+    };
+  }
+});
 </script>

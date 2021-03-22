@@ -117,7 +117,7 @@
       <el-button
         v-bind="item"
         :index="index"
-        :disabled="iApiLoading || iDisabled(item.disabledOn)"
+        :disabled="iApiLoading"
         @click="onClick"
       >
         {{ item.text }}
@@ -141,6 +141,8 @@
   </el-button>
 </template>
 <script>
+import { defineComponent, watch, computed, ref, getCurrentInstance } from 'vue';
+import { useRouter } from 'vue-router';
 import {
   ElPopover,
   ElPopconfirm,
@@ -150,11 +152,11 @@ import {
   ElButtonGroup,
 } from 'element-plus';
 
-import derivedProp from './mixin/derived-prop';
-import initData from './mixin/init-data';
-import initApi from './mixin/init-api';
+import useDerivedProp from './mixin/useDerivedProp';
+import initApi from './mixin/props/init-api';
+import useInitApi from './mixin/useInitApi';
 
-export default {
+export default defineComponent({
   name: 'MisAction',
   components: {
     ElPopover,
@@ -338,91 +340,86 @@ export default {
       required: false,
     },
   },
-  data() {
-    return {
-      iShowPopup: false,
-      index: 0,
-    };
-  },
-  watch: {
-    showPopup: {
-      handler(val) {
-        this.iShowPopup = val;
-      },
-      immediate: true,
-    },
-    iShowPopup(val) {
-      this.$emit('update:showPopup', val);
-    },
-  },
-  mixins: [derivedProp, initData, initApi],
-  computed: {
-    renderText() {
-      return this.$getRenderedTpl(this.text, this.data);
-    },
-  },
-  methods: {
-    iDisabled(disabledOn) {
+  mixins: [initApi],
+  setup(props, context) {
+    const router = useRouter();
+    const { ctx } = getCurrentInstance();
+    const { data } = useInitApi(props);
+    const iShowPopup = ref(props.showPopup);
+    const renderText = computed(() => {
+      return ctx.$getRenderedTpl(props.text, data);
+    });
+    let index;
+    const isDisabled = (disabledOn) => {
       if (disabledOn) {
-        const context = {$router: this.$router, ...this.data};
-        return this.$onExpressionEval(disabledOn, this.data);
+        const context = {$router: router, ...data};
+        return ctx.$onExpressionEval(disabledOn, data);
       }
       return false;
-    },
-    onClick() {
+    };
+    const onClick = () => {
       const attributes = event.currentTarget.attributes;
-      let index;
       let actionType;
       let remoteComponent;
-      if (this.actions) {
+      if (props.actions) {
         index = attributes.index && attributes.index.value;
         remoteComponent = attributes.remotecomponent && attributes.remotecomponent.value;
-        actionType = this.actions[index].actionType;
-        this.index = index;
+        actionType = props.actions[index].actionType;
       } else {
-        actionType = this.$attrs.actionType;
+        actionType = context.attrs.actionType;
       }
 
-      if (remoteComponent || this.remoteComponent) {
-        this.$eventHub.$emit(
+      if (remoteComponent || props.remoteComponent) {
+        ctx.$eventHub.$emit(
           'mis-component:remoteComponent',
           actionType,
-          remoteComponent ||this.remoteComponent,
-          this.handleAfterAction
+          remoteComponent ||props.remoteComponent,
+          handleAfterAction
         );
       } else if (typeof index === 'string') {
-        this.action(
+        props.action(
           {
             actions: true,
-            path: this.path,
-            ...this.actions[index],
+            path: props.path,
+            ...props.actions[index],
           },
-          this.data,
-          this.handleAfterAction
+          data,
+          handleAfterAction
         );
       } else {
-        const { renderer, actionApi } = this.$props;
-        const { header, footer, ...other } = this.$attrs;
-        this.action(
+        const { renderer, actionApi } = props;
+        const { header, footer, ...other } = context.attrs;
+        props.action(
           {
             renderer,
             actionType,
             actionApi,
             ...other,
           },
-          this.data,
-          this.handleAfterAction
+          data,
+          handleAfterAction
         );
       }
-    },
-    handleAfterAction() {
-      if (this.afterAction && typeof this.afterAction === 'function') {
-        this.afterAction();
+    };
+    const handleAfterAction = () => {
+      if (props.afterAction && typeof props.afterAction === 'function') {
+        props.afterAction();
       }
-      if (this.target) {
-        this.linkageTrigger(this.target, this.data);
+      if (props.target) {
+        props.linkageTrigger(props.target, data);
       }
-    },
+    };
+
+    watch(iShowPopup, val => {
+      ctx.emit('update:showPopup', val);
+    });
+    return {
+      isDisabled,
+      onClick,
+      renderText,
+      ...useDerivedProp(),
+      ...useInitApi(props)
+    };
   },
-};
+});
 </script>

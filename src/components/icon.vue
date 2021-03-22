@@ -20,7 +20,9 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   name: 'MisIcon',
   props: {
     path: {
@@ -66,13 +68,17 @@ export default {
       required: true,
     },
   },
-  methods: {
-    handleClick() {
-      this.action &&
-        this.action({
-          actionType: this.actionType,
-        });
-    },
-  },
-};
+  setup(props) {
+    const handleClick = () => {
+      props.action &&
+      props.action({
+        actionType: props.actionType,
+      });
+    };
+
+    return {
+      handleClick
+    };
+  }
+});
 </script>

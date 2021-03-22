@@ -13,10 +13,12 @@
 </template>
 
 <script>
+import { defineComponent, watch } from 'vue';
 import { ElProgress } from 'element-plus';
-import initData from './mixin/init-data';
+import useInitApi from './mixin/useInitApi';
+import initApi from './mixin/props/init-api';
 
-export default {
+export default defineComponent({
   name: 'MisProgress',
   components: {
     ElProgress,
@@ -71,14 +73,17 @@ export default {
       required: true,
     },
   },
-  watch: {
-    percentage: {
-      handler(val) {
-        this.data.percentage = val;
-      },
-      immediate: true,
-    },
-  },
-  mixins: [initData],
-};
+  mixins: [initApi],
+  setup(props) {
+    const { data } = useInitApi(props);
+
+    watch(props.value, val => {
+      data.percentage = val;
+    });
+
+    return {
+      data
+    };
+  }
+});
 </script>

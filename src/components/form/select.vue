@@ -23,7 +23,7 @@
 <script>
 import { defineComponent, watch, ref, reactive } from 'vue';
 import { ElSelect, ElOption } from 'element-plus';
-import initApi from '../mixin/init-api';
+import initApi from '../mixin/useInitApi';
 import initData from '../mixin/init-data';
 import mixinProps from '../mixin/props/select';
 import cache from '../mixin/cache';

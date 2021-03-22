@@ -75,7 +75,7 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import { ElDrawer, ElMain } from 'element-plus';
-import derivedProp from '../mixin/derived-prop';
+import useDerivedProp from '../mixin/useDerivedProp';
 import initData from '../mixin/init-data';
 import mixinProps from '../mixin/props/drawer';
 
@@ -85,17 +85,18 @@ export default defineComponent({
     ElMain,
     ElDrawer,
   },
-  mixins: [mixinProps, derivedProp, initData],
+  mixins: [mixinProps, initData],
   setup(props) {
     const iVisible = ref(props.visible);
     const onClose = () => {
       iVisible.value = false;
-      props.onPopupInvisible && props.onPopupInvisible(`${props.path}/mis-drawer`);
+      props.onPopupInvisible && props.onPopupInvisible(props.path);
     };
 
     return {
       iVisible,
-      onClose
+      onClose,
+      ...useDerivedProp()
     };
   }
 });

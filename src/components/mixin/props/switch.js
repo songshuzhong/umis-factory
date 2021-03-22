@@ -9,6 +9,14 @@ export default {
         tip: 'name'
       }
     },
+    label: {
+      type: String,
+      required: false,
+      edit: {
+        renderer: 'mis-input',
+        tip: 'label'
+      }
+    },
     value: {
       type: Boolean,
       required: false,

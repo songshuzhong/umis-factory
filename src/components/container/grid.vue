@@ -31,7 +31,7 @@
 import { defineComponent } from 'vue';
 import { ElRow, ElCol } from 'element-plus';
 
-import derivedProp from '../mixin/derived-prop';
+import useDerivedProp from '../mixin/useDerivedProp';
 import mixinProps from '../mixin/props/grid';
 
 export default defineComponent({
@@ -40,6 +40,11 @@ export default defineComponent({
     ElRow,
     ElCol,
   },
-  mixins: [mixinProps, derivedProp],
+  mixins: [mixinProps],
+  setup() {
+    return {
+      ...useDerivedProp()
+    }
+  }
 });
 </script>

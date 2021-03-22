@@ -32,9 +32,10 @@
   </div>
 </template>
 <script>
+import { defineComponent } from 'vue';
 import { ElImage } from 'element-plus';
 
-export default {
+export default defineComponent({
   name: 'MisImage',
   components: {
     ElImage,
@@ -80,5 +81,5 @@ export default {
       required: false,
     },
   },
-};
+});
 </script>

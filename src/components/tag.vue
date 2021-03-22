@@ -16,9 +16,10 @@
   </el-tag>
 </template>
 <script>
+import { defineComponent } from 'vue';
 import { ElTag } from 'element-plus';
 
-export default {
+export default defineComponent({
   name: 'MisTag',
   components: {
     ElTag,
@@ -59,9 +60,14 @@ export default {
       required: false,
     },
   },
-  methods: {
-    handleClick() {},
-    handleClose() {},
-  },
-};
+  setup(props) {
+    const handleClick = () => {};
+    const handleClose = () => {};
+
+    return {
+      handleClick,
+      handleClose
+    };
+  }
+});
 </script>

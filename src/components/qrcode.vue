@@ -7,9 +7,10 @@
   </div>
 </template>
 <script>
+import { defineComponent, onMounted, getCurrentInstance } from 'vue';
 import QRCode from 'qrcodejs2';
 
-export default {
+export default defineComponent({
   name: 'MisQrcode',
   props: {
     value: {
@@ -37,19 +38,21 @@ export default {
       default: ''
     }
   },
-  mounted() {
-    this.init();
-  },
-  methods: {
-    init() {
-      new QRCode(this.$refs.qrcode, {
-        width: this.size,
-        height: this.size,
-        text: this.value,
-        colorDark: this.colorDark,
-        colorLight: this.colorLight
+  setup(props) {
+    const { ctx } = getCurrentInstance();
+    const init = () => {
+      new QRCode(ctx.$.$refs.qrcode, {
+        width: props.size,
+        height: props.size,
+        text: props.value,
+        colorDark: props.colorDark,
+        colorLight: props.colorLight
       });
-    }
+    };
+
+    onMounted(() => {
+      init()
+    });
   }
-}
+})
 </script>

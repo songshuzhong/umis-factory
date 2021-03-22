@@ -183,6 +183,7 @@
 </template>
 
 <script>
+import { defineComponent, reactive, getCurrentInstance } from 'vue';
 import {
   ElTable,
   ElTableColumn,
@@ -197,13 +198,13 @@ import {
 import FileSaver from 'file-saver';
 import XLSX from 'xlsx';
 
-import initApi from './mixin/init-api';
-import derivedProp from './mixin/derived-prop';
-import initData from './mixin/init-data';
+import useInitApi from './mixin/useInitApi';
+import useDerivedProp from './mixin/useDerivedProp';
 import pageInfo from './mixin/page-info';
 import props from './mixin/props/table';
+import initApi from './mixin/props/init-api';
 
-export default {
+export default defineComponent({
   name: 'MisTable',
   components: {
     ElTable,
@@ -216,20 +217,18 @@ export default {
     ElCheckbox,
     ElDivider,
   },
-  data() {
-    return {
-      dynamicColumn: [],
-      multipleSelection: [],
-    };
-  },
-  mixins: [props, initData, initApi, derivedProp, pageInfo],
-  methods: {
-    handleSelectionChange(val) {
+  mixins: [props, initApi, pageInfo],
+  setup(props) {
+    const { ctx } = getCurrentInstance();
+    const dynamicColumn = reactive([]);
+    let multipleSelection = reactive([]);
+    const handleSelectionChange = (val) => {
       const selectedIds = val.map(item => item.id);
-      this.multipleSelection = { selectedIds };
-    },
-    handleExportExcel() {
-      const dom = this.$refs.table.$el.querySelector('.el-table__fixed');
+      multipleSelection = { selectedIds };
+    };
+
+    const handleExportExcel = () => {
+      const dom = ctx.$.$refs.table.$el.querySelector('.el-table__fixed');
       const wb = XLSX.utils.table_to_book(dom);
       const wbout = XLSX.write(wb, {
         bookType: 'xlsx',
@@ -245,7 +244,16 @@ export default {
         if (typeof console !== 'undefined') console.log(e, wbout);
       }
       return wbout;
-    },
-  },
-};
+    };
+
+    return {
+      dynamicColumn,
+      multipleSelection,
+      handleSelectionChange,
+      handleExportExcel,
+      ...useInitApi(props),
+      ...useDerivedProp()
+    };
+  }
+});
 </script>

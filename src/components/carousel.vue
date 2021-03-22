@@ -24,13 +24,14 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue';
 import { ElCarousel, ElCarouselItem } from 'element-plus';
 
-import initApi from './mixin/init-api';
+import useInitApi from './mixin/useInitApi';
 import initData from './mixin/init-data';
-import derivedProp from './mixin/derived-prop';
+import useDerivedProp from './mixin/useDerivedProp';
 
-export default {
+export default defineComponent({
   name: 'MisCarousel',
   components: {
     ElCarousel,
@@ -89,6 +90,12 @@ export default {
       required: false,
     },
   },
-  mixins: [initApi, initData, derivedProp],
-};
+  mixins: [initData],
+  setup() {
+    return {
+      ...useInitApi(),
+      ...useDerivedProp()
+    };
+  }
+});
 </script>

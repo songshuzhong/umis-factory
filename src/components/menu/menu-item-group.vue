@@ -18,11 +18,12 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue';
 import { ElMenuItemGroup } from 'element-plus';
 
-import derivedProp from '../mixin/derived-prop';
+import useDerivedProp from '../mixin/useDerivedProp';
 
-export default {
+export default defineComponent({
   name: 'MisMenuItemGroup',
   components: {
     ElMenuItemGroup,
@@ -49,6 +50,10 @@ export default {
       required: true,
     },
   },
-  mixins: [derivedProp],
-};
+  setup(props) {
+    return {
+      ...useDerivedProp()
+    };
+  }
+});
 </script>

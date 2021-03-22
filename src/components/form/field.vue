@@ -40,12 +40,14 @@
 </template>
 
 <script>
+import { defineComponent, watch, reactive, getCurrentInstance } from 'vue';
 import { ElTooltip, ElFormItem } from 'element-plus';
-import visible from '../mixin/visible';
+import useVisible from '../mixin/useVisible';
 import initData from '../mixin/init-data';
-import linkage from '../mixin/linkage';
+import useLinkage from '../mixin/useLinkage';
+import visibleProps from '../mixin/props/visible';
 
-export default {
+export default defineComponent({
   name: 'MisField',
   components: {
     ElTooltip,
@@ -81,36 +83,26 @@ export default {
       required: false,
     },
   },
-  data() {
+  mixins: [visibleProps, initData],
+  setup(props, context) {
+    const { iVisible } = useVisible(props, context);
+    const updateValue = val => iValue = val;
+    let iValue = reactive(props.modelValue);
+
+    watch(iValue, val => context.emit('update:modelValue', val), {
+      deep: true,
+      immediate: true
+    });
+
+    watch(iVisible, val => this.handleInvisible(val, this.name), {
+      immediate: true
+    });
+
     return {
-      iValue: '',
+      iValue,
+      updateValue,
+      ...useLinkage(props)
     };
   },
-  mixins: [linkage, visible, initData],
-  watch: {
-    modelValue: {
-      handler(val) {
-        this.iValue = val;
-      },
-      immediate: true,
-    },
-    iValue: {
-      handler(val) {
-        this.$emit('update:modelValue', val);
-      },
-      deep: true
-    },
-    iVisible: {
-      handler(val) {
-        this.handleInvisible(val, this.name);
-      },
-      immediate: true
-    },
-  },
-  methods: {
-    updateValue(value) {
-      this.iValue = value;
-    },
-  },
-};
+});
 </script>

@@ -34,7 +34,7 @@
 <script>
 import { defineComponent, computed, ref } from 'vue';
 import { ElInput } from 'element-plus';
-import derivedProp from '../mixin/derived-prop';
+import derivedProp from '../mixin/useDerivedProp';
 import initData from '../mixin/init-data';
 import mixinProps from '../mixin/props/input';
 

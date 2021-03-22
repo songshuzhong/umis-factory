@@ -8,9 +8,10 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue';
 import { ElMenuItem } from 'element-plus';
 
-export default {
+export default defineComponent({
   name: 'MisMenuItem',
   components: {
     ElMenuItem,
@@ -37,5 +38,5 @@ export default {
       required: false,
     },
   },
-};
+});
 </script>

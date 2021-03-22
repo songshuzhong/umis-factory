@@ -28,10 +28,12 @@
 import { defineComponent, nextTick, computed, ref, onBeforeMount, onMounted, onErrorCaptured, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
 import copy from 'copy-to-clipboard';
-import derivedProp from '../mixin/derived-prop';
-import linkage from '../mixin/linkage';
-import visible from '../mixin/visible';
-import initData from '../mixin/init-data';
+import useVisible from '../mixin/useVisible';
+import useDerivedProp from '../mixin/useDerivedProp';
+import useInitApi from '../mixin/useInitApi';
+import useLinkage from '../mixin/useLinkage';
+import initApi from '../mixin/props/init-api';
+import visibleProps from '../mixin/props/visible';
 
 export default defineComponent({
   name: 'MisComponent',
@@ -85,10 +87,12 @@ export default defineComponent({
       required: false,
     },
   },
-  mixins: [visible, initData, linkage, derivedProp],
-  setup(props) {
+  mixins: [visibleProps, initApi],
+  setup(props, context) {
     const { ctx } = getCurrentInstance();
     const router = useRouter();
+    const { data } = useInitApi(props);
+    const { iHidden, iVisible } = useVisible(props, ctx);
     const componentRef = ref(null);
     const error = ref('');
     const forceRerender = ref(true);
@@ -212,7 +216,7 @@ export default defineComponent({
     const handleShowPopup = (props, context) => {
       ctx.$eventHub.$emit('mis-portal:create', props.path, {
         body: props.body || props.body,
-        data: props.data || context,
+        data: data || context,
         actionType: props.actionType,
         visible: true,
       });
@@ -244,12 +248,16 @@ export default defineComponent({
     };
 
     onBeforeMount(() => {
-      const misName = props.misName
-        .split('-')
-        .map(kebab => kebab.charAt(0).toUpperCase() + kebab.slice(1))
-        .join('');
-      if (!ctx.$.appContext.components[misName]) {
-        error.value = '找不到对应的渲染器';
+      try {
+        const misName = props.misName
+          .split('-')
+          .map(kebab => kebab.charAt(0).toUpperCase() + kebab.slice(1))
+          .join('');
+        if (!ctx.$.appContext.components[misName]) {
+          error.value = '找不到对应的渲染器';
+        }
+      } catch (e) {
+        console.log(props)
       }
     });
 
@@ -268,7 +276,12 @@ export default defineComponent({
       errorInfo,
       forceRerender,
       componentName,
+      iHidden,
+      iVisible,
       filterAction,
+      ...useInitApi(props),
+      ...useLinkage(props),
+      ...useDerivedProp()
     };
   },
 });

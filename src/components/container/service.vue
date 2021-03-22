@@ -35,25 +35,29 @@
 </template>
 
 <script>
-import { defineComponent, reactive, watch } from 'vue';
-import derivedProp from '../mixin/derived-prop';
-import initData from '../mixin/init-data';
-import initApi from '../mixin/init-api';
+import { defineComponent, getCurrentInstance, watch } from 'vue';
+import useDerivedProp from '../mixin/useDerivedProp';
+import useInitApi from '../mixin/useInitApi';
+import initApi from '../mixin/props/init-api';
 import mixinProps from '../mixin/props/service';
 
 export default defineComponent({
   name: 'MisService',
-  mixins: [mixinProps, initData, initApi, derivedProp],
+  mixins: [mixinProps, initApi],
   setup(props) {
+    const { ctx } = getCurrentInstance();
+    const { data } = useInitApi(props);
     const handleLinkage = () => {
       if (props.target) {
-        props.linkageTrigger(props.target, props.data);
+        props.linkageTrigger(props.target, data);
       }
     };
     watch(data, val => handleLinkage);
 
     return {
-      handleLinkage
+      handleLinkage,
+      ...useDerivedProp(),
+      ...useInitApi(props, ctx)
     };
   },
 });

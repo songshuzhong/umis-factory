@@ -15,10 +15,12 @@
 </template>
 
 <script>
-import initData from './mixin/init-data';
-import derivedProp from './mixin/derived-prop';
+import { defineComponent, watch, ref, getCurrentInstance } from 'vue';
+import initApi from './mixin/props/init-api';
+import useInitApi from './mixin/useInitApi';
+import useDerivedProp from './mixin/useDerivedProp';
 
-export default {
+export default defineComponent({
   name: 'MisMapping',
   props: {
     path: {
@@ -51,28 +53,27 @@ export default {
       default: false,
     },
   },
-  data() {
-    return {
-      primaryKey: '',
-    };
-  },
-  watch: {
-    value: {
-      handler(val) {
-        this.primaryKey = val;
-      },
-      immediate: true,
-    },
-  },
-  mixins: [initData, derivedProp],
-  computed: {
-    getMapItem() {
-      if (this.map) {
-        const key = this.$getRenderedTpl(this.primaryKey, this.data);
-        return this.map[key];
+  mixins: [initApi],
+  setup(props) {
+    const { ctx } = getCurrentInstance();
+    const { data } = useInitApi(props);
+    const primaryKey = ref('');
+    const getMapItem = () => {
+      if (props.map) {
+        const key = ctx.$getRenderedTpl(props.primaryKey, data);
+        return props.map[key];
       }
       return '';
-    },
-  },
-};
+    };
+
+    watch(value, val => {
+      primaryKey.value = val;
+    });
+
+    return {
+      getMapItem,
+      ...useDerivedProp()
+    };
+  }
+});
 </script>

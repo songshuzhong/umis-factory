@@ -76,9 +76,9 @@
 <script>
 import { ElCard, ElSteps, ElStep, ElButton } from 'element-plus';
 
-import derivedProp from './mixin/derived-prop';
+import derivedProp from './mixin/useDerivedProp';
 import initData from './mixin/init-data';
-import initApi from './mixin/init-api';
+import initApi from './mixin/useInitApi';
 
 const formItems = [
   'mis-field',

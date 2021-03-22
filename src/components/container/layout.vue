@@ -33,9 +33,10 @@
 import { defineComponent } from 'vue';
 import { ElContainer, ElHeader, ElMain, ElAside, ElFooter } from 'element-plus';
 
-import derivedProp from '../mixin/derived-prop';
-import initData from '../mixin/init-data';
-import linkage from '../mixin/linkage';
+import useDerivedProp from '../mixin/useDerivedProp';
+import useInitApi from '../mixin/useInitApi';
+import initApi from '../mixin/props/init-api';
+import useLinkage from '../mixin/useLinkage';
 import mixinProps from '../mixin/props/layout';
 
 export default defineComponent({
@@ -47,6 +48,13 @@ export default defineComponent({
     ElAside,
     ElFooter,
   },
-  mixins: [mixinProps, derivedProp, initData, linkage],
+  mixins: [mixinProps, initApi],
+  setup(props) {
+    return {
+      ...useDerivedProp(),
+      ...useLinkage(props),
+      ...useInitApi(props)
+    };
+  }
 });
 </script>

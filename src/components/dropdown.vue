@@ -34,14 +34,16 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue';
 import { ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus';
 
-import derivedProp from './mixin/derived-prop';
-import initData from './mixin/init-data';
+import useDerivedProp from './mixin/useDerivedProp';
+import useInitApi from './mixin/useInitApi';
+import initApi from './mixin/props/init-api';
 
 const actionItems = ['mis-ajax', 'mis-copy', 'mis-redirect', 'mis-url'];
 
-export default {
+export default defineComponent({
   name: 'MisDropdown',
   components: {
     ElDropdown,
@@ -82,11 +84,13 @@ export default {
       required: false,
     },
   },
-  data() {
+  mixins: [initApi],
+  setup(props) {
     return {
       actionItems,
+      ...useDerivedProp(),
+      ...useInitApi(props)
     };
-  },
-  mixins: [initData, derivedProp],
-};
+  }
+});
 </script>

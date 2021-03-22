@@ -32,10 +32,11 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, watch, ref } from 'vue';
 import { ElAside } from 'element-plus';
-import derivedProp from '../mixin/derived-prop';
-import initData from '../mixin/init-data';
+import useDerivedProp from '../mixin/useDerivedProp';
+import useInitApi from '../mixin/useInitApi';
+import initApi from '../mixin/props/init-api';
 import mixinProps from '../mixin/props/aside';
 
 export default defineComponent({
@@ -43,6 +44,18 @@ export default defineComponent({
   components: {
     ElAside,
   },
-  mixins: [mixinProps, derivedProp, initData],
+  mixins: [mixinProps, initApi],
+  setup(props) {
+    const { data } = useInitApi(props);
+    const iWidth = ref(props.width);
+    watch(iWidth, val => {
+      data.width = val;
+    });
+
+    return {
+      data,
+      ...useDerivedProp()
+    }
+  }
 });
 </script>

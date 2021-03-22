@@ -1,6 +1,6 @@
 <template>
   <div class="umis-schema__container">
-    <template v-if="iSchema">
+    <template v-if="!iSchemaLoading">
       <template
         v-if="Object.prototype.toString.call(iSchema) === '[object Array]'"
       >
@@ -50,12 +50,14 @@
   </div>
 </template>
 <script>
+import { defineComponent, onMounted, watch, computed, reactive, ref, getCurrentInstance } from 'vue';
 import { ElSkeleton, ElSkeletonItem } from 'element-plus';
-import derivedProp from '../mixin/derived-prop';
-import initData from '../mixin/init-data';
-import linkage from '../mixin/linkage';
+import useDerivedProp from '../mixin/useDerivedProp';
+import useInitApi from '../mixin/useInitApi';
+import initApi from '../mixin/props/init-api';
+import useLinkage from '../mixin/useLinkage';
 
-export default {
+export default defineComponent({
   name: 'MisSchema',
   components: {
     ElSkeleton,
@@ -65,6 +67,7 @@ export default {
     schema: {
       type: [Array, Object],
       required: false,
+      default: {}
     },
     canSchemaUpdate: {
       type: Boolean,
@@ -80,78 +83,79 @@ export default {
       required: false
     },
   },
-  data() {
-    return {
-      iSchemaLoading: false,
-      iStopAutoRefresh: false,
-      iSchema: {},
-    };
-  },
-  watch: {
-    schema: {
-      handler(val) {
-        this.iSchema = val;
-      },
-      deep: true,
-      immediate: true,
-    },
-    url: {
-      handler(val) {
-        if (val) {
-          this.getPageSchema();
-        }
-      },
-      deep: true,
-    },
-  },
-  computed: {
-    path() {
-      if (!this.iProtal) {
-        return this.$route.path;
-      }
-      return this.canSchemaUpdate ? this.$route.path : '/website';
-    },
-  },
-  mixins: [derivedProp, initData, linkage],
-  mounted() {
-    this.isMounted = true;
-    this.$eventHub.$on('mis-schema:change', this.updatePageSchema);
-    if (this.url && !this.schema) {
-      this.getPageSchema();
-    }
-    if (!this.canSchemaUpdate) {
-      this.$initSetting(this, this.$umisConfig);
-    }
-  },
-  methods: {
-    getPageSchema() {
-      this.iSchemaLoading = true;
-      this.$api
-        .slientApi(this.$umisConfig).get(this.url)
+  setup(props) {
+    const { ctx } = getCurrentInstance();
+    const iSchemaLoading = ref(false);
+    const iStopAutoRefresh = ref(false);
+    const isMounted = ref(false);
+    const iSchema = ref(props.schema);
+    const iUrl = ref(props.url);
+
+    const getPageSchema = () => {
+      iSchemaLoading.value = true;
+      ctx.$api
+        .slientApi(ctx.$umisConfig).get(props.url)
         .then(res => {
           const { pageSchema, ...pageInfo } = res.data;
           const schema = JSON.parse(pageSchema);
-          this.iSchema = schema;
-          this.iSchemaLoading = false;
-          // this.onLinkageTrigger(this.target, {url: this.url});
-          if (this.canSchemaUpdate) {
+          iSchema.value = schema;
+          iSchemaLoading.value = false;
+          if (props.canSchemaUpdate) {
             window.UMIS = { pageInfo, pageSchema: schema };
           }
         }).catch(err => {
-          console.log(err);
+        console.log(err);
       });
-    },
-    updatePageSchema(schema) {
-      if (this.canSchemaUpdate) {
-        this.iSchemaLoading = true;
+    };
+    const updatePageSchema = schema => {
+      if (props.canSchemaUpdate) {
+        iSchemaLoading.value = true;
         const timer = setTimeout(() => {
-          this.iSchema = schema;
-          this.iSchemaLoading = false;
+          iSchema.value = schema;
+          iSchemaLoading.value = false;
           window.UMIS.pageSchema = schema;
           clearTimeout(timer);
         }, 200);
       }
-    },
+    };
+    const path = computed(() => {
+      if (!props.iProtal) {
+        return '';
+      }
+      return props.canSchemaUpdate ? '' : '/website';
+    });
+
+    watch(iUrl, val => {
+      if (val) {
+        getPageSchema();
+      }
+    }, {
+      deep: true,
+      immediate: true
+    });
+
+    onMounted(() => {
+      isMounted.value = true;
+      ctx.$eventHub.$on('mis-schema:change', updatePageSchema);
+      if (props.url) {
+        getPageSchema();
+      }
+      if (!props.canSchemaUpdate) {
+        ctx.$initSetting(ctx, ctx.$umisConfig);
+      }
+    });
+
+    return {
+      path,
+      iSchema,
+      iSchemaLoading,
+      iStopAutoRefresh,
+      isMounted,
+      ...useInitApi(props),
+      ...useLinkage(props),
+      ...useDerivedProp()
+    };
   },
-};
+  mixins: [initApi],
+});
 </script>
