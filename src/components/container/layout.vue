@@ -50,9 +50,10 @@ export default defineComponent({
   },
   mixins: [mixinProps, initApi],
   setup(props) {
+    const { data } = useInitApi(props);
     return {
       ...useDerivedProp(),
-      ...useLinkage(props),
+      ...useLinkage(props, data),
       ...useInitApi(props)
     };
   }

@@ -1,12 +1,13 @@
 import { onMounted, getCurrentInstance } from 'vue';
 import clonedeep from 'lodash.clonedeep';
+import useInitApi from '../mixin/useInitApi';
 
-export default function (props) {
+export default function (props, contextData) {
   const { ctx } = getCurrentInstance();
-  const onLinkageTrigger = (target, data) => {
+  const { data } = useInitApi(props);
+  const onLinkageTrigger = (target, exData) => {
     if (target) {
-      const trigerData = data || ctx.data;
-      ctx.$eventHub.$emit('mis-component:linkage', target, trigerData);
+      ctx.$eventHub.$emit('mis-component:linkage', target, exData);
     }
   };
 
@@ -18,7 +19,7 @@ export default function (props) {
     }, {});
   };
 
-  const handleLinkage = (linkage, data) => {
+  const handleLinkage = (linkage, exData) => {
     if (linkage) {
       const [target, url] = linkage.split('?');
       let newData = {};
@@ -28,18 +29,21 @@ export default function (props) {
           for (const field in fields) {
             if (fields.hasOwnProperty(field)) {
               if (field === '*') {
-                newData = data;
+                newData = exData;
               } else if (fields[field] === '*') {
-                newData[field] = data;
+                newData[field] = exData;
               } else {
-                newData[field] = data[fields[field]];
+                newData[field] = exData[fields[field]];
               }
             }
           }
-          newData = Object.assign(ctx.data, newData);
+          Object.assign(data, newData);
         } else {
-          newData = Object.assign(ctx.data, data);
+          Object.assign(ctx.data, exData);
         }
+      }
+      if (ctx.$.attrs.renderer === 'mis-aside') {
+        console.log(111, data)
       }
     }
   };

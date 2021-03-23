@@ -43,8 +43,9 @@
 import { defineComponent, watch, reactive, getCurrentInstance } from 'vue';
 import { ElTooltip, ElFormItem } from 'element-plus';
 import useVisible from '../mixin/useVisible';
-import initData from '../mixin/init-data';
 import useLinkage from '../mixin/useLinkage';
+import useInitApi from '../mixin/useInitApi';
+import initApi from '../mixin/props/init-api';
 import visibleProps from '../mixin/props/visible';
 
 export default defineComponent({
@@ -83,7 +84,7 @@ export default defineComponent({
       required: false,
     },
   },
-  mixins: [visibleProps, initData],
+  mixins: [visibleProps, initApi],
   setup(props, context) {
     const { iVisible } = useVisible(props, context);
     const updateValue = val => iValue = val;
@@ -101,7 +102,7 @@ export default defineComponent({
     return {
       iValue,
       updateValue,
-      ...useLinkage(props)
+      ...useLinkage(props, iValue)
     };
   },
 });

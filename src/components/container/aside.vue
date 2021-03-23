@@ -32,10 +32,11 @@
 </template>
 
 <script>
-import { defineComponent, watch, ref } from 'vue';
+import { defineComponent, watch, ref, reactive } from 'vue';
 import { ElAside } from 'element-plus';
 import useDerivedProp from '../mixin/useDerivedProp';
 import useInitApi from '../mixin/useInitApi';
+import useLinkage from '../mixin/useLinkage';
 import initApi from '../mixin/props/init-api';
 import mixinProps from '../mixin/props/aside';
 
@@ -47,13 +48,15 @@ export default defineComponent({
   mixins: [mixinProps, initApi],
   setup(props) {
     const { data } = useInitApi(props);
-    const iWidth = ref(props.width);
-    watch(iWidth, val => {
-      data.width = val;
+    const iData = reactive(data);
+    watch(iData, val => {
+      console.log(333, val);
+    }, {
+      deep: true
     });
-
     return {
-      data,
+      data: iData,
+      ...useLinkage(props, iData),
       ...useDerivedProp()
     }
   }

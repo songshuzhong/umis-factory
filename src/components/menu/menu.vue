@@ -118,7 +118,7 @@ export default defineComponent({
       nextTick(() => {
         width.value = menuRef.value.$el.clientWidth;
         if (props.target) {
-          props.linkageTrigger(props.target, { width: width.value });
+          props.linkageTrigger(props.target, { width: width.value, activeIndex: activeIndex.value });
         }
       });
     };
@@ -132,13 +132,12 @@ export default defineComponent({
       data.collapse = val;
     });
     onMounted(() => {
-      autoWidth()
+      // autoWidth()
     });
 
     const handleSelect = (index) => {
       activeIndex.value = index;
       autoWidth();
-      props.linkageTrigger(props.target, { activeIndex: index });
     };
 
     return {

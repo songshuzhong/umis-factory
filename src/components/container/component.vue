@@ -280,7 +280,7 @@ export default defineComponent({
       iVisible,
       filterAction,
       ...useInitApi(props),
-      ...useLinkage(props),
+      ...useLinkage(props, data),
       ...useDerivedProp()
     };
   },

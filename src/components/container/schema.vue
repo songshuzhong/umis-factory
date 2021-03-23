@@ -55,7 +55,6 @@ import { ElSkeleton, ElSkeletonItem } from 'element-plus';
 import useDerivedProp from '../mixin/useDerivedProp';
 import useInitApi from '../mixin/useInitApi';
 import initApi from '../mixin/props/init-api';
-import useLinkage from '../mixin/useLinkage';
 
 export default defineComponent({
   name: 'MisSchema',
@@ -152,7 +151,6 @@ export default defineComponent({
       iStopAutoRefresh,
       isMounted,
       ...useInitApi(props),
-      ...useLinkage(props),
       ...useDerivedProp()
     };
   },
