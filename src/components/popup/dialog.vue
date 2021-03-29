@@ -93,7 +93,7 @@ export default defineComponent({
     const iVisible = ref(props.visible);
     const onClose = () => {
       iVisible.value = false;
-      props.onPopupInvisible && props.onPopupInvisible(`${props.path}/mis-dialog`);
+      props.onPopupInvisible && props.onPopupInvisible(`${props.path}`);
     };
     const renderTitle = computed(() => {
       return ctx.$getRenderedTpl(props.title, props.initData);

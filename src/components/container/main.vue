@@ -43,8 +43,8 @@
         <component
           :is="actionType"
           v-bind="body"
-          :path="`${path}/${actionType}`"
-          :track="`${path}/${actionType}`"
+          :path="path"
+          :track="path"
           :track-id="actionType"
           :visible="visible"
           :init-data="data"
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { defineComponent, computed, reactive, onMounted, getCurrentInstance } from 'vue';
+import { defineComponent, computed, reactive, ref, onMounted, getCurrentInstance } from 'vue';
 import { ElMain } from 'element-plus';
 import clonedeep from "lodash.clonedeep";
 
@@ -72,7 +72,7 @@ export default defineComponent({
   mixins: [mixinProps, derivedProp, initData],
   setup(props) {
     const { ctx } = getCurrentInstance();
-    let popMap = reactive({});
+    let popMap = ref({});
     const iComputedClass = computed(() => {
       if (props.computedClass) {
         return ctx.$onExpressionEval(props.computedClass, props.initData);
@@ -80,16 +80,15 @@ export default defineComponent({
       return '';
     });
     const createProtal = (path, pop) => {
-      const iPopMap = popMap;
-      iPopMap[path] = pop;
-      popMap = clonedeep(iPopMap);
+      console.log(path)
+      popMap.value[path] = pop
     };
 
     const destroyProtal = (path) => {
-      const iPopMap = popMap;
-      delete iPopMap[path];
-      popMap = clonedeep(iPopMap);
+      console.log(111, path);
+      delete popMap.value[path]
     };
+
     onMounted(() => {
       ctx.$eventHub.$on('mis-portal:create', createProtal);
       ctx.$eventHub.$on('mis-portal:destroy', destroyProtal);
