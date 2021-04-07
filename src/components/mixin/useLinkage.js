@@ -20,6 +20,7 @@ export default function (props, contextData) {
   };
 
   const handleLinkage = (linkage, exData) => {
+    console.log(linkage, exData)
     if (linkage) {
       const [target, url] = linkage.split('?');
       let newData = {};
@@ -39,11 +40,12 @@ export default function (props, contextData) {
           }
           Object.assign(data, newData);
         } else {
-          Object.assign(ctx.data, exData);
+          newData = Object.assign({}, ctx.data, exData);
+          ctx.data = newData
         }
       }
       if (ctx.$.attrs.renderer === 'mis-aside') {
-        console.log(111, data)
+        console.log(111, ctx.data)
       }
     }
   };

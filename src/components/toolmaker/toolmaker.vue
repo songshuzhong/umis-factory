@@ -124,7 +124,7 @@ export default {
       drawerVisible: false,
       activeJson: {},
       originApiProps: {},
-      originNormalProps: {}
+      originNormalProps: {},
     }
   },
   mixins: [dropTools],

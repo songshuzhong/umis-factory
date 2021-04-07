@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { defineComponent, watch, ref, reactive } from 'vue';
+import { defineComponent, onBeforeUpdate, getCurrentInstance } from 'vue';
 import { ElAside } from 'element-plus';
 import useDerivedProp from '../mixin/useDerivedProp';
 import useInitApi from '../mixin/useInitApi';
@@ -47,16 +47,14 @@ export default defineComponent({
   },
   mixins: [mixinProps, initApi],
   setup(props) {
-    const { data } = useInitApi(props);
-    const iData = reactive(data);
-    watch(iData, val => {
-      console.log(333, val);
-    }, {
-      deep: true
+    const { ctx } = getCurrentInstance();
+
+    onBeforeUpdate(() => {
+      console.log(ctx.data);
     });
     return {
-      data: iData,
-      ...useLinkage(props, iData),
+      ...useInitApi(props),
+      ...useLinkage(props, ctx.data),
       ...useDerivedProp()
     }
   }
