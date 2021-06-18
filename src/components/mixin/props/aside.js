@@ -6,7 +6,7 @@ export default {
       required: true,
     },
     body: {
-      type: [Array, Object],
+      type: [Array, Object, String],
       required: false,
       default: 'Body',
       edit: {

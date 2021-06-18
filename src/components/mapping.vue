@@ -38,7 +38,7 @@ export default {
       required: true,
     },
     map: {
-      type: String,
+      type: [Object, String],
       required: false,
     },
     body: {

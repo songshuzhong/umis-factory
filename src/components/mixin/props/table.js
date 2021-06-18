@@ -75,6 +75,15 @@ export default {
         tip: '是否为斑马纹 table'
       }
     },
+    size: {
+      type: String,
+      required: false,
+      default: '-',
+      edit: {
+        renderer: 'mis-input',
+        tip: 'table的尺寸'
+      }
+    },
     border: {
       type: Boolean,
       required: false,

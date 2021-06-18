@@ -39,7 +39,7 @@ export default {
       }
     },
     actions: {
-      type: Object,
+      type: [Object, Array],
       required: false,
     },
     action: {

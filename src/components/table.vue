@@ -173,8 +173,8 @@
       background
       layout="prev, pager, next, total, sizes, jumper"
       :total="iTotal"
-      :page-size="iPageSize"
-      :current-page="iPageIndex"
+      :page-size="Number(iPageSize)"
+      :current-page="Number(iPageIndex)"
       :page-sizes="[10, 20, 30, 40]"
       @current-change="handlePageChanged"
       @size-change="handlePageSizeChanged"

@@ -52,8 +52,6 @@ export default defineComponent({
       ctx.$eventHub.$on('mis-component:remoteComponent', handleRemoteClick);
     });
 
-    watch(props.value, val => iValue.value = val);
-
     return {
       iValue,
       onChange,

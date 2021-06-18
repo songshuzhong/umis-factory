@@ -5,11 +5,9 @@
     :closeOnPressEscape="closeOnPressEscape"
     :custom-class="classname"
     :modal="modal"
-    :modalAppendToBody="modalAppendToBody"
     :direction="direction"
     :showClose="showClose"
     :size="size"
-    :wrapperClosable="wrapperClosable"
     :withHeader="withHeader"
     destroy-on-close
     custom-class="umis-popup__container"
@@ -81,6 +79,7 @@ import mixinProps from '../mixin/props/drawer';
 
 export default defineComponent({
   name: 'MisDrawer',
+  inheritAttrs: true,
   components: {
     ElMain,
     ElDrawer,

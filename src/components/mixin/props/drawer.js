@@ -5,6 +5,18 @@ export default {
       type: String,
       required: true,
     },
+    label: {
+      type: String,
+      required: false,
+    },
+    track: {
+      type: String,
+      required: false,
+    },
+    trackId: {
+      type: String,
+      required: false,
+    },
     appendToBody: {
       type: Boolean,
       required: false,
@@ -68,11 +80,11 @@ export default {
     },
     name: {
       type: String,
-      required: true,
+      required: false,
     },
     body: {
       type: [Array, Object],
-      required: true,
+      required: false,
     },
     footer: {
       type: [Array, Object],

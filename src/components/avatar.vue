@@ -80,7 +80,7 @@ export default {
       required: false,
     },
     size: {
-      type: String,
+      type: [Number, String],
       required: false,
       options: ['number', 'large', 'medium', 'small'],
     },
@@ -121,7 +121,7 @@ export default {
       required: false,
     },
     borderRadius: {
-      type: Number,
+      type: [Number, String],
       required: false,
     },
     invert: {

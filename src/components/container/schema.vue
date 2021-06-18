@@ -79,6 +79,11 @@ export default {
       type: String,
       required: false
     },
+    iProtal: {
+      type: Boolean,
+      required: false,
+      default: false,
+    }
   },
   data() {
     return {

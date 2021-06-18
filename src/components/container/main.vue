@@ -80,12 +80,10 @@ export default defineComponent({
       return '';
     });
     const createProtal = (path, pop) => {
-      console.log(path)
       popMap.value[path] = pop
     };
 
     const destroyProtal = (path) => {
-      console.log(111, path);
       delete popMap.value[path]
     };
 

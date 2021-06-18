@@ -45,19 +45,13 @@ export default defineComponent({
   mixins: [mixinProps, derivedProp, initData],
   setup(props) {
     const { ctx } = getCurrentInstance();
-    const iHeight = ref(60);
+    const iHeight = ref(props.height);
     const iComputedClass = computed(() => {
       if (props.computedClass) {
         return ctx.$onExpressionEval(props.computedClass, props.initData);
       }
       return '';
     });
-
-    watch(props.height, val => {
-      if (val) {
-        iHeight.value = val;
-      }
-    }, { immediate:true });
 
     return {
       iHeight,

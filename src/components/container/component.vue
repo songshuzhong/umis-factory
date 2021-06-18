@@ -1,27 +1,25 @@
 <template>
-  <transition :name="transition">
-    <component
-      ref="component"
-      :is="componentName"
-      v-if="iVisible && forceRerender"
-      v-show="iHidden && forceRerender"
-      v-bind="getSlimmingProps(props)"
-      :path="path"
-      :track="path"
-      :track-id="componentName"
-      :index="index"
-      :class="className"
-      :header="header"
-      :body="body"
-      :footer="footer"
-      :init-data="data"
-      :init-rows="rows"
-      :error-info="errorInfo"
-      :action="filterAction"
-      :after-action="afterAction"
-      :linkage-trigger="onLinkageTrigger"
-    />
-  </transition>
+  <component
+    ref="component"
+    :is="componentName"
+    v-if="iVisible && forceRerender"
+    v-show="iHidden && forceRerender"
+    v-bind="getSlimmingProps(props)"
+    :path="path"
+    :track="path"
+    :track-id="componentName"
+    :index="index"
+    :class="className"
+    :header="header"
+    :body="body"
+    :footer="footer"
+    :init-data="data"
+    :init-rows="rows"
+    :error-info="errorInfo"
+    :action="filterAction"
+    :after-action="afterAction"
+    :linkage-trigger="onLinkageTrigger"
+  />
 </template>
 
 <script>
@@ -81,7 +79,7 @@ export default defineComponent({
       required: false,
     },
     actions: {
-      type: Array,
+      type: [Object, Array],
       required: false,
     },
   },

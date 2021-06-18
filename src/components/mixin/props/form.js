@@ -41,7 +41,7 @@ export default {
       }
     },
     labelWidth: {
-      type: Number,
+      type: [String, Number],
       required: false,
       default: 'auto',
       edit: {
