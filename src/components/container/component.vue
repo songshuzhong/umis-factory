@@ -1,6 +1,6 @@
 <template>
   <component
-    ref="component"
+    :ref="componentDom"
     :is="componentName"
     v-if="iVisible && forceRerender"
     v-show="iHidden && forceRerender"
@@ -87,7 +87,6 @@ export default defineComponent({
   setup(props) {
     const { ctx } = getCurrentInstance();
     const router = useRouter();
-    const componentRef = ref(null);
     const error = ref('');
     const forceRerender = ref(true);
     const errorInfo = computed(() => {
@@ -99,6 +98,8 @@ export default defineComponent({
       }
       return {};
     });
+    const componentDom = el => componentRef = el;
+    let componentRef = ref(null);
     const componentName = computed(() => {
       return error.value ? 'mis-error' : props.misName;
     });
@@ -172,13 +173,9 @@ export default defineComponent({
     };
 
     const handleAjaxAction = (props, context, feedback) => {
-      componentRef.value
+      componentRef
         .handleFetchApi(props.actionApi, feedback)
-        .then(status => {
-          if (status === 'resolve') {
-            onReloadAction(props);
-          }
-        });
+        .then(() => onReloadAction(props));
     };
 
     const handleUrlAction = (props, context) => {
@@ -266,6 +263,8 @@ export default defineComponent({
       errorInfo,
       forceRerender,
       componentName,
+      componentRef,
+      componentDom,
       filterAction,
     };
   },
