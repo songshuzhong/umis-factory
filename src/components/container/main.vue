@@ -71,11 +71,11 @@ export default defineComponent({
   },
   mixins: [mixinProps, derivedProp, initData],
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     let popMap = ref({});
     const iComputedClass = computed(() => {
       if (props.computedClass) {
-        return ctx.$onExpressionEval(props.computedClass, props.initData);
+        return proxy.$onExpressionEval(props.computedClass, props.initData);
       }
       return '';
     });
@@ -88,8 +88,8 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      ctx.$eventHub.$on('mis-portal:create', createProtal);
-      ctx.$eventHub.$on('mis-portal:destroy', destroyProtal);
+      proxy.$eventHub.$on('mis-portal:create', createProtal);
+      proxy.$eventHub.$on('mis-portal:destroy', destroyProtal);
     });
 
     return {

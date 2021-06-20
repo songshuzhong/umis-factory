@@ -53,13 +53,14 @@
   </el-tabs>
 </template>
 <script>
+import { defineComponent, watch } from 'vue';
 import { ElTabs, ElTabPane } from 'element-plus';
 
 import derivedProp from '../mixin/derived-prop';
 import initData from '../mixin/init-data';
 import mixinProps from '../mixin/props/tabs';
 
-export default {
+export default defineComponent({
   name: 'MisTabs',
   components: {
     ElTabs,
@@ -73,21 +74,26 @@ export default {
     };
   },
   mixins: [mixinProps, derivedProp, initData],
-  watch: {
-    activeName: {
-      handler(val) {
-        this.data.iActiveTab = val;
+  setup(props) {
+    watch: {
+      activeName: {
+        handler(val) {
+          this.data.iActiveTab = val;
+        },
+        immediate: true,
       },
-      immediate: true,
     },
-  },
-  methods: {
-    isPanelAlive(item) {
+    watch(props.activeName, () => {})
+    const isPanelAlive = item => {
       if (item.keepAlive === false) {
         return this.data.iActiveTab === item.name;
       }
       return true;
-    },
+    };
+
+    return {
+      isPanelAlive
+    }
   },
-};
+});
 </script>

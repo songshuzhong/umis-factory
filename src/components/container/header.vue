@@ -44,11 +44,11 @@ export default defineComponent({
   },
   mixins: [mixinProps, derivedProp, initData],
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const iHeight = ref(props.height);
     const iComputedClass = computed(() => {
       if (props.computedClass) {
-        return ctx.$onExpressionEval(props.computedClass, props.initData);
+        return proxy.$onExpressionEval(props.computedClass, props.initData);
       }
       return '';
     });

@@ -89,14 +89,14 @@ export default defineComponent({
   },
   mixins: [mixinProps, derivedProp, initData],
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const iVisible = ref(props.visible);
     const onClose = () => {
       iVisible.value = false;
       props.onPopupInvisible && props.onPopupInvisible(`${props.path}`);
     };
     const renderTitle = computed(() => {
-      return ctx.$getRenderedTpl(props.title, props.initData);
+      return proxy.$getRenderedTpl(props.title, props.initData);
     });
 
     return {
