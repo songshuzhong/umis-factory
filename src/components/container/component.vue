@@ -85,7 +85,7 @@ export default defineComponent({
   },
   mixins: [visible, initData, linkage, derivedProp],
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const router = useRouter();
     const error = ref('');
     const forceRerender = ref(true);
@@ -155,7 +155,7 @@ export default defineComponent({
     const onReloadAction = (props) => {
       const { reload } = props;
       if (reload) {
-        ctx.$eventHub.$emit('mis-component:reload', reload);
+        proxy.$eventHub.$emit('mis-component:reload', reload);
       }
     };
 
@@ -179,13 +179,13 @@ export default defineComponent({
     };
 
     const handleUrlAction = (props, context) => {
-      const url = ctx.$getCompiledUrl(props.url, context);
+      const url = proxy.$getCompiledUrl(props.url, context);
       props.blank ? window.open(url) : (window.location.href = url);
     };
 
     const handleRedirectAction= (props, context) => {
-      const url = ctx.$getCompiledUrl(props.redirect, context);
-      let params = ctx.$getCompiledParams(props.params, context);
+      const url = proxy.$getCompiledUrl(props.redirect, context);
+      let params = proxy.$getCompiledParams(props.params, context);
       if (/^https?:\/\//.test(url)) {
         window.location.replace(url);
       } else if (props.redirectType === 'routeName') {
@@ -199,13 +199,13 @@ export default defineComponent({
     };
 
     const handleCopyAction = (props, context) => {
-      const content = ctx.$getCompiledUrl(props.content, context);
+      const content = proxy.$getCompiledUrl(props.content, context);
       copy(content);
-      ctx.$message.success(`已复制：${content}.`);
+      proxy.$message.success(`已复制：${content}.`);
     };
 
     const handleShowPopup = (props, context) => {
-      ctx.$eventHub.$emit('mis-portal:create', props.path, {
+      proxy.$eventHub.$emit('mis-portal:create', props.path, {
         body: props.body || props.body,
         data: props.data || context,
         actionType: props.actionType,
@@ -243,13 +243,13 @@ export default defineComponent({
         .split('-')
         .map(kebab => kebab.charAt(0).toUpperCase() + kebab.slice(1))
         .join('');
-      if (!ctx.$.appContext.components[misName]) {
+      if (!proxy.$.appContext.components[misName]) {
         error.value = '找不到对应的渲染器';
       }
     });
 
     onMounted(() => {
-      ctx.$eventHub.$on('mis-component:reload', handleReload);
+      proxy.$eventHub.$on('mis-component:reload', handleReload);
     });
 
     onErrorCaptured((err, vm, info) => {
