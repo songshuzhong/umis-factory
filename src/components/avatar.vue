@@ -141,31 +141,31 @@ export default defineComponent({
   },
   mixins: [initApi],
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const { data } = useInitApi(props);
     const computedSrc = ref();
     let iconProps = reactive({});
     const renderTitle = computed(() => {
       if (props.title) {
-        return ctx.$getRenderedTpl(props.title, data);
+        return proxy.$getRenderedTpl(props.title, data);
       }
       return undefined;
     });
     const renderSubTitle = computed(() => {
       if (props.subTitle) {
-        return ctx.$getRenderedTpl(props.subTitle, data);
+        return proxy.$getRenderedTpl(props.subTitle, data);
       }
       return undefined;
     });
     const renderDescription = computed(() => {
       if (props.description) {
-        return ctx.$getRenderedTpl(props.description, data);
+        return proxy.$getRenderedTpl(props.description, data);
       }
       return undefined;
     });
 
     const onClick = () => {
-      const { renderer, content, url, redirect, blank } = ctx.attrs;
+      const { renderer, content, url, redirect, blank } = proxy.attrs;
       if (props.action && typeof props.action === 'function') {
         props.action(
           { renderer, content, url, redirect, blank, actionType: props.actionType },
@@ -175,7 +175,7 @@ export default defineComponent({
     };
     onBeforeMount(() => {
       if (props.src) {
-        computedSrc.value = ctx.$getCompiledUrl(props.src, data);
+        computedSrc.value = proxy.$getCompiledUrl(props.src, data);
       }
       iconProps = {
         size: props.size,

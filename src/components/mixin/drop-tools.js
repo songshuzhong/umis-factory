@@ -7,7 +7,8 @@ export default {
     };
   },
   mounted() {
-    this.schemaInstance = window.UMIS.pageSchema;
+    const UMIS = window.UMIS || {};
+    this.schemaInstance = UMIS.pageSchema;
   },
   methods: {
     dragStart(e) {

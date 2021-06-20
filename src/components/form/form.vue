@@ -125,7 +125,7 @@ export default defineComponent({
   },
   mixins: [dropTools, mixinProps, initApi, initData],
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const activeCollapse = [];
     const data = {};
     for (let i = 0; i < props.controls.length; i++) {
@@ -202,7 +202,7 @@ export default defineComponent({
     };
     const handleRemoteSubmit = (actionType, target, feedback) => {
       if (props.name && props.name === target) {
-        const form = ctx.$.$refs['form'];
+        const form = proxy.$.$refs['form'];
         if (form && actionType === 'mis-reset') {
           form.resetFields();
         } else if (form && actionType === 'mis-submit') {
@@ -216,7 +216,7 @@ export default defineComponent({
     };
     const onBeforeSubmit = () => {
       const attributes = event.currentTarget.attributes;
-      const form = ctx.$.$refs['form'];
+      const form = proxy.$.$refs['form'];
       if (
         attributes.actionType &&
         attributes.actionType.value === 'mis-reset'
@@ -260,16 +260,16 @@ export default defineComponent({
     };
     const onAfterSubmit = res => {
       if (props.redirect) {
-        ctx.$.$refs['mis-redirect'].$refs['component'].onClick();
+        proxy.$.$refs['mis-redirect'].$refs['component'].onClick();
       } else if (props.target && props.linkageType === 'after') {
         return props.linkageTrigger(props.target, res);
       } else if (props.reload) {
-        ctx.$eventHub.$emit('mis-component:reload', props.reload);
+        proxy.$eventHub.$emit('mis-component:reload', props.reload);
       }
     };
 
     onMounted(() => {
-      ctx.$eventHub.$on('mis-component:remoteComponent', handleRemoteSubmit);
+      proxy.$eventHub.$on('mis-component:remoteComponent', handleRemoteSubmit);
     });
 
     return {
@@ -280,7 +280,7 @@ export default defineComponent({
       inactiveControls,
       handleInvisible,
       onBeforeSubmit,
-      ...useInitApi(props, ctx),
+      ...useInitApi(props, proxy),
       ...useDerivedProp()
     };
   }

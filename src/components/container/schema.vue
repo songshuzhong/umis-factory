@@ -83,7 +83,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const iSchemaLoading = ref(false);
     const iStopAutoRefresh = ref(false);
     const isMounted = ref(false);
@@ -92,8 +92,8 @@ export default defineComponent({
 
     const getPageSchema = () => {
       iSchemaLoading.value = true;
-      ctx.$api
-        .slientApi(ctx.$umisConfig).get(props.url)
+      proxy.$api
+        .slientApi(proxy.$umisConfig).get(props.url)
         .then(res => {
           const { pageSchema, ...pageInfo } = res.data;
           const schema = JSON.parse(pageSchema);
@@ -135,12 +135,12 @@ export default defineComponent({
 
     onMounted(() => {
       isMounted.value = true;
-      ctx.$eventHub.$on('mis-schema:change', updatePageSchema);
+      proxy.$eventHub.$on('mis-schema:change', updatePageSchema);
       if (props.url) {
         getPageSchema();
       }
       if (!props.canSchemaUpdate) {
-        ctx.$initSetting(ctx, ctx.$umisConfig);
+        proxy.$initSetting(proxy, proxy.$umisConfig);
       }
     });
 

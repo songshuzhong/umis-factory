@@ -45,7 +45,7 @@ export default defineComponent({
   name: 'MisService',
   mixins: [mixinProps, initApi],
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const { data } = useInitApi(props);
     const handleLinkage = () => {
       if (props.target) {
@@ -57,7 +57,7 @@ export default defineComponent({
     return {
       handleLinkage,
       ...useDerivedProp(),
-      ...useInitApi(props, ctx)
+      ...useInitApi(props, proxy)
     };
   },
 });

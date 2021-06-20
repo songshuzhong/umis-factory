@@ -47,14 +47,14 @@ export default defineComponent({
   },
   mixins: [mixinProps, initApi],
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
 
     onBeforeUpdate(() => {
-      console.log(ctx.data);
+      console.log(proxy.data);
     });
     return {
       ...useInitApi(props),
-      ...useLinkage(props, ctx.data),
+      ...useLinkage(props, proxy.data),
       ...useDerivedProp()
     }
   }

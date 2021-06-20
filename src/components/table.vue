@@ -219,7 +219,7 @@ export default defineComponent({
   },
   mixins: [props, initApi, pageInfo],
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const dynamicColumn = reactive([]);
     let multipleSelection = reactive([]);
     const handleSelectionChange = (val) => {
@@ -228,7 +228,7 @@ export default defineComponent({
     };
 
     const handleExportExcel = () => {
-      const dom = ctx.$.$refs.table.$el.querySelector('.el-table__fixed');
+      const dom = proxy.$.$refs.table.$el.querySelector('.el-table__fixed');
       const wb = XLSX.utils.table_to_book(dom);
       const wbout = XLSX.write(wb, {
         bookType: 'xlsx',

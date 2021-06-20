@@ -4,7 +4,7 @@ import { getUrlParams } from "../../utils/url";
 import clonedeep from "lodash.clonedeep";
 
 export default function (props) {
-  const { ctx } = getCurrentInstance();
+  const { proxy } = getCurrentInstance();
   const isMounted = ref(false);
   let iLoading = ref(false);
   let iTotal = ref();
@@ -24,7 +24,7 @@ export default function (props) {
   });
   const iSendOn = computed(() => {
     if (props.sendOn) {
-      return ctx.$onExpressionEval(props.sendOn, data);
+      return proxy.$onExpressionEval(props.sendOn, data);
     }
     return true;
   });
@@ -38,9 +38,9 @@ export default function (props) {
     intervalFetcher = setInterval(() => {
       handleFetchApi();
       if (props.stopAutoRefreshWhen) {
-        props.iStopAutoRefresh = ctx.$onExpressionEval(
+        props.iStopAutoRefresh = proxy.$onExpressionEval(
           props.stopAutoRefreshWhen,
-          ctx
+          proxy
         );
       }
     }, props.interval);
@@ -62,8 +62,8 @@ export default function (props) {
     if (params === '&') {
       compiledParams = mergedData
     }
-    if (ctx.$.usePageInfo) {
-      compiledParams = ctx.$.usePageInfo(compiledParams);
+    if (proxy.$.usePageInfo) {
+      compiledParams = proxy.$.usePageInfo(compiledParams);
     }
     if (method === 'get') {
       fetchBody = {
@@ -72,10 +72,10 @@ export default function (props) {
     } else {
       fetchBody = compiledParams;
     }
-    fetchBody = ctx.$json2FormData(ctx.$umisConfig.isFormData, fetchBody);
+    fetchBody = proxy.$json2FormData(proxy.$umisConfig.isFormData, fetchBody);
     iLoading.value = true;
-    return ctx.$api
-      .slientApi(ctx.$umisConfig)
+    return proxy.$api
+      .slientApi(proxy.$umisConfig)
       [method](compiledUrl, fetchBody)
       .then(res => {
         const result = res.data;
@@ -93,7 +93,7 @@ export default function (props) {
           }
         }
         !props.silentMessage &&
-        ctx.$message({
+        proxy.$message({
           message: res.msg,
           showClose: true,
           type: 'success',
@@ -102,7 +102,7 @@ export default function (props) {
         return res;
       })
       .catch(error => {
-        ctx.$message({
+        proxy.$message({
           message: error.msg,
           showClose: true,
           type: 'error',
@@ -119,8 +119,8 @@ export default function (props) {
     if (props.syncLocation) {
       mergedData = useMergeUrlParams(mergedData);
     }
-    const compiledUrl = ctx.$getCompiledUrl(url, mergedData);
-    const compiledParams = ctx.$getCompiledParams(params, mergedData);
+    const compiledUrl = proxy.$getCompiledUrl(url, mergedData);
+    const compiledParams = proxy.$getCompiledParams(params, mergedData);
 
     if (
       (params === '&' && !deepEqual(cacheData, val)) ||
@@ -147,7 +147,7 @@ export default function (props) {
       }
     }
     if (shouldCompiled) {
-      const compiledParams = ctx.$getCompiledParams(params, mergedData);
+      const compiledParams = proxy.$getCompiledParams(params, mergedData);
       compiledCacheParams = clonedeep(compiledParams);
       return compiledParams;
     }
@@ -155,7 +155,7 @@ export default function (props) {
   };
   const useCompiledUrl = (url, mergedData) => {
     if (/\$\{.+?\}/g.test(url)) {
-      const compiledUrl = ctx.$getCompiledUrl(url, mergedData);
+      const compiledUrl = proxy.$getCompiledUrl(url, mergedData);
       compiledCacheUrl = compiledUrl;
       return compiledUrl;
     }

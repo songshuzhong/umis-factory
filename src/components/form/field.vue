@@ -86,6 +86,7 @@ export default defineComponent({
   },
   mixins: [visibleProps, initApi],
   setup(props, context) {
+    const { proxy } = getCurrentInstance();
     const { iVisible } = useVisible(props, context);
     const updateValue = val => iValue = val;
     let iValue = reactive(props.modelValue);
@@ -95,7 +96,7 @@ export default defineComponent({
       immediate: true
     });
 
-    watch(iVisible, val => this.handleInvisible(val, this.name), {
+    watch(iVisible, val => proxy.handleInvisible(val, props.name), {
       immediate: true
     });
 

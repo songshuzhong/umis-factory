@@ -343,17 +343,17 @@ export default defineComponent({
   mixins: [initApi],
   setup(props, context) {
     const router = useRouter();
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const { data } = useInitApi(props);
     const iShowPopup = ref(props.showPopup);
     const renderText = computed(() => {
-      return ctx.$getRenderedTpl(props.text, data);
+      return proxy.$getRenderedTpl(props.text, data);
     });
     let index;
     const isDisabled = (disabledOn) => {
       if (disabledOn) {
         const context = {$router: router, ...data};
-        return ctx.$onExpressionEval(disabledOn, data);
+        return proxy.$onExpressionEval(disabledOn, data);
       }
       return false;
     };
@@ -370,7 +370,7 @@ export default defineComponent({
       }
 
       if (remoteComponent || props.remoteComponent) {
-        ctx.$eventHub.$emit(
+        proxy.$eventHub.$emit(
           'mis-component:remoteComponent',
           actionType,
           remoteComponent ||props.remoteComponent,
@@ -411,7 +411,7 @@ export default defineComponent({
     };
 
     watch(iShowPopup, val => {
-      ctx.emit('update:showPopup', val);
+      proxy.emit('update:showPopup', val);
     });
     return {
       isDisabled,

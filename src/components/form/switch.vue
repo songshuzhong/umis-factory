@@ -25,7 +25,7 @@ export default defineComponent({
   },
   mixins: [mixinProps],
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const iValue = ref(props.value);
     const onChange = val => {
       iValue.value = val;
@@ -49,7 +49,7 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      ctx.$eventHub.$on('mis-component:remoteComponent', handleRemoteClick);
+      proxy.$eventHub.$on('mis-component:remoteComponent', handleRemoteClick);
     });
 
     return {

@@ -127,9 +127,9 @@ export default defineComponent({
   },
   mixins: [mixinProps, initApi, dropTools],
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const { data, ...other } = useInitApi(props);
-    const renderHeader = () => ctx.$getRenderedTpl(props.header, data);
+    const renderHeader = () => proxy.$getRenderedTpl(props.header, data);
 
     const handleClick= () => {
       if (props.actions) {
@@ -137,7 +137,7 @@ export default defineComponent({
           let props = props.actions.find(item => {
             if (
               item.actionOn &&
-              ctx.$onExpressionEval(item.actionOn, data)
+              proxy.$onExpressionEval(item.actionOn, data)
             ) {
               return item;
             }

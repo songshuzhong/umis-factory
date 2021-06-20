@@ -50,10 +50,10 @@ export default defineComponent({
   },
   mixins: [initApi],
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const { data } = useInitApi(props);
     const renderTitle = computed(() => {
-      return ctx.$getRenderedTpl(props.text, data);
+      return proxy.$getRenderedTpl(props.text, data);
     });
 
     return {

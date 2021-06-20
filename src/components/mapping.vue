@@ -15,10 +15,10 @@
 </template>
 
 <script>
-import { defineComponent, watch, ref, getCurrentInstance } from 'vue';
-import initApi from './mixin/props/init-api';
+import {defineComponent, ref, getCurrentInstance, computed} from 'vue';
 import useInitApi from './mixin/useInitApi';
 import useDerivedProp from './mixin/useDerivedProp';
+import initApi from './mixin/props/init-api';
 
 export default defineComponent({
   name: 'MisMapping',
@@ -55,19 +55,15 @@ export default defineComponent({
   },
   mixins: [initApi],
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const { data } = useInitApi(props);
     const primaryKey = ref('');
-    const getMapItem = () => {
+    const getMapItem = computed(() => {
       if (props.map) {
-        const key = ctx.$getRenderedTpl(props.primaryKey, data);
+        const key = proxy.$getRenderedTpl(props.value, data);
         return props.map[key];
       }
       return '';
-    };
-
-    watch(value, val => {
-      primaryKey.value = val;
     });
 
     return {

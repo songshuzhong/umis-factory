@@ -315,10 +315,10 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const handleClick = (icon) => {
       copy(icon);
-      ctx.$message.success('复制成功');
+      proxy.$message.success('复制成功');
     };
 
     return {

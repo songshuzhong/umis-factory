@@ -3,11 +3,11 @@ import clonedeep from 'lodash.clonedeep';
 import useInitApi from '../mixin/useInitApi';
 
 export default function (props, contextData) {
-  const { ctx } = getCurrentInstance();
+  const { proxy } = getCurrentInstance();
   const { data } = useInitApi(props);
   const onLinkageTrigger = (target, exData) => {
     if (target) {
-      ctx.$eventHub.$emit('mis-component:linkage', target, exData);
+      proxy.$eventHub.$emit('mis-component:linkage', target, exData);
     }
   };
 
@@ -20,7 +20,6 @@ export default function (props, contextData) {
   };
 
   const handleLinkage = (linkage, exData) => {
-    console.log(linkage, exData)
     if (linkage) {
       const [target, url] = linkage.split('?');
       let newData = {};
@@ -40,18 +39,18 @@ export default function (props, contextData) {
           }
           Object.assign(data, newData);
         } else {
-          newData = Object.assign({}, ctx.data, exData);
-          ctx.data = newData
+          newData = Object.assign({}, proxy.data, exData);
+          proxy.data = newData
         }
       }
-      if (ctx.$.attrs.renderer === 'mis-aside') {
-        console.log(111, ctx.data)
+      if (proxy.$.attrs.renderer === 'mis-aside') {
+        console.log(111, proxy.data)
       }
     }
   };
 
   onMounted(() => {
-    ctx.$eventHub.$on('mis-component:linkage', handleLinkage);
+    proxy.$eventHub.$on('mis-component:linkage', handleLinkage);
   });
 
   return {

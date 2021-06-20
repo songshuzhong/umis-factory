@@ -43,10 +43,10 @@ export default defineComponent({
   },
   mixins: [initApi],
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const { data } = useInitApi(props);
     const getHtml = computed(() => {
-      return ctx.$getRenderedTpl(props.html, data);
+      return proxy.$getRenderedTpl(props.html, data);
     });
 
     return {

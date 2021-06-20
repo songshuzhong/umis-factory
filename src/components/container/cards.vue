@@ -54,9 +54,9 @@ export default defineComponent({
   },
   mixins: [mixinProps, initApi, pageInfo],
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const iBody = reactive(props.body);
-    const renderHeader = (data) => ctx.$getRenderedTpl(props.header, data);
+    const renderHeader = (data) => proxy.$getRenderedTpl(props.header, data);
 
     return {
       iBody,

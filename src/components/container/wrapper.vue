@@ -43,11 +43,11 @@ export default defineComponent({
   name: 'MisWrapper',
   mixins: [mixinProps, initApi],
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const { data } = useInitApi(props);
     const iComputedClass = computed(() => {
       if (props.computedClass) {
-        return ctx.$onExpressionEval(props.computedClass, data);
+        return proxy.$onExpressionEval(props.computedClass, data);
       }
       return '';
     });

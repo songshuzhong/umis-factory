@@ -71,12 +71,12 @@ export default defineComponent({
   },
   mixins: [mixinProps, initApi],
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const { data } = useInitApi(props);
     const popMap = reactive({});
     const iComputedClass = computed(() => {
       if (props.computedClass) {
-        return ctx.$onExpressionEval(props.computedClass, data);
+        return proxy.$onExpressionEval(props.computedClass, data);
       }
       return '';
     });
@@ -84,8 +84,8 @@ export default defineComponent({
     const destroyProtal = (path) => delete popMap[path];
 
     onMounted(() => {
-      ctx.$eventHub.$on('mis-portal:create', createProtal);
-      ctx.$eventHub.$on('mis-portal:destroy', destroyProtal);
+      proxy.$eventHub.$on('mis-portal:create', createProtal);
+      proxy.$eventHub.$on('mis-portal:destroy', destroyProtal);
     });
 
     return {

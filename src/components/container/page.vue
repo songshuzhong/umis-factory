@@ -41,7 +41,7 @@ export default defineComponent({
   name: 'MisPage',
   mixins: [mixinProps, initApi],
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     return {
       ...useDerivedProp(),
       ...useInitApi(props)

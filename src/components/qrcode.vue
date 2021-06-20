@@ -39,9 +39,9 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const init = () => {
-      new QRCode(ctx.$.$refs.qrcode, {
+      new QRCode(proxy.$.$refs.qrcode, {
         width: props.size,
         height: props.size,
         text: props.value,

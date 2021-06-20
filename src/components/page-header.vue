@@ -31,7 +31,7 @@ export default defineComponent({
   mixins: [initApi],
   setup(props) {
     const router = useRouter();
-    const { ctx } = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const { data } = useInitApi(props);
 
     const handleClick = () => {
@@ -39,7 +39,7 @@ export default defineComponent({
     };
 
     const getContent = computed(() => {
-      return ctx.$getRenderedTpl(props.content, data);
+      return proxy.$getRenderedTpl(props.content, data);
     });
 
     return {
