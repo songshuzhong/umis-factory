@@ -1,7 +1,7 @@
 <template>
   <transition :name="transition">
     <component
-      ref="component"
+      :ref="componentDom"
       :is="componentName"
       v-if="iVisible && forceRerender"
       v-show="iHidden && forceRerender"
@@ -93,7 +93,8 @@ export default defineComponent({
     const router = useRouter();
     const { data } = useInitApi(props);
     const { iHidden, iVisible } = useVisible(props, proxy);
-    const componentRef = ref(null);
+    let componentRef = ref(null);
+    const componentDom = el => componentRef = el;
     const error = ref('');
     const forceRerender = ref(true);
     const errorInfo = computed(() => {
@@ -178,7 +179,7 @@ export default defineComponent({
     };
 
     const handleAjaxAction = (props, context, feedback) => {
-      componentRef.value
+      componentDom
         .handleFetchApi(props.actionApi, feedback)
         .then(status => {
           if (status === 'resolve') {
@@ -278,6 +279,7 @@ export default defineComponent({
       componentName,
       iHidden,
       iVisible,
+      componentDom,
       filterAction,
       ...useInitApi(props),
       ...useLinkage(props, data),
