@@ -38,10 +38,9 @@ import { defineComponent, reactive, getCurrentInstance } from 'vue';
 import { ElRow, ElCol, ElCard, ElPagination } from 'element-plus';
 import MisCard from './card';
 import useInitApi from '../mixin/useInitApi';
-import initApi from '../mixin/props/init-api';
 import useDerivedProp from '../mixin/useDerivedProp';
-import pageInfo from '../mixin/page-info';
 import mixinProps from '../mixin/props/cards';
+import initApi from '../mixin/props/init-api';
 
 export default defineComponent({
   name: 'MisCards',
@@ -52,7 +51,7 @@ export default defineComponent({
     ElCard,
     ElPagination,
   },
-  mixins: [mixinProps, initApi, pageInfo],
+  mixins: [mixinProps, initApi],
   setup(props) {
     const { proxy } = getCurrentInstance();
     const iBody = reactive(props.body);

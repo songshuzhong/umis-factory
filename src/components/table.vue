@@ -89,7 +89,6 @@
           <el-table-column
             v-if="column.headSlot"
             :path="`${path}/${index}/${column.name}`"
-            :key="`${path}/${index}/${column.name}`"
             :prop="column.name || ''"
             :label="column.label"
             :fixed="column.fixed"
@@ -122,19 +121,18 @@
           <el-table-column
             v-else-if="!column.headSlot && column.body"
             :path="`${path}/${index}/${column.name}`"
+            :key="`${path}/${iPageIndex}/${index}/${column.name}`"
             :prop="column.name || ''"
             :label="column.label"
           >
             <template #default="scope">
-              <template
-                v-if="
-                  Object.prototype.toString.call(column.body) ===
-                    '[object Array]'
-                "
-              >
-                <template v-for="(item, jndex) in column.body" :key="jndex">
+              <template v-if="Object.prototype.toString.call(column.body) === '[object Array]'">
+                <template
+                  v-for="(item, jndex) in column.body"
+                  :key="`${path}/${jndex}/${index}/${item.renderer}`"
+                >
                   <mis-component
-                    :path="`${path}/${index}/${item.renderer}`"
+                    :path="`${path}/${jndex}/${index}/${item.renderer}`"
                     :mis-name="item.renderer"
                     :header="getHeader(item)"
                     :body="getBody(item)"
@@ -146,7 +144,7 @@
               </template>
               <mis-component
                 v-else
-                :path="`${path}/${column.body.renderer}`"
+                :path="`${path}/${index}/${column.body.renderer}`"
                 :mis-name="column.body.renderer"
                 :header="getHeader(column.body)"
                 :body="getBody(column.body)"
@@ -176,8 +174,8 @@
       :page-size="iPageSize"
       :current-page="iPageIndex"
       :page-sizes="[10, 20, 30, 40]"
-      @current-change="handlePageChanged"
-      @size-change="handlePageSizeChanged"
+      @current-change="onPageIndexChanged"
+      @size-change="onPageSizeChanged"
     />
   </div>
 </template>
@@ -200,7 +198,6 @@ import XLSX from 'xlsx';
 
 import useInitApi from './mixin/useInitApi';
 import useDerivedProp from './mixin/useDerivedProp';
-import pageInfo from './mixin/page-info';
 import props from './mixin/props/table';
 import initApi from './mixin/props/init-api';
 
@@ -217,7 +214,7 @@ export default defineComponent({
     ElCheckbox,
     ElDivider,
   },
-  mixins: [props, initApi, pageInfo],
+  mixins: [props, initApi],
   setup(props) {
     const { proxy } = getCurrentInstance();
     const dynamicColumn = reactive([]);

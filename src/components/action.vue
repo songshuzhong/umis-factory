@@ -345,6 +345,9 @@ export default defineComponent({
     const router = useRouter();
     const { proxy } = getCurrentInstance();
     const { data } = useInitApi(props);
+    if (!props.path.includes('mis-dropdown')) {
+      console.log(props.path, data);
+    }
     const iShowPopup = ref(props.showPopup);
     const renderText = computed(() => {
       return proxy.$getRenderedTpl(props.text, data);

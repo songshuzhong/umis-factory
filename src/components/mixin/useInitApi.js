@@ -1,11 +1,13 @@
 import { onMounted, onBeforeUnmount, computed, watch, reactive, ref, getCurrentInstance } from 'vue';
-import deepEqual from "deep-equal";
-import { getUrlParams } from "../../utils/url";
-import clonedeep from "lodash.clonedeep";
+import deepEqual from 'deep-equal';
+import clonedeep from 'lodash.clonedeep';
+import { constructUrl, getUrlParams } from '../../utils/url';
 
 export default function (props) {
   const { proxy } = getCurrentInstance();
   const isMounted = ref(false);
+  const iPageIndex = ref(1);
+  const iPageSize = ref(10);
   let iLoading = ref(false);
   let iTotal = ref();
   let iHasMore = ref(true);
@@ -63,7 +65,7 @@ export default function (props) {
       compiledParams = mergedData
     }
     if (proxy.$.usePageInfo) {
-      compiledParams = proxy.$.usePageInfo(compiledParams);
+      compiledParams = usePageInfo(compiledParams);
     }
     if (method === 'get') {
       fetchBody = {
@@ -161,6 +163,48 @@ export default function (props) {
     }
     return url;
   };
+  const onPageIndexChanged = (pageIndex) => {
+    const apiData = props.initApi;
+    iPageIndex.value = pageIndex;
+    apiData.params.pageIndex = pageIndex;
+    handleFetchApi(apiData);
+  };
+  const onPageSizeChanged = (pageSize) => {
+    const apiData = props.initApi;
+    iPageIndex.value = 1;
+    iPageSize.value = pageSize;
+    apiData.params.pageIndex = 1;
+    apiData.params.pageIndex = pageSize;
+    handleFetchApi(apiData);
+  };
+  const usePageInfo = (params = {}) => {
+    params['pageIndex'] = iPageIndex;
+    params['pageSize'] = iPageSize;
+    syncPageHistory();
+    return params;
+  };
+  const syncPageHistory = () => {
+    const defaultQuery = getUrlParams();
+    defaultQuery['pageIndex'] = iPageIndex;
+    defaultQuery['pageSize'] = iPageSize;
+    const newUrl = constructUrl(
+        '',
+        location.pathname,
+        defaultQuery,
+        location.hash,
+        location.protocol
+    );
+    window.history.replaceState({}, window.document.title, newUrl);
+  };
+
+  onBeforeUnmount(() => {
+    const defaultQuery = getUrlParams();
+    const { pageIndex, pageSize } = defaultQuery;
+    const defaultPageIndex = pageIndex || iPageIndex;
+    const defaultPageSize = pageSize || iPageSize;
+    iPageIndex.value = defaultPageIndex;
+    iPageSize.value = defaultPageSize;
+  });
 
   watch(initRows, val => {
     if (!props.initApi.url && props.inherit) {
@@ -217,11 +261,10 @@ export default function (props) {
     compiledCacheUrl = null;
     compiledCacheParams = null;
     cacheData = null;
-    if (props.initApi) {
+    if (props.interval) {
+      handleIntervalFetch();
+    } else if (props.initApi) {
       handleFetchApi();
-      if (props.interval) {
-        handleIntervalFetch();
-      }
     }
   });
   onBeforeUnmount(() => {
@@ -229,8 +272,12 @@ export default function (props) {
   });
 
   return {
+    onPageIndexChanged,
+    onPageSizeChanged,
     isMounted,
     iLoading,
+    iPageIndex,
+    iPageSize,
     data,
     rows,
     iTotal,
